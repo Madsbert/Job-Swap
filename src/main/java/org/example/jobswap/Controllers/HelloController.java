@@ -1,4 +1,4 @@
-package org.example.jobswap;
+package org.example.jobswap.Controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

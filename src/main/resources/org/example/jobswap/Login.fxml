@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.jobswap.View.JobswapApplication"
+            prefHeight="852.0" prefWidth="1298.0">
+
+   <!-- Top Banner -->
+   <top>
+      <HBox alignment="CENTER_LEFT" style="-fx-background-color: #003366;" prefHeight="100.0">
+         <children>
+            <Label text="JobSwap" textFill="white">
+               <font>
+                  <Font size="36.0" />
+               </font>
+               <padding>
+                  <Insets left="40.0" />
+               </padding>
+            </Label>
+         </children>
+      </HBox>
+   </top>
+
+   <!-- Center Login Form -->
+   <center>
+      <VBox spacing="20.0" alignment="CENTER" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets top="50.0" bottom="50.0" left="100.0" right="100.0"/>
+         </padding>
+         <children>
+            <TextField promptText="Enter your Employee ID" maxWidth="300.0" />
+            <PasswordField promptText="Enter your Password" maxWidth="300.0" />
+            <Button text="Log In" defaultButton="true" minWidth="150.0" />
+            <Button text="Create a New Account" minWidth="150.0" />
+         </children>
+      </VBox>
+   </center>
+</BorderPane>

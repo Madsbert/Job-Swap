@@ -1,0 +1,46 @@
+/* styles.css */
+
+/* Global font and styling */
+.root {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 14px;
+}
+
+/* Header label style */
+.label.header-title {
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* Buttons */
+.button {
+    -fx-background-color: #eeeeee;
+    -fx-text-fill: #333333;
+    -fx-font-weight: bold;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.1), 2, 0, 0, 1);
+    -fx-border-color: transparent;
+}
+
+/* Hover effect */
+.button:hover {
+    -fx-background-color: #cccccc;
+    -fx-text-fill: #000000;
+}
+
+/* Top bar background */
+.top-bar {
+    -fx-background-color: #da291c; /* Danfoss red */
+}
+
+/* TextFields */
+.text-field, .password-field {
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: #cccccc;
+    -fx-padding: 6 10;
+}

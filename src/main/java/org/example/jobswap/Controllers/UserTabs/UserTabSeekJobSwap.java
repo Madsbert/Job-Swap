@@ -2,6 +2,11 @@ package org.example.jobswap.Controllers.UserTabs;
 
 public class UserTabSeekJobSwap extends javafx.scene.control.Tab {
 
+    public UserTabSeekJobSwap()
+    {
+        super("Seek JobSwap");
+    }
+
     private void showJobswapOptions()
     {
 

@@ -11,13 +11,13 @@ import java.io.IOException;
 
 
 public class SceneService {
-    public static void shiftScene(ActionEvent actionEvent, String title, Class controller ) throws IOException {
+    public static void shiftScene(ActionEvent actionEvent, String title ) throws IOException {
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(JobswapApplication.class.getResource("/org/example/jobswap/MainScene.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 
         // Get controller
-         controller = fxmlLoader.getController();
+        
          //need a method for initizializing the scene
 
         stage.setTitle(title);

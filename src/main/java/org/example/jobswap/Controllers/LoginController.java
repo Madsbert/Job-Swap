@@ -16,10 +16,10 @@ public class LoginController {
     public void login(ActionEvent event) throws IOException {
 
         UserTabMatches userTabMatches = new UserTabMatches();
-        shiftScene(event, "Jobswap", userTabMatches.getClass());
+        shiftScene(event, "Jobswap");
     }
 
-    private void shiftScene(ActionEvent event, String title, Class controller) throws IOException {
-        SceneService.shiftScene(event, title, controller);
+    private void shiftScene(ActionEvent event, String title) throws IOException {
+        SceneService.shiftScene(event, title);
     }
 }

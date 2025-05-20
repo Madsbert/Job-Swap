@@ -6,15 +6,26 @@ import org.example.jobswap.Controllers.UserTabs.UserTabMatches;
 import org.example.jobswap.Controllers.UserTabs.UserTabMessages;
 import org.example.jobswap.Controllers.UserTabs.UserTabProfile;
 import org.example.jobswap.Controllers.UserTabs.UserTabSeekJobSwap;
+import org.example.jobswap.Model.Profile;
 
 public class MainSceneController {
     @FXML
     private TabPane tabPane;
 
+    private static Profile currentProfile;
+
     public void initialize() {
         tabPane.getTabs().add(new UserTabMatches());
-        tabPane.getTabs().add(new UserTabMessages());
-        tabPane.getTabs().add(new UserTabProfile());
         tabPane.getTabs().add(new UserTabSeekJobSwap());
+        tabPane.getTabs().add(new UserTabProfile());
+        tabPane.getTabs().add(new UserTabMessages());
+    }
+
+    public static Profile getCurrentProfile() {
+        return currentProfile;
+    }
+
+    public static void setCurrentProfile(Profile currentProfile) {
+        MainSceneController.currentProfile = currentProfile;
     }
 }

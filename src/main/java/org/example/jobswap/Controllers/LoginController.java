@@ -25,7 +25,6 @@ public class LoginController {
                 "Afløser",
                 "Rykker pakker",
                 "Pakkeri",
-                false,
                 false
         );
 

@@ -23,7 +23,14 @@ public class JobswapApplication extends Application {
         stage.show();
 
         DBConnection.getConnection();
-        Profile jakob = new Profile(AccessLevel.EMPLOYEE,"Jakob Jessen","Danfoss Sales","CSO","IT","Jakob2rune",true,"Head of IT and Sales");
+        Profile jakob = new Profile(
+                AccessLevel.EMPLOYEE,
+                "Jakob Jessen",
+                "Danfoss Sales",
+                "CSO",
+                "IT",
+                "Head of IT and Sales",
+                true);
         ProfileDB profileDB = new ProfileDB();
 
         profileDB.createNewProfile(jakob);

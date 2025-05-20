@@ -8,11 +8,10 @@ public class Profile {
     private String jobTitle;
     private String JobDescription;
     private String JobCategory;
-    private String Username;
     private boolean activelySeeking;
     private boolean isLocked;
 
-    public Profile(AccessLevel level, int profileID, String name, String department, String jobTitle, String jobDescription, String jobCategory, String username, boolean activelySeeking) {
+    public Profile(AccessLevel level, int profileID, String name, String department, String jobTitle, String jobDescription, String jobCategory, boolean activelySeeking) {
         this.level = level;
         this.profileID = profileID;
         this.name = name;
@@ -20,18 +19,16 @@ public class Profile {
         this.jobTitle = jobTitle;
         JobDescription = jobDescription;
         JobCategory = jobCategory;
-        Username = username;
         this.activelySeeking = activelySeeking;
         this.isLocked = false;
     }
 
-    public Profile(AccessLevel level, String name, String department, String jobTitle, String jobCategory, String username, boolean activelySeeking, String jobDescription) {
+    public Profile(AccessLevel level, String name, String department, String jobTitle, String jobDescription, String jobCategory, boolean activelySeeking) {
         this.name = name;
         this.level = level;
         this.department = department;
         this.jobTitle = jobTitle;
         JobCategory = jobCategory;
-        Username = username;
         this.activelySeeking = activelySeeking;
         JobDescription = jobDescription;
         this.isLocked = false;
@@ -103,14 +100,6 @@ public class Profile {
 
     public void setLocked(boolean locked) {
         isLocked = locked;
-    }
-
-    public String getUsername() {
-        return Username;
-    }
-
-    public void setUsername(String username) {
-        Username = username;
     }
 
     public void updateInformation()

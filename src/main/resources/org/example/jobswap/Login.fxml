@@ -9,7 +9,7 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.example.jobswap.View.JobswapApplication"
             stylesheets="@Style.css"
-            prefHeight="852.0" prefWidth="1298.0">
+            prefHeight="800.0" prefWidth="1200.0">
 
    <!-- Top Banner -->
    <top>

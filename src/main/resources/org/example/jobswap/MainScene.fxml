@@ -1,54 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8"
-            xmlns:fx="http://javafx.com/fxml/1"
-            stylesheets="@Style.css"
-            prefHeight="800" prefWidth="1200.0">
+<BorderPane prefHeight="800" prefWidth="1200.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
 
     <!-- Top Banner -->
     <top>
-        <HBox alignment="CENTER_LEFT" styleClass="top-bar" prefHeight="100.0">
+        <HBox alignment="CENTER_LEFT" prefHeight="100.0" styleClass="top-bar">
             <padding>
-                <Insets left="30.0" right="30.0"/>
+                <Insets left="30.0" right="30.0" />
             </padding>
             <children>
-                <Label text="JobSwap" styleClass="header-title" />
-                <Region HBox.hgrow="ALWAYS"/>
-                <Button text="Help" minWidth="80.0"/>
+                <Label styleClass="header-title" text="JobSwap" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Button minWidth="80.0" text="Help" />
             </children>
         </HBox>
     </top>
 
     <!-- Tabs Area -->
     <center>
-        <TabPane prefHeight="646.0" prefWidth="1139.0" tabClosingPolicy="UNAVAILABLE">
-            <tabs>
-                <Tab text="Matches">
-                    <content>
-                        <AnchorPane prefHeight="600.0" prefWidth="1100.0"/>
-                    </content>
-                </Tab>
-                <Tab text="Seek Jobswap">
-                    <content>
-                        <AnchorPane prefHeight="600.0" prefWidth="1100.0"/>
-                    </content>
-                </Tab>
-                <Tab text="Profile">
-                    <content>
-                        <AnchorPane prefHeight="600.0" prefWidth="1100.0"/>
-                    </content>
-                </Tab>
-                <Tab text="Messages">
-                    <content>
-                        <AnchorPane prefHeight="600.0" prefWidth="1100.0"/>
-                    </content>
-                </Tab>
-            </tabs>
-        </TabPane>
+        <TabPane fx:id="tabPane" prefHeight="646.0" prefWidth="1139.0" tabClosingPolicy="UNAVAILABLE" />
     </center>
 </BorderPane>

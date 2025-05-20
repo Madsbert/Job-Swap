@@ -1,22 +1,44 @@
 package org.example.jobswap.Model;
 
+import java.time.LocalDateTime;
+
 public class Match {
     private MatchState state;
-    public Profile ownerProfile;
-    public Profile otherProfile;
+    private Profile ownerProfile;
+    private Profile otherProfile;
+    private LocalDateTime timeOfMatch;
+
+
+    public Profile getOwnerProfile() {
+        return ownerProfile;
+    }
+
+    public void setOwnerProfile(Profile ownerProfile) {
+        this.ownerProfile = ownerProfile;
+    }
+
+    public Profile getOtherProfile() {
+        return otherProfile;
+    }
+
+    public void setOtherProfile(Profile otherProfile) {
+        this.otherProfile = otherProfile;
+    }
+
+    public LocalDateTime getTimeOfMatch() {
+        return timeOfMatch;
+    }
+
+    public void setTimeOfMatch(LocalDateTime timeOfMatch) {
+        this.timeOfMatch = timeOfMatch;
+    }
 
     public void UpdateState(MatchState newState)
     {
         this.state = newState;
     }
 
-    public void setMatchState()
-    {
-
-    }
-
-    public void getMatchState()
-    {
-
+    public MatchState getMatchState() {
+        return state;
     }
 }

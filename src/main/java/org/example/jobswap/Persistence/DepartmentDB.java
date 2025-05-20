@@ -6,6 +6,7 @@ import org.example.jobswap.Persistence.Interfaces.DepartmentDBInterface;
 import java.util.List;
 
 public class DepartmentDB implements DepartmentDBInterface {
+
     public List<Department> getDepartments()
     {
         return null;
@@ -13,12 +14,12 @@ public class DepartmentDB implements DepartmentDBInterface {
 
     public void createDepartment(Department department)
     {
-
+        // Not implemented
     }
 
     public void deleteDepartment(int departmentID)
     {
-
+        // Not implemented
     }
 
     public Department getDepartmentFromUserID(int profileID)

@@ -1,12 +1,11 @@
 package org.example.jobswap.Controllers.UserTabs;
 
 import javafx.geometry.Insets;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
 import org.example.jobswap.Controllers.MainSceneController;
 import org.example.jobswap.Service.BorderedVBox;
 import org.example.jobswap.Service.Header;
@@ -15,11 +14,16 @@ import java.util.ArrayList;
 
 public class UserTabProfile extends javafx.scene.control.Tab {
 
-    private boolean editMode = false;
     private ChoiceBox departmentChoiceBox;
     private ChoiceBox jobCategoryChoiceBox;
     private TextField jobTitleField;
     private TextField jobDescriptionField;
+
+    private VBox optionsBox;
+    private VBox profileDetailsBox;
+
+    private CheckBox editModeCheckBox;
+    private CheckBox activeCheckBox;
 
     public UserTabProfile() {
         super("Profile");
@@ -29,13 +33,55 @@ public class UserTabProfile extends javafx.scene.control.Tab {
         scrollPane.setFitToWidth(true);
         scrollPane.setPadding(new Insets(25, 25, 25, 25));
 
-        VBox vbox = new VBox();
-        scrollPane.setContent(vbox);
+        VBox primaryVBox = new BorderedVBox();
+        scrollPane.setContent(primaryVBox);
 
-        VBox profileDetailsBox = new BorderedVBox();
-        profileDetailsBox.getChildren().add(new Header("Personal details"));
-        vbox.getChildren().add(profileDetailsBox);
+        primaryVBox.getChildren().add(new Header("Personal details"));
 
+        HBox sections = new HBox();
+        primaryVBox.getChildren().add(sections);
+
+        setupProfileDetails();
+        setupOptions();
+
+        sections.getChildren().add(profileDetailsBox);
+        sections.getChildren().add(optionsBox);
+
+        this.setContent(scrollPane);
+    }
+
+    private void setupOptions() {
+        optionsBox = new VBox();
+        optionsBox.setPrefWidth(Screen.getPrimary().getBounds().getWidth()/2);
+
+        editModeCheckBox = new CheckBox("Edit Mode");
+        editModeCheckBox.setSelected(false);
+        editModeCheckBox.setOnAction(event -> updateEditableState());
+        optionsBox.getChildren().add(editModeCheckBox);
+
+        activeCheckBox = new CheckBox("Actively Searching");
+        activeCheckBox.setSelected(MainSceneController.getCurrentProfile().isActivelySeeking());
+
+        activeCheckBox.setOnAction(event -> MainSceneController.getCurrentProfile().setActivelySeeking(activeCheckBox.isSelected()));
+        optionsBox.getChildren().add(activeCheckBox);
+
+        updateEditableState();
+    }
+
+    private void setupProfileDetails() {
+        profileDetailsBox = new VBox();
+        profileDetailsBox.setPrefWidth(Screen.getPrimary().getBounds().getWidth()/2);
+
+        setupNameBox();
+        setupIDBox();
+        setupDepartmentBox();
+        setupJobCategoryBox();
+        setupJobTitleBox();
+        setupJobDescription();
+    }
+
+    private void setupNameBox()
+    {
         HBox nameBox = new HBox();
 
         Label tLabel = new Label("Name:");
@@ -45,7 +91,10 @@ public class UserTabProfile extends javafx.scene.control.Tab {
         nameBox.getChildren().add(tLabel);
         nameBox.getChildren().add(new Label(MainSceneController.getCurrentProfile().getName()));
         profileDetailsBox.getChildren().add(nameBox);
+    }
 
+    private void setupIDBox()
+    {
         HBox idBox = new HBox();
 
         Label t2Label = new Label("ID:");
@@ -55,11 +104,14 @@ public class UserTabProfile extends javafx.scene.control.Tab {
         idBox.getChildren().add(t2Label);
         idBox.getChildren().add(new Label("" + MainSceneController.getCurrentProfile().getProfileID()));
         profileDetailsBox.getChildren().add(idBox);
+    }
 
+    private void setupDepartmentBox()
+    {
         HBox departmentBox = new HBox();
         ArrayList<String> departments = new ArrayList<>();
         departments.add("Sønderborg");
-        departmentChoiceBox = new ChoiceBox();
+        departmentChoiceBox = new ChoiceBox<String>();
         departmentChoiceBox.getItems().addAll(departments);
 
         Label t3Label = new Label("Departments:");
@@ -69,14 +121,16 @@ public class UserTabProfile extends javafx.scene.control.Tab {
         departmentBox.getChildren().add(t3Label);
         departmentBox.getChildren().add(departmentChoiceBox);
         profileDetailsBox.getChildren().add(departmentBox);
+    }
 
-
+    private void setupJobCategoryBox()
+    {
         HBox jobCategoryBox = new HBox();
         ArrayList<String> jobCategories = new ArrayList<>();
         jobCategories.add("Sanitet");
         jobCategories.add("Produktion");
         jobCategories.add("Pakkeri");
-        jobCategoryChoiceBox = new ChoiceBox();
+        jobCategoryChoiceBox = new ChoiceBox<String>();
         jobCategoryChoiceBox.getItems().addAll(jobCategories);
         for (int i = 0; i < jobCategories.size(); i++) {
             if (MainSceneController.getCurrentProfile().getJobCategory().equals(jobCategories.get(i))) {
@@ -91,9 +145,10 @@ public class UserTabProfile extends javafx.scene.control.Tab {
         jobCategoryBox.getChildren().add(t4Label);
         jobCategoryBox.getChildren().add(jobCategoryChoiceBox);
         profileDetailsBox.getChildren().add(jobCategoryBox);
+    }
 
-
-
+    private void setupJobTitleBox()
+    {
         HBox JobTitleBox = new HBox();
 
         jobTitleField = new TextField(MainSceneController.getCurrentProfile().getJobTitle());
@@ -105,7 +160,10 @@ public class UserTabProfile extends javafx.scene.control.Tab {
         JobTitleBox.getChildren().add(t5Label);
         JobTitleBox.getChildren().add(jobTitleField);
         profileDetailsBox.getChildren().add(JobTitleBox);
+    }
 
+    private void setupJobDescription()
+    {
         HBox JobDescriptionBox = new HBox();
         Label t6Label = new Label("Job Description:");
 
@@ -116,8 +174,23 @@ public class UserTabProfile extends javafx.scene.control.Tab {
         JobDescriptionBox.getChildren().add(t6Label);
         JobDescriptionBox.getChildren().add(jobDescriptionField);
         profileDetailsBox.getChildren().add(JobDescriptionBox);
+    }
 
-        this.setContent(scrollPane);
+    private void updateEditableState()
+    {
+        if (editModeCheckBox.isSelected()) {
+            departmentChoiceBox.setDisable(true);
+            jobCategoryChoiceBox.setDisable(true);
+            jobTitleField.setDisable(true);
+            jobDescriptionField.setDisable(true);
+        }
+        else
+        {
+            departmentChoiceBox.setDisable(false);
+            jobCategoryChoiceBox.setDisable(false);
+            jobTitleField.setDisable(false);
+            jobDescriptionField.setDisable(false);
+        }
     }
 
     private void getProfileInformation()

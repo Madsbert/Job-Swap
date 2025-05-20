@@ -8,4 +8,8 @@ public class MakeNewProfilePopUp {
     public String addDescription;
     public int addDepartment;
     public String addActivelySeeking;
+
+    public void CreateNewAccount(){
+
+    }
 }

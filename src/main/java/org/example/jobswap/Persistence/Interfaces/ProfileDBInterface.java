@@ -8,7 +8,7 @@ public interface ProfileDBInterface {
     Profile getProfile();
     List<Profile> getAllProfiles();
     void unlockProfile(int workerId);
-    void createProfile(Profile profile);
+    void createNewProfile(Profile profile);
     void deleteProfile(int workerId);
     void grantHRRights(int workerId);
 }

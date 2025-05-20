@@ -5,8 +5,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.example.jobswap.Foundation.DBConnection;
+import org.example.jobswap.Model.AccessLevel;
+import org.example.jobswap.Model.Profile;
+import org.example.jobswap.Persistence.ProfileDB;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.Objects;
 
 public class JobswapApplication extends Application {
@@ -17,6 +21,14 @@ public class JobswapApplication extends Application {
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
+
+        DBConnection.getConnection();
+        Profile jakob = new Profile(AccessLevel.EMPLOYEE,"Jakob Jessen","Danfoss Sales","CSO","IT","Jakob2rune",true,"Head of IT and Sales");
+        ProfileDB profileDB = new ProfileDB();
+
+        profileDB.createNewProfile(jakob);
+
+
     }
 
     public static void main(String[] args) {

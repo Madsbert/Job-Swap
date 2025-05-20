@@ -6,10 +6,36 @@ public class Profile {
     private String name;
     private String department;
     private String jobTitle;
-    private String description;
+    private String JobDescription;
     private String JobCategory;
+    private String Username;
     private boolean activelySeeking;
     private boolean isLocked;
+
+    public Profile(AccessLevel level, int profileID, String name, String department, String jobTitle, String jobDescription, String jobCategory, String username, boolean activelySeeking) {
+        this.level = level;
+        this.profileID = profileID;
+        this.name = name;
+        this.department = department;
+        this.jobTitle = jobTitle;
+        JobDescription = jobDescription;
+        JobCategory = jobCategory;
+        Username = username;
+        this.activelySeeking = activelySeeking;
+        this.isLocked = false;
+    }
+
+    public Profile(AccessLevel level, String name, String department, String jobTitle, String jobCategory, String username, boolean activelySeeking, String jobDescription) {
+        this.name = name;
+        this.level = level;
+        this.department = department;
+        this.jobTitle = jobTitle;
+        JobCategory = jobCategory;
+        Username = username;
+        this.activelySeeking = activelySeeking;
+        JobDescription = jobDescription;
+        this.isLocked = false;
+    }
 
     public AccessLevel getLevel() {
         return level;
@@ -35,6 +61,10 @@ public class Profile {
         this.department = department;
     }
 
+    public int getAccessLevel() {
+        return level.ordinal();
+    }
+
     public String getJobTitle() {
         return jobTitle;
     }
@@ -43,12 +73,12 @@ public class Profile {
         this.jobTitle = jobTitle;
     }
 
-    public String getDescription() {
-        return description;
+    public String getJobDescription() {
+        return JobDescription;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.JobDescription = description;
     }
 
     public String getJobCategory() {
@@ -73,6 +103,14 @@ public class Profile {
 
     public void setLocked(boolean locked) {
         isLocked = locked;
+    }
+
+    public String getUsername() {
+        return Username;
+    }
+
+    public void setUsername(String username) {
+        Username = username;
     }
 
     public void updateInformation()

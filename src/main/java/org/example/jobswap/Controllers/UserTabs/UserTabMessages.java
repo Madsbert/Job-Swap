@@ -2,7 +2,7 @@ package org.example.jobswap.Controllers.UserTabs;
 
 import org.example.jobswap.Model.Message;
 
-public class UserTabMessages extends javafx.scene.control.TabPane {
+public class UserTabMessages extends javafx.scene.control.Tab {
     private void showChats()
     {
 

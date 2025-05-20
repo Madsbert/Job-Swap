@@ -1,6 +1,6 @@
 package org.example.jobswap.Controllers.SysAdminTabs;
 
-public class SysAdminTabOrganisation extends javafx.scene.control.TabPane{
+public class SysAdminTabOrganisation extends javafx.scene.control.Tab{
     private void createJobCategory(String title)
     {
 

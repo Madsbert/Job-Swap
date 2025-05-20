@@ -1,6 +1,6 @@
 package org.example.jobswap.Controllers.UserTabs;
 
-public class UserTabProfile extends javafx.scene.control.TabPane {
+public class UserTabProfile extends javafx.scene.control.Tab {
     private void getProfileInformation()
     {
 

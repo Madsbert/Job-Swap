@@ -1,8 +1,10 @@
 package org.example.jobswap.Persistence;
 
+import org.example.jobswap.Persistence.Interfaces.JobCategoryDBInterface;
+
 import java.util.List;
 
-public class JobCategoryDB {
+public class JobCategoryDB implements JobCategoryDBInterface {
 
     public List<String> getCategories()
     {

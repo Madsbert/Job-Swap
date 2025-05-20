@@ -2,10 +2,11 @@ package org.example.jobswap.Persistence;
 
 import org.example.jobswap.Model.Match;
 import org.example.jobswap.Model.MatchState;
+import org.example.jobswap.Persistence.Interfaces.MatchDBInterface;
 
 import java.util.List;
 
-public class MatchDB {
+public class MatchDB implements MatchDBInterface {
     public List<Match> getMatches(int profileID, MatchState state)
     {
         return null;

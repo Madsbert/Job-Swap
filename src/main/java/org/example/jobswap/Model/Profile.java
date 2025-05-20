@@ -11,6 +11,18 @@ public class Profile {
     private boolean activelySeeking;
     private boolean isLocked;
 
+    public Profile(AccessLevel level, int profileID, String name, String department, String jobTitle, String description, String JobCategory, boolean activelySeeking, boolean isLocked) {
+        this.level = level;
+        this.profileID = profileID;
+        this.name = name;
+        this.department = department;
+        this.jobTitle = jobTitle;
+        this.description = description;
+        this.JobCategory = JobCategory;
+        this.activelySeeking = activelySeeking;
+        this.isLocked = isLocked;
+    }
+
     public AccessLevel getLevel() {
         return level;
     }

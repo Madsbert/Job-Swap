@@ -3,6 +3,7 @@ module org.example.jobswap {
     requires javafx.fxml;
     requires java.sql;
     requires jdk.jshell;
+    requires java.desktop;
 
 
     opens org.example.jobswap to javafx.fxml;

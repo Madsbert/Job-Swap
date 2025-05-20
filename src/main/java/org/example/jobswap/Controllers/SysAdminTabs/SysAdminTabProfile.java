@@ -2,7 +2,7 @@ package org.example.jobswap.Controllers.SysAdminTabs;
 
 import org.example.jobswap.Model.Profile;
 
-public class SysAdminTabProfile extends javafx.scene.control.TabPane{
+public class SysAdminTabProfile extends javafx.scene.control.Tab{
     private void unlockProfile(int profileId)
     {
 

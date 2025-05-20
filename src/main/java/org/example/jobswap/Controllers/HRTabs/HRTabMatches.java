@@ -4,7 +4,7 @@ import org.example.jobswap.Model.Match;
 
 import java.util.List;
 
-public class HRTabMatches extends javafx.scene.control.TabPane{
+public class HRTabMatches extends javafx.scene.control.Tab{
     private List<Match> allMatches;
 
     private void viewMatches(){

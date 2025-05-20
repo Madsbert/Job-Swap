@@ -1,6 +1,6 @@
 package org.example.jobswap.Controllers.UserTabs;
 
-public class UserTabMatches extends javafx.scene.control.TabPane {
+public class UserTabMatches extends javafx.scene.control.Tab {
     public UserTabMatches() {
         super();
     }

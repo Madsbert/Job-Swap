@@ -19,6 +19,7 @@ public class UserTabProfile extends javafx.scene.control.Tab {
     private ChoiceBox departmentChoiceBox;
     private ChoiceBox jobCategoryChoiceBox;
     private TextField jobTitleField;
+    private TextField jobDescriptionField;
 
     public UserTabProfile() {
         super("Profile");
@@ -105,6 +106,16 @@ public class UserTabProfile extends javafx.scene.control.Tab {
         JobTitleBox.getChildren().add(jobTitleField);
         profileDetailsBox.getChildren().add(JobTitleBox);
 
+        HBox JobDescriptionBox = new HBox();
+        Label t6Label = new Label("Job Description:");
+
+        jobDescriptionField = new TextField(MainSceneController.getCurrentProfile().getDescription());
+
+        t6Label.setPrefWidth(140);
+        t6Label.setStyle("-fx-padding: 0 0 0 10;");
+        JobDescriptionBox.getChildren().add(t6Label);
+        JobDescriptionBox.getChildren().add(jobDescriptionField);
+        profileDetailsBox.getChildren().add(JobDescriptionBox);
 
         this.setContent(scrollPane);
     }

@@ -5,9 +5,9 @@ import java.sql.DriverManager;
 
 public class DBConnection {
 
-        private static final String URL = "jdbc:sqlserver://localhost;databaseName=KantineDB";
-        private static final String USERNAME = "sa"; // replace with your username
-        private static final String PASSWORD = "Kantine1234"; // replace with your password
+        private static final String URL = "jdbc:sqlserver://localhost;databaseName=Danfoss Jobswap DB";
+        private static final String USERNAME = "sa";
+        private static final String PASSWORD = "Abcd1234!";
         private static Connection conn;
 
         /**

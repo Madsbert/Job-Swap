@@ -13,6 +13,6 @@ public class JobCategoryDB implements JobCategoryDBInterface {
 
     public void addCategory(String categoryName)
     {
-
+        // Not implemented
     }
 }

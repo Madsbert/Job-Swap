@@ -29,7 +29,7 @@ public class MatchDB implements MatchDBInterface {
 
     public void confirmJobswap(int matchID)
     {
-
+        // Not implemented
     }
 
     public int getMatchIDFromProfile(int profileID)

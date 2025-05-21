@@ -7,6 +7,9 @@ import org.example.jobswap.Model.AccessLevel;
 import org.example.jobswap.Service.BorderedVBox;
 import org.example.jobswap.Service.Header;
 
+/**
+ * class which sets up the tab seek jobswap
+ */
 public class UserTabSeekJobSwap extends javafx.scene.control.Tab {
 
     public UserTabSeekJobSwap()

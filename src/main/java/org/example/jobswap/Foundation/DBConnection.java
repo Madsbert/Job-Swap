@@ -3,6 +3,9 @@ package org.example.jobswap.Foundation;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+/**
+ * class to connect to Database
+ */
 public class DBConnection {
 
         private static final String URL = "jdbc:sqlserver://localhost;databaseName=Danfoss Jobswap DB";

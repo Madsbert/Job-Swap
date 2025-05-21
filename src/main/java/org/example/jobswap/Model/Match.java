@@ -2,6 +2,9 @@ package org.example.jobswap.Model;
 
 import java.time.LocalDateTime;
 
+/**
+ * a class which defines a Match
+ */
 public class Match {
     private MatchState state;
     private Profile ownerProfile;

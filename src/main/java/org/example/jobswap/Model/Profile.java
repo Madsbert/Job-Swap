@@ -1,5 +1,8 @@
 package org.example.jobswap.Model;
 
+/**
+ * a class which defines a Profile
+ */
 public class Profile {
     private AccessLevel level;
     private int profileID;

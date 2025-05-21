@@ -2,6 +2,9 @@ package org.example.jobswap.Model;
 
 import java.sql.Date;
 
+/**
+ * class to define a message
+ */
 public class Message {
     private Profile sender;
     private Profile receiver;

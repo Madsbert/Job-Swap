@@ -8,6 +8,9 @@ import org.example.jobswap.Service.SceneService;
 
 import java.io.IOException;
 
+/**
+ * class to control the Login.fxml and has logic for login
+ */
 public class LoginController {
 
     private void checkCredentials(String workerId, String password)

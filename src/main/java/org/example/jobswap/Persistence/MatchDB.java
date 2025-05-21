@@ -18,7 +18,21 @@ public class MatchDB implements MatchDBInterface {
 
     public void createMatch(Match match)
     {
+        String sp = "{call create_new_match(?,?,?,?)}";
+        Connection conn = DBConnection.getConnection();
+        try (CallableStatement cstmt = conn.prepareCall(sp)){
+            cstmt.setInt(1, match.getOwnerProfile().getProfileID());
+            cstmt.setInt(2, match.getOtherProfile().getProfileID());
+            cstmt.setInt(3, match.getMatchStateInt());
+            cstmt.setObject(4, match.getTimeOfMatch());
+            cstmt.executeUpdate();
+            System.out.println("Effected rows" + cstmt.getUpdateCount());
 
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Something went wrong in createMatch");
+            throw new RuntimeException(e);
+        }
     }
 
     public void updateMatchState(int matchID, MatchState state)

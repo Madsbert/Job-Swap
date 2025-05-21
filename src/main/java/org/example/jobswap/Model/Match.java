@@ -38,7 +38,9 @@ public class Match {
         this.state = newState;
     }
 
-    public MatchState getMatchState() {
-        return state;
+    public int getMatchStateInt() {
+        return state.ordinal();
     }
+
+    public MatchState getMatchState() {return state;}
 }

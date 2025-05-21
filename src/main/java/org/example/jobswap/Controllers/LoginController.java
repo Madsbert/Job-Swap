@@ -17,18 +17,18 @@ public class LoginController {
 
     public void login(ActionEvent event) throws IOException {
 
-        Profile tempTestProfile = new Profile(
-                AccessLevel.EMPLOYEE,
-                2,
-                "Mikkel",
-                "Sønderborg",
-                "Afløser",
-                "Rykker pakker",
-                "Pakkeri",
-                false
-        );
+//        Profile tempTestProfile = new Profile(
+//                AccessLevel.EMPLOYEE,
+//                2,
+//                "Mikkel",
+//                "Sønderborg",
+//                "Afløser",
+//                "Rykker pakker",
+//                "Pakkeri",
+//                false
+//        );
 
-        MainSceneController.setCurrentProfile(tempTestProfile);
+        //MainSceneController.setCurrentProfile(tempTestProfile);
         UserTabMatches userTabMatches = new UserTabMatches();
         shiftScene(event, "Jobswap");
     }

@@ -14,5 +14,5 @@ public interface MatchDBInterface {
     Match getProfileAcceptedMatch();
     void confirmJobswap(int matchID);
     int getMatchIDFromProfile(int profileID);
-    List<Profile> seekAllPossibleProfileMatches(int profileID, Department wantedDepartment);
+    List<Profile> seekAllPossibleProfileMatches(int profileID, String wantedDepartment);
 }

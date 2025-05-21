@@ -25,10 +25,12 @@ public class MatchDB implements MatchDBInterface {
     {
 
     }
-    public List<Profile> seekAllPossibleProfileMatches(int profileID, Department wantedDepartment){
-        String sp = "{call seek_all_possible_profile_matches(?,?,?,?,?,?,?,?,?)}";
+    public List<Profile> seekAllPossibleProfileMatches(int profileID, String wantedDepartment){
+        String sp = "{call seek_all_possible_profile_matches(?,?) }";
         Connection conn = DBConnection.getConnection();
         try (CallableStatement cstmt = conn.prepareCall(sp)){
+            cstmt.setInt(1, profileID);
+            cstmt.setString(2, wantedDepartment);
             ResultSet rs = cstmt.executeQuery();
             List<Profile> profiles = new ArrayList<>();
             while(rs.next()){
@@ -36,7 +38,7 @@ public class MatchDB implements MatchDBInterface {
                 int matchProfileId = rs.getInt("ProfileID");
                 String name = rs.getString("FullName");
                 String username = rs.getString("Username");
-                String department = rs.getString("Department");
+                String department = rs.getString("DepartmentName");
                 String jobTitle = rs.getString("JobTitle");
                 String jobDescription = rs.getString("JobDescription");
                 String jobCategory = rs.getString("JobCategory");

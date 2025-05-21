@@ -109,4 +109,12 @@ public class Profile {
     {
 
     }
+
+    public String getUsername() {
+        return Username;
+    }
+
+    public void setUsername(String username) {
+        Username = username;
+    }
 }

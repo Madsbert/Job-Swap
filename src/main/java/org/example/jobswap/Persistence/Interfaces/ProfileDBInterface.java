@@ -1,11 +1,12 @@
 package org.example.jobswap.Persistence.Interfaces;
 
+import org.example.jobswap.Model.Match;
 import org.example.jobswap.Model.Profile;
 
 import java.util.List;
 
 public interface ProfileDBInterface {
-    Profile getProfile();
+    Profile getProfileFromID(int id);
     List<Profile> getAllProfiles();
     void unlockProfile(int workerId);
     void createNewProfile(Profile profile);

@@ -6,10 +6,11 @@ import org.example.jobswap.Model.Profile;
 import org.example.jobswap.Persistence.Interfaces.ProfileDBInterface;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProfileDB implements ProfileDBInterface {
-    public Profile getProfile()
+    public Profile getProfileFromID(int id)
     {
         // Stored procedure
         return null;
@@ -17,6 +18,7 @@ public class ProfileDB implements ProfileDBInterface {
 
     public List<Profile> getAllProfiles()
     {
+      //Will not be implemented in this iteration
         return null;
     }
 

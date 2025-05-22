@@ -12,6 +12,10 @@ import java.util.List;
 
 public class JobCategoryDB implements JobCategoryDBInterface {
 
+    /**
+     * Returns a List containing Strings of JobCategory names from the database.
+     * @return List of Strings, Job Categories
+     */
     public static List<String> getCategories()
     {
         String query = "select * from tbl_JobCategory";

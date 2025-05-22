@@ -33,11 +33,10 @@ public class LoginController {
 
         //MainSceneController.setCurrentProfile(tempTestProfile);
         UserTabMatches userTabMatches = new UserTabMatches();
-        shiftScene(event, "Jobswap");
+        SceneService.shiftScene(event, "Jobswap","/org/example/jobswap/MainScene.fxml");
     }
 
-    private void shiftScene(ActionEvent event, String title) throws IOException {
-        SceneService.shiftScene(event, title);
+    public void SceneShiftToCreateAccount(ActionEvent actionEvent) throws IOException {
+        SceneService.shiftScene(actionEvent, "Create New Profile", "/org/example/jobswap/CreateNewProfilScene.fxml" );
     }
-
 }

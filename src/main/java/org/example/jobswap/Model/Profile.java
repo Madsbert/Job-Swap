@@ -16,7 +16,7 @@ public class Profile {
     private boolean isLocked;
 
     public Profile(AccessLevel level, int profileID, String name,String Username, String department, String jobTitle, String jobDescription, String jobCategory, boolean activelySeeking) {
-        this.level = level;
+        this.level = AccessLevel.EMPLOYEE;
         this.profileID = profileID;
         this.name = name;
         this.Username = Username;
@@ -27,16 +27,16 @@ public class Profile {
         this.activelySeeking = activelySeeking;
         this.isLocked = false;
     }
-
-    public Profile(AccessLevel level, String name, String Username, String department, String jobTitle, String jobDescription, String jobCategory, boolean activelySeeking) {
+    public Profile(int profileID, String name,String Username, String department, String jobTitle, String jobDescription, String jobCategory, boolean activelySeeking) {
+        this.level = AccessLevel.EMPLOYEE;
+        this.profileID = profileID;
         this.name = name;
         this.Username = Username;
-        this.level = level;
         this.department = department;
         this.jobTitle = jobTitle;
+        this.JobDescription = jobDescription;
         this.JobCategory = jobCategory;
         this.activelySeeking = activelySeeking;
-        this.JobDescription = jobDescription;
         this.isLocked = false;
     }
 

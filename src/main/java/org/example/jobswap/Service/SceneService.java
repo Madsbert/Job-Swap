@@ -13,9 +13,9 @@ import java.io.IOException;
  * class which have a method to shift scene
  */
 public class SceneService {
-    public static void shiftScene(ActionEvent actionEvent, String title ) throws IOException {
+    public static void shiftScene(ActionEvent actionEvent, String title, String fxmlFile ) throws IOException {
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(JobswapApplication.class.getResource("/org/example/jobswap/MainScene.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(JobswapApplication.class.getResource(fxmlFile));
         Scene scene = new Scene(fxmlLoader.load());
 
         stage.setTitle(title);

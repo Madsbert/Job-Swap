@@ -67,7 +67,7 @@ public class MatchDB implements MatchDBInterface {
      * @param wantedDepartment the department the profile is seeking
      * @return
      */
-    public List<Profile> seekAllPossibleProfileMatches(int profileID, String wantedDepartment){
+    public static List<Profile> seekAllPossibleProfileMatches(int profileID, String wantedDepartment){
         String sp = "{call seek_all_possible_profile_matches(?,?) }";
         Connection conn = DBConnection.getConnection();
         try (CallableStatement cstmt = conn.prepareCall(sp)){

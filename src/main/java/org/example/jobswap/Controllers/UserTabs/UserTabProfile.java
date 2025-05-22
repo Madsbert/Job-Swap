@@ -1,13 +1,11 @@
 package org.example.jobswap.Controllers.UserTabs;
 
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import org.example.jobswap.Controllers.MainSceneController;
-import org.example.jobswap.Foundation.DBConnection;
 import org.example.jobswap.Model.Department;
 import org.example.jobswap.Model.Profile;
 import org.example.jobswap.Persistence.DepartmentDB;
@@ -65,6 +63,10 @@ public class UserTabProfile extends javafx.scene.control.Tab {
         this.setContent(scrollPane);
     }
 
+    /**
+     * Sets up all the options in the right side area.
+     * Options are Edit mode, Actively searching and Save Changes.
+     */
     private void setupOptions() {
         optionsBox = new VBox();
         optionsBox.setPrefWidth(Screen.getPrimary().getBounds().getWidth()/2);
@@ -87,6 +89,10 @@ public class UserTabProfile extends javafx.scene.control.Tab {
         updateEditableState();
     }
 
+    /**
+     * Creates an Apply/save changes button.
+     * @return Save Changes button.
+     */
     private Button getApplyButton() {
         Button applyButton = new Button("Save Changes");
         applyButton.setOnAction((event) -> {
@@ -106,6 +112,10 @@ public class UserTabProfile extends javafx.scene.control.Tab {
         return applyButton;
     }
 
+    /**
+     * Sets up the Profile details area. Left side of page.
+     * This calls the setup methods for all the details in order.
+     */
     private void setupProfileDetails() {
         profileDetailsBox = new VBox();
         profileDetailsBox.setPrefWidth(Screen.getPrimary().getBounds().getWidth()/2);
@@ -118,6 +128,9 @@ public class UserTabProfile extends javafx.scene.control.Tab {
         setupJobDescription();
     }
 
+    /**
+     * Sets up name label and the label containing the profile name.
+     */
     private void setupNameBox()
     {
         HBox nameBox = new HBox();
@@ -131,6 +144,9 @@ public class UserTabProfile extends javafx.scene.control.Tab {
         profileDetailsBox.getChildren().add(nameBox);
     }
 
+    /**
+     * Sets up id label and the label containing the profileID.
+     */
     private void setupIDBox()
     {
         HBox idBox = new HBox();
@@ -144,6 +160,10 @@ public class UserTabProfile extends javafx.scene.control.Tab {
         profileDetailsBox.getChildren().add(idBox);
     }
 
+    /**
+     * Sets up Department label and a ChoiceBox containing all the Departments, which it gets from the Database.
+     * It also sets the profiles current Department to be selected in the ChoiceBox if it is valid.
+     */
     private void setupDepartmentBox()
     {
         HBox departmentBox = new HBox();
@@ -172,6 +192,10 @@ public class UserTabProfile extends javafx.scene.control.Tab {
         profileDetailsBox.getChildren().add(departmentBox);
     }
 
+    /**
+     * Sets up JobCategory label and a ChoiceBox containing all the JobCategory, which it gets from the Database.
+     * It also sets the profiles current JobCategory to be selected in the ChoiceBox if it is valid.
+     */
     private void setupJobCategoryBox()
     {
         HBox jobCategoryBox = new HBox();
@@ -194,6 +218,9 @@ public class UserTabProfile extends javafx.scene.control.Tab {
         profileDetailsBox.getChildren().add(jobCategoryBox);
     }
 
+    /**
+     * Sets up JobTitle label and a TextField containing the current profile job title.
+     */
     private void setupJobTitleBox()
     {
         HBox JobTitleBox = new HBox();
@@ -209,6 +236,9 @@ public class UserTabProfile extends javafx.scene.control.Tab {
         profileDetailsBox.getChildren().add(JobTitleBox);
     }
 
+    /**
+     * Sets up JobDescription label and a TextField containing the current profile job description.
+     */
     private void setupJobDescription()
     {
         HBox JobDescriptionBox = new HBox();
@@ -223,6 +253,10 @@ public class UserTabProfile extends javafx.scene.control.Tab {
         profileDetailsBox.getChildren().add(JobDescriptionBox);
     }
 
+    /**
+     * Updates the logic behind the edit mode.
+     * disables editable fields if edit mode is off, does the opposite if it is enabled.
+     */
     private void updateEditableState()
     {
         if (editModeCheckBox.isSelected()) {
@@ -238,25 +272,5 @@ public class UserTabProfile extends javafx.scene.control.Tab {
             jobTitleField.setDisable(true);
             jobDescriptionField.setDisable(true);
         }
-    }
-
-    private void getProfileInformation()
-    {
-
-    }
-
-    private void editProfileInformation()
-    {
-
-    }
-
-    private void setSeekingJobswap(boolean status)
-    {
-
-    }
-
-    private void saveChanges()
-    {
-
     }
 }

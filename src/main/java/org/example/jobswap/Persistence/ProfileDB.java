@@ -2,6 +2,7 @@ package org.example.jobswap.Persistence;
 
 import javafx.scene.effect.Effect;
 import org.example.jobswap.Foundation.DBConnection;
+import org.example.jobswap.Model.AccessLevel;
 import org.example.jobswap.Model.Profile;
 import org.example.jobswap.Persistence.Interfaces.ProfileDBInterface;
 
@@ -13,10 +14,32 @@ import java.util.List;
  * Class to do CRUD in Profiles
  */
 public class ProfileDB implements ProfileDBInterface {
-    public Profile getProfileFromID(int id)
-    {
-        // Stored procedure
-        return null;
+    public Profile getProfileFromID(int profileID) {
+        String sp = "{call getProfileFromID(?)}";
+        Connection conn = DBConnection.getConnection();
+        try (CallableStatement cstmt = conn.prepareCall(sp)) {
+            cstmt.setInt(1, profileID);
+            ResultSet rs = cstmt.executeQuery();
+            Profile profile = null;
+            if (rs.next()) {
+                AccessLevel accessLevel = AccessLevel.values()[rs.getInt("AccessLevelID")];
+                int matchProfileId = rs.getInt("ProfileID");
+                String name = rs.getString("FullName");
+                String username = rs.getString("Username");
+                String department = rs.getString("DepartmentName");
+                String jobTitle = rs.getString("JobTitle");
+                String jobDescription = rs.getString("JobDescription");
+                String jobCategory = rs.getString("JobCategory");
+                boolean activelySeeking = rs.getBoolean("ActivelySeeking");
+                profile = new Profile(accessLevel,matchProfileId, name, username, department,
+                        jobTitle, jobDescription, jobCategory, activelySeeking);
+            }
+            return profile;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("something went wrong in GetProfileFromID");
+            throw new RuntimeException(e);
+        }
     }
 
     public List<Profile> getAllProfiles()

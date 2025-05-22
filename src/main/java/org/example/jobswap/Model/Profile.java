@@ -7,11 +7,11 @@ public class Profile {
     private AccessLevel level;
     private int profileID;
     private String name;
-    private String Username;
+    private String username;
     private String department;
     private String jobTitle;
-    private String JobDescription;
-    private String JobCategory;
+    private String jobDescription;
+    private String jobCategory;
     private boolean activelySeeking;
     private boolean isLocked;
 
@@ -19,24 +19,24 @@ public class Profile {
         this.level = level;
         this.profileID = profileID;
         this.name = name;
-        this.Username = Username;
+        this.username = Username;
         this.department = department;
         this.jobTitle = jobTitle;
-        this.JobDescription = jobDescription;
-        this.JobCategory = jobCategory;
+        this.jobDescription = jobDescription;
+        this.jobCategory = jobCategory;
         this.activelySeeking = activelySeeking;
         this.isLocked = false;
     }
 
-    public Profile(AccessLevel level, String name, String Username, String department, String jobTitle, String jobDescription, String jobCategory, boolean activelySeeking) {
+    public Profile(AccessLevel level, String name, String username, String department, String jobTitle, String jobDescription, String jobCategory, boolean activelySeeking) {
         this.name = name;
-        this.Username = Username;
+        this.username = username;
         this.level = level;
         this.department = department;
         this.jobTitle = jobTitle;
-        this.JobCategory = jobCategory;
+        this.jobCategory = jobCategory;
         this.activelySeeking = activelySeeking;
-        this.JobDescription = jobDescription;
+        this.jobDescription = jobDescription;
         this.isLocked = false;
     }
 
@@ -77,19 +77,19 @@ public class Profile {
     }
 
     public String getJobDescription() {
-        return JobDescription;
+        return jobDescription;
     }
 
     public void setDescription(String description) {
-        this.JobDescription = description;
+        this.jobDescription = description;
     }
 
     public String getJobCategory() {
-        return JobCategory;
+        return jobCategory;
     }
 
     public void setJobCategory(String jobCategory) {
-        JobCategory = jobCategory;
+        this.jobCategory = jobCategory;
     }
 
     public boolean isActivelySeeking() {
@@ -114,10 +114,25 @@ public class Profile {
     }
 
     public String getUsername() {
-        return Username;
+        return username;
     }
 
     public void setUsername(String username) {
-        Username = username;
+        this.username = username;
+    }
+
+    @Override
+    public String toString() {
+        return "Profile{" +
+                "profileID=" + profileID +
+                ", name='" + name+ '\'' +
+                ", username='" + username + '\'' +
+                ", department='" + department + '\'' +
+                ", jobTitle='" + jobTitle + '\'' +
+                ", jobCategory='" +  + '\'' +
+                ", activelySeeking=" + activelySeeking +
+                ", accessLevel=" + level +
+                ", jobDescription='" + jobDescription + '\'' +
+                '}';
     }
 }

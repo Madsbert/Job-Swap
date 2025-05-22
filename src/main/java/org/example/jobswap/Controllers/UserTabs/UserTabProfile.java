@@ -7,10 +7,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import org.example.jobswap.Controllers.MainSceneController;
+import org.example.jobswap.Model.Department;
+import org.example.jobswap.Persistence.DepartmentDB;
+import org.example.jobswap.Persistence.JobCategoryDB;
 import org.example.jobswap.Service.BorderedVBox;
 import org.example.jobswap.Service.Header;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * class which sets up the tab Profile
@@ -113,7 +117,12 @@ public class UserTabProfile extends javafx.scene.control.Tab {
     {
         HBox departmentBox = new HBox();
         ArrayList<String> departments = new ArrayList<>();
-        departments.add("Sønderborg");
+
+        for (Department department : DepartmentDB.getDepartments())
+        {
+            departments.add(department.getDepartmentName());
+        }
+
         departmentChoiceBox = new ChoiceBox<String>();
         departmentChoiceBox.getItems().addAll(departments);
 
@@ -129,10 +138,8 @@ public class UserTabProfile extends javafx.scene.control.Tab {
     private void setupJobCategoryBox()
     {
         HBox jobCategoryBox = new HBox();
-        ArrayList<String> jobCategories = new ArrayList<>();
-        jobCategories.add("Sanitet");
-        jobCategories.add("Produktion");
-        jobCategories.add("Pakkeri");
+        List<String> jobCategories = JobCategoryDB.getCategories();
+
         jobCategoryChoiceBox = new ChoiceBox<String>();
         jobCategoryChoiceBox.getItems().addAll(jobCategories);
         for (int i = 0; i < jobCategories.size(); i++) {
@@ -182,17 +189,17 @@ public class UserTabProfile extends javafx.scene.control.Tab {
     private void updateEditableState()
     {
         if (editModeCheckBox.isSelected()) {
-            departmentChoiceBox.setDisable(true);
-            jobCategoryChoiceBox.setDisable(true);
-            jobTitleField.setDisable(true);
-            jobDescriptionField.setDisable(true);
-        }
-        else
-        {
             departmentChoiceBox.setDisable(false);
             jobCategoryChoiceBox.setDisable(false);
             jobTitleField.setDisable(false);
             jobDescriptionField.setDisable(false);
+        }
+        else
+        {
+            departmentChoiceBox.setDisable(true);
+            jobCategoryChoiceBox.setDisable(true);
+            jobTitleField.setDisable(true);
+            jobDescriptionField.setDisable(true);
         }
     }
 

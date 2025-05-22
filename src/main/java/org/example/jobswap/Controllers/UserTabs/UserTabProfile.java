@@ -99,7 +99,8 @@ public class UserTabProfile extends javafx.scene.control.Tab {
             System.out.println("Profile Diff: " + !changedProfile.equals(MainSceneController.getCurrentProfile()));
             if (!changedProfile.equals(MainSceneController.getCurrentProfile())) {
                 MainSceneController.setCurrentProfile(new Profile(changedProfile));
-                ProfileDB.updateProfile(changedProfile);
+                ProfileDBInterface profileDB = new ProfileDB();
+                profileDB.updateProfile(changedProfile);
             }
         });
         return applyButton;

@@ -13,8 +13,7 @@ public interface ProfileDBInterface {
     public boolean createNewProfile(Profile profile);
 
     public void deleteProfile(int workerId);
-    static void updateProfile(Profile profile) {
-    }
+    void updateProfile(Profile profile);
 
     void grantHRRights(int workerId);
 }

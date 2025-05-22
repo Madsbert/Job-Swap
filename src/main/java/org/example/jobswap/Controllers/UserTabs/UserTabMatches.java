@@ -6,6 +6,9 @@ import javafx.scene.layout.*;
 import org.example.jobswap.Service.BorderedVBox;
 import org.example.jobswap.Service.Header;
 
+/**
+ * class which sets up the tab Matches
+ */
 public class UserTabMatches extends javafx.scene.control.Tab {
     public UserTabMatches() {
         super("Matches");

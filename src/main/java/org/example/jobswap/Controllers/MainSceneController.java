@@ -8,6 +8,9 @@ import org.example.jobswap.Controllers.UserTabs.UserTabProfile;
 import org.example.jobswap.Controllers.UserTabs.UserTabSeekJobSwap;
 import org.example.jobswap.Model.Profile;
 
+/**
+ * class which sets up the MAinescene.fxml
+ */
 public class MainSceneController {
     @FXML
     private TabPane tabPane;

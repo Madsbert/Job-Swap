@@ -1,5 +1,8 @@
 package org.example.jobswap.Controllers;
 
+/**
+ * class which sets createNewProfileScene fxml and handles some logic for creating a new profile
+ */
 public class MakeNewProfilePopUp {
     public String addName;
     public int addJobCategory;

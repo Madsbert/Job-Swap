@@ -12,6 +12,9 @@ import org.example.jobswap.Service.Header;
 
 import java.util.ArrayList;
 
+/**
+ * class which sets up the tab Profile
+ */
 public class UserTabProfile extends javafx.scene.control.Tab {
 
     private ChoiceBox departmentChoiceBox;

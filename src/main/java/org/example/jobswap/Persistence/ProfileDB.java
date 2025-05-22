@@ -9,6 +9,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class to do CRUD in Profiles
+ */
 public class ProfileDB implements ProfileDBInterface {
     public Profile getProfileFromID(int id)
     {
@@ -38,6 +41,10 @@ public class ProfileDB implements ProfileDBInterface {
         }
     }
 
+    /**
+     * method to create a new profile in the database
+     * @param profile an employee in the system
+     */
     public void createNewProfile(Profile profile)
     {
         String sp = "{call create_new_profile(?,?,?,?,?,?,?,?,?)}";

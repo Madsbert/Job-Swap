@@ -10,15 +10,25 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * class to do CRUD in Matches
+ */
 public class MatchDB implements MatchDBInterface {
     public List<Match> getMatches(int profileID, MatchState state) {
         return null;
     }
 
-    public void createMatch(Match match) {
+    /**
+     * creates a new match and in SQL it makes sure the match doesn't exist
+     * and changes state if Person 1 has sent an application and then person 2 also sends an application
+     * the state will then be both interested
+     * @param match two profiles are connected
+     */
+    public void createMatch(Match match)
+    {
         String sp = "{call create_new_match(?,?,?,?)}";
         Connection conn = DBConnection.getConnection();
-        try (CallableStatement cstmt = conn.prepareCall(sp)) {
+        try (CallableStatement cstmt = conn.prepareCall(sp)){
             cstmt.setInt(1, match.getOwnerProfile().getProfileID());
             cstmt.setInt(2, match.getOtherProfile().getProfileID());
             cstmt.setInt(3, match.getMatchStateInt());
@@ -26,7 +36,7 @@ public class MatchDB implements MatchDBInterface {
             cstmt.executeUpdate();
             System.out.println("Effected rows" + cstmt.getUpdateCount());
 
-        } catch (Exception e) {
+        }catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println("Something went wrong in createMatch");
             throw new RuntimeException(e);
@@ -49,6 +59,14 @@ public class MatchDB implements MatchDBInterface {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * a class which seeks for all the possible matches for the profile with their current jobcategory and
+     * the department they wish to work in
+     * @param profileID an id for a profile
+     * @param wantedDepartment the department the profile is seeking
+     * @return
+     */
     public List<Profile> seekAllPossibleProfileMatches(int profileID, String wantedDepartment){
         String sp = "{call seek_all_possible_profile_matches(?,?) }";
         Connection conn = DBConnection.getConnection();
@@ -88,6 +106,7 @@ public class MatchDB implements MatchDBInterface {
     public void confirmJobswap(int matchID)
     {
         // HR - Not implemented
+        // Will not be implemented in this iteration
     }
 
     public int getMatchIDFromProfile(int profileID)

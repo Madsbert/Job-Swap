@@ -17,6 +17,9 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * class to start application
+ */
 public class JobswapApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {

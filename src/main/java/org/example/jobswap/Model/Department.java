@@ -1,5 +1,8 @@
 package org.example.jobswap.Model;
 
+/**
+ * class to define a department
+ */
 public class Department {
     private int departmentID;
     private String departmentName;

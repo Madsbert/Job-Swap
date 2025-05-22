@@ -7,6 +7,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import org.example.jobswap.Controllers.MainSceneController;
+import org.example.jobswap.Model.Department;
+import org.example.jobswap.Persistence.DepartmentDB;
 import org.example.jobswap.Service.BorderedVBox;
 import org.example.jobswap.Service.Header;
 
@@ -113,7 +115,12 @@ public class UserTabProfile extends javafx.scene.control.Tab {
     {
         HBox departmentBox = new HBox();
         ArrayList<String> departments = new ArrayList<>();
-        departments.add("Sønderborg");
+
+        for (Department department : DepartmentDB.getDepartments())
+        {
+            departments.add(department.getDepartmentName());
+        }
+
         departmentChoiceBox = new ChoiceBox<String>();
         departmentChoiceBox.getItems().addAll(departments);
 
@@ -182,17 +189,17 @@ public class UserTabProfile extends javafx.scene.control.Tab {
     private void updateEditableState()
     {
         if (editModeCheckBox.isSelected()) {
-            departmentChoiceBox.setDisable(true);
-            jobCategoryChoiceBox.setDisable(true);
-            jobTitleField.setDisable(true);
-            jobDescriptionField.setDisable(true);
-        }
-        else
-        {
             departmentChoiceBox.setDisable(false);
             jobCategoryChoiceBox.setDisable(false);
             jobTitleField.setDisable(false);
             jobDescriptionField.setDisable(false);
+        }
+        else
+        {
+            departmentChoiceBox.setDisable(true);
+            jobCategoryChoiceBox.setDisable(true);
+            jobTitleField.setDisable(true);
+            jobDescriptionField.setDisable(true);
         }
     }
 

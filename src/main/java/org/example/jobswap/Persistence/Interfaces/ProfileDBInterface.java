@@ -9,7 +9,14 @@ public interface ProfileDBInterface {
     Profile getProfileFromID(int id);
     List<Profile> getAllProfiles();
     void unlockProfile(int workerId);
-    void createNewProfile(Profile profile);
-    void deleteProfile(int workerId);
+
+    static void createNewProfile(Profile profile) {
+
+    }
+
+    static void deleteProfile(int workerId) {
+
+    }
+
     void grantHRRights(int workerId);
 }

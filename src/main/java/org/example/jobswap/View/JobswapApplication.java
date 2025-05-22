@@ -29,43 +29,6 @@ public class JobswapApplication extends Application {
         stage.setScene(scene);
         stage.show();
 
-        DBConnection.getConnection();
-//        Profile jakob = new Profile(
-//                AccessLevel.EMPLOYEE,
-//                "Anakin Skywalker",
-//                "Not just the Men",
-//                "Danfoss Redan",
-//                "But the women",
-//                "And the children too",
-//                "Sales",
-//                true);;
-//        ProfileDB profileDB = new ProfileDB();
-
-//        profileDB.createNewProfile(jakob);
-
-//        MatchDBInterface matchDB = new MatchDB();
-//        List<Profile> profiles= matchDB.seekAllPossibleProfileMatches(10000, "Danfoss Redan");
-//        System.out.println("Found " + profiles.size() + " matching profiles:");
-//        System.out.println("------------------------------------------------");
-//
-//        for (Profile profile : profiles) {
-//            System.out.println("Profile ID: " + profile.getProfileID());
-//            System.out.println("Name: " + profile.getName());
-//            System.out.println("Username: " + profile.getUsername());
-//            System.out.println("Department: " + profile.getDepartment());
-//            System.out.println("Job Title: " + profile.getJobTitle());
-//            System.out.println("Job Category: " + profile.getJobCategory());
-//            System.out.println("Access Level: " + profile.getAccessLevel());
-//            System.out.println("Actively Seeking: " + (profile.isActivelySeeking() ? "Yes" : "No"));
-//            System.out.println("------------------------------------------------");
-//        }
-//        ProfileDB profile = new ProfileDB();
-//        Profile profile1 = profile.getProfileFromID(10000);
-//        System.out.println( profile1);
-//
-
-
-
     }
 
     public static void main(String[] args) {

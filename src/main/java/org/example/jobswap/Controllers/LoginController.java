@@ -20,24 +20,24 @@ public class LoginController {
 
     public void login(ActionEvent event) throws IOException {
 
-//        Profile tempTestProfile = new Profile(
-//                AccessLevel.EMPLOYEE,
-//                2,
-//                "Mikkel",
-//                "Sønderborg",
-//                "Afløser",
-//                "Rykker pakker",
-//                "Pakkeri",
-//                false
-//        );
+        Profile tempTestProfile = new Profile(
+                AccessLevel.EMPLOYEE,
+                1,
+                "Mikkel",
+                "MikkerMan",
+                "Sønderborg",
+                "Afløser",
+                "Rykker pakker",
+                "Pakkeri",
+                false
+        );
 
-        //MainSceneController.setCurrentProfile(tempTestProfile);
+        MainSceneController.setCurrentProfile(tempTestProfile);
         UserTabMatches userTabMatches = new UserTabMatches();
-        shiftScene(event, "Jobswap");
+        SceneService.shiftScene(event, "Jobswap","/org/example/jobswap/MainScene.fxml");
     }
 
-    private void shiftScene(ActionEvent event, String title) throws IOException {
-        SceneService.shiftScene(event, title);
+    public void SceneShiftToCreateAccount(ActionEvent actionEvent) throws IOException {
+        SceneService.shiftScene(actionEvent, "Create New Profile", "/org/example/jobswap/CreateNewProfilScene.fxml" );
     }
-
 }

@@ -1,5 +1,7 @@
 package org.example.jobswap.Model;
 
+import java.util.Objects;
+
 /**
  * a class which defines a Profile
  */
@@ -15,8 +17,21 @@ public class Profile {
     private boolean activelySeeking;
     private boolean isLocked;
 
+    public Profile(Profile profile) {
+        this.level = profile.getLevel();
+        this.profileID = profile.getProfileID();
+        this.name = profile.getName();
+        this.username = profile.getUsername();
+        this.department = profile.getDepartment();
+        this.jobTitle = profile.getJobTitle();
+        this.jobDescription = profile.getJobDescription();
+        this.jobCategory = profile.getJobCategory();
+        this.activelySeeking = profile.isActivelySeeking();
+        this.isLocked = profile.isLocked();
+    }
+
     public Profile(AccessLevel level, int profileID, String name,String Username, String department, String jobTitle, String jobDescription, String jobCategory, boolean activelySeeking) {
-        this.level = level;
+        this.level = AccessLevel.EMPLOYEE;
         this.profileID = profileID;
         this.name = name;
         this.username = Username;
@@ -27,16 +42,16 @@ public class Profile {
         this.activelySeeking = activelySeeking;
         this.isLocked = false;
     }
-
-    public Profile(AccessLevel level, String name, String username, String department, String jobTitle, String jobDescription, String jobCategory, boolean activelySeeking) {
+    public Profile(int profileID, String name,String Username, String department, String jobTitle, String jobDescription, String jobCategory, boolean activelySeeking) {
+        this.level = AccessLevel.EMPLOYEE;
+        this.profileID = profileID;
         this.name = name;
-        this.username = username;
-        this.level = level;
+        this.username = Username;
         this.department = department;
         this.jobTitle = jobTitle;
+        this.jobDescription = jobDescription;
         this.jobCategory = jobCategory;
         this.activelySeeking = activelySeeking;
-        this.jobDescription = jobDescription;
         this.isLocked = false;
     }
 
@@ -134,5 +149,21 @@ public class Profile {
                 ", accessLevel=" + level +
                 ", jobDescription='" + jobDescription + '\'' +
                 '}';
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        if (this.level != ((Profile) o).level) return false;
+        if (this.profileID != ((Profile) o).profileID) return false;
+        if (!Objects.equals(this.name, ((Profile) o).name)) return false;
+        if (!Objects.equals(this.username, ((Profile) o).Username)) return false;
+        if (!Objects.equals(this.department, ((Profile) o).department)) return false;
+        if (!Objects.equals(this.jobTitle, ((Profile) o).jobTitle)) return false;
+        if (!Objects.equals(this.jobDescription, ((Profile) o).JobDescription)) return false;
+        if (!Objects.equals(this.jobCategory, ((Profile) o).JobCategory)) return false;
+        if (this.activelySeeking != ((Profile) o).activelySeeking) return false;
+        return true;
     }
 }

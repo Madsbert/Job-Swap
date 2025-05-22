@@ -1,5 +1,7 @@
 package org.example.jobswap.Controllers;
 
+import javafx.event.ActionEvent;
+
 /**
  * class which sets createNewProfileScene fxml and handles some logic for creating a new profile
  */
@@ -14,5 +16,11 @@ public class MakeNewProfilePopUp {
 
     public void CreateNewAccount(){
 
+    }
+
+    public void createProfileInDatabase(ActionEvent actionEvent) {
+    }
+
+    public void Cancel(ActionEvent actionEvent) {
     }
 }

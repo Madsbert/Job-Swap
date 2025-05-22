@@ -37,10 +37,57 @@
     -fx-background-color: #da291c; /* Danfoss red */
 }
 
+/* Create New Profile */
 /* TextFields */
 .text-field, .password-field {
     -fx-background-radius: 5;
     -fx-border-radius: 5;
     -fx-border-color: #cccccc;
     -fx-padding: 6 10;
+}
+/* Section titles */
+.section-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 0 5 0;
+    -fx-text-fill: #333333;
+}
+
+/* Form title */
+.form-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+/* Form background */
+.form-background {
+    -fx-background-color: #ffffff;
+    -fx-padding: 20px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+/* Primary button */
+.primary-button {
+    -fx-background-color: #da291c;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 16px;
+}
+
+.primary-button:hover {
+    -fx-background-color: #B2221A;
+}
+
+/* Secondary button */
+.secondary-button {
+    -fx-background-color: #95a5a6;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 16px;
+}
+
+.secondary-button:hover {
+    -fx-background-color: #7f8c8d;
 }

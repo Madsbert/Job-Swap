@@ -3,6 +3,7 @@ package org.example.jobswap.Persistence;
 import javafx.scene.effect.Effect;
 import org.example.jobswap.Foundation.DBConnection;
 import org.example.jobswap.Model.AccessLevel;
+import org.example.jobswap.Model.Department;
 import org.example.jobswap.Model.Profile;
 import org.example.jobswap.Persistence.Interfaces.ProfileDBInterface;
 
@@ -68,20 +69,21 @@ public class ProfileDB implements ProfileDBInterface {
      * method to create a new profile in the database
      * @param profile an employee in the system
      */
-    public void createNewProfile(Profile profile)
+    public static void createNewProfile(Profile profile)
     {
-        String sp = "{call create_new_profile(?,?,?,?,?,?,?,?,?)}";
+        String sp = "{call create_new_profile(?,?,?,?,?,?,?,?,?,?)}";
         Connection conn = DBConnection.getConnection();
         try (CallableStatement cstmt = conn.prepareCall(sp)){
-            cstmt.setString(1, profile.getDepartment());
-            cstmt.setString(2, profile.getJobCategory());
-            cstmt.setInt(3,profile.getAccessLevel());
-            cstmt.setString(4, profile.getName());
-            cstmt.setString(5, profile.getUsername());
-            cstmt.setString(6, profile.getJobTitle());
-            cstmt.setBoolean(7, profile.isActivelySeeking());
-            cstmt.setString(8, profile.getJobDescription());
-            cstmt.setBoolean(9, profile.isLocked());
+            cstmt.setInt(1, profile.getProfileID());
+            cstmt.setString(2, profile.getDepartment());
+            cstmt.setString(3, profile.getJobCategory());
+            cstmt.setInt(4,profile.getAccessLevel());
+            cstmt.setString(5, profile.getName());
+            cstmt.setString(6, profile.getUsername());
+            cstmt.setString(7, profile.getJobTitle());
+            cstmt.setBoolean(8, profile.isActivelySeeking());
+            cstmt.setString(9, profile.getJobDescription());
+            cstmt.setBoolean(10, profile.isLocked());
             cstmt.executeUpdate();
             System.out.println("Effected rows" + cstmt.getUpdateCount());
 
@@ -93,9 +95,21 @@ public class ProfileDB implements ProfileDBInterface {
 
     }
 
-    public void deleteProfile(int workerId)
+    public static void deleteProfile(int profileID)
     {
+        String query = "DELETE from tbl_Profile WHERE ProfileID = ?";
 
+        try {
+            Connection connection = DBConnection.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.executeQuery();
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println(e.getCause());
+            System.out.println(e.getStackTrace());
+        }
     }
 
     public void grantHRRights(int workerId)

@@ -6,12 +6,22 @@ package org.example.jobswap.Model;
 public class Department {
     private int departmentID;
     private String departmentName;
-    private Profile hrProfile;
     private String city;
-    public Department(int departmentID, String departmentName, Profile hrProfile, String city) {
+    public Department(int departmentID, String departmentName, String city) {
         this.departmentID = departmentID;
         this.departmentName = departmentName;
-        this.hrProfile = hrProfile;
         this.city = city;
+    }
+
+    public int getDepartmentID() {
+        return departmentID;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public String getCity() {
+        return city;
     }
 }

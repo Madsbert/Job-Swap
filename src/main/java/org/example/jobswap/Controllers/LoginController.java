@@ -32,8 +32,7 @@ public class LoginController {
         String pass = password.getText();
         try {
             LoginDBInterface db = new LoginDB();
-            db.checkCredentials(id, pass);
-            return true;
+            return db.checkCredentials(id, pass);
         }catch(NumberFormatException e) {
             System.out.println("invalid employee ID");
             return false;
@@ -58,14 +57,14 @@ public class LoginController {
 //        );
         if (!checkCredentials()) {
             System.out.println("wrong credentials");
-            return;
-        }
+        }else {
 
-        ProfileDB db = new ProfileDB();
-        Profile profile = db.getProfileFromID(Integer.parseInt(employeeID.getText()));
-        MainSceneController.setCurrentProfile(profile);
-        UserTabMatches userTabMatches = new UserTabMatches();
-        SceneService.shiftScene(event, "Jobswap", "/org/example/jobswap/MainScene.fxml");
+            ProfileDB db = new ProfileDB();
+            Profile profile = db.getProfileFromID(Integer.parseInt(employeeID.getText()));
+            MainSceneController.setCurrentProfile(profile);
+            UserTabMatches userTabMatches = new UserTabMatches();
+            SceneService.shiftScene(event, "Jobswap", "/org/example/jobswap/MainScene.fxml");
+        }
 
     }
 

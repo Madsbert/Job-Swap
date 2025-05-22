@@ -13,13 +13,12 @@ public class LoginDB implements LoginDBInterface {
     public boolean checkCredentials(int workerId, String password)
     {
         Connection conn = DBConnection.getConnection();
-        String query = "SELECT * FROM dbo.tbl_Login WHERE ProfileID = ? AND LoginPassword = ?";
+        String query = "SELECT 1 FROM dbo.tbl_Login WHERE ProfileID = ? AND LoginPassword = ?";
         try (PreparedStatement ps = conn.prepareStatement(query)){
             ps.setInt(1, workerId);
             ps.setString(2, password);
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()){
-                return true;
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
             }
         }catch (Exception e){
             e.printStackTrace();

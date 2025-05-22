@@ -33,5 +33,9 @@ public class DBConnection {
             return conn;
         }
 
+        private DBConnection() {
+
+        }
+
 }
 

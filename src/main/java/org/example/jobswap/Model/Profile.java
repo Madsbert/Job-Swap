@@ -149,6 +149,7 @@ public class Profile {
         if (!Objects.equals(this.JobDescription, ((Profile) o).JobDescription)) return false;
         if (!Objects.equals(this.JobCategory, ((Profile) o).JobCategory)) return false;
         if (this.activelySeeking != ((Profile) o).activelySeeking) return false;
+
         return true;
     }
 }

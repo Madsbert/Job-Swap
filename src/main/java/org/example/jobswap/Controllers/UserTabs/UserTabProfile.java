@@ -81,8 +81,15 @@ public class UserTabProfile extends javafx.scene.control.Tab {
 
         applyButton = new Button("Save Changes");
         applyButton.setOnAction((event) -> {
+            changedProfile.setDepartment(departmentChoiceBox.getSelectionModel().getSelectedItem().toString());
+            changedProfile.setJobCategory(jobCategoryChoiceBox.getSelectionModel().getSelectedItem().toString());
+            changedProfile.setJobTitle(jobTitleField.getText());
+            changedProfile.setDescription(jobDescriptionField.getText());
+            changedProfile.setActivelySeeking(activeCheckBox.isSelected());
+
+            System.out.println("Profile Diff: " + !changedProfile.equals(MainSceneController.getCurrentProfile()));
             if (!changedProfile.equals(MainSceneController.getCurrentProfile())) {
-                MainSceneController.setCurrentProfile(changedProfile);
+                MainSceneController.setCurrentProfile(new Profile(changedProfile));
                 ProfileDB.deleteProfile(MainSceneController.getCurrentProfile().getProfileID());
                 ProfileDB.createNewProfile(MainSceneController.getCurrentProfile());
             }

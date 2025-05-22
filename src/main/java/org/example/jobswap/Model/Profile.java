@@ -150,6 +150,12 @@ public class Profile {
                 ", jobDescription='" + jobDescription + '\'' +
                 '}';
     }
+
+    /**
+     * Compares itself with an object to see if they have the same values.
+     * @param o another Object.
+     * @return Returns {@code true} if all instance variables are equal to each other.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

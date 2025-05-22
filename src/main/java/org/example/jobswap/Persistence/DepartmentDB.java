@@ -13,8 +13,8 @@ import java.util.List;
 public class DepartmentDB implements DepartmentDBInterface {
 
     /**
-     * Returns a list containing all Departments in the Database.
-     * @return List of Department Objects.
+     * Returns a {@link List} containing all {@link Department} in the Database.
+     * @return {@link List} of {@link Department} Objects.
      */
     public static List<Department> getDepartments()
     {

@@ -2,6 +2,7 @@ package org.example.jobswap.Persistence;
 
 import org.example.jobswap.Foundation.DBConnection;
 import org.example.jobswap.Model.Department;
+import org.example.jobswap.Model.Profile;
 import org.example.jobswap.Persistence.Interfaces.JobCategoryDBInterface;
 
 import java.sql.Connection;
@@ -13,8 +14,8 @@ import java.util.List;
 public class JobCategoryDB implements JobCategoryDBInterface {
 
     /**
-     * Returns a List containing Strings of JobCategory names from the database.
-     * @return List of Strings, Job Categories
+     * Returns a {@link List} containing {@link String}s of JobCategory names from the database.
+     * @return {@link List} of {@link String}s, Job Categories
      */
     public static List<String> getCategories()
     {

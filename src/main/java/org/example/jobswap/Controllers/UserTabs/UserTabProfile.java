@@ -10,6 +10,7 @@ import org.example.jobswap.Controllers.MainSceneController;
 import org.example.jobswap.Model.Department;
 import org.example.jobswap.Model.Profile;
 import org.example.jobswap.Persistence.DepartmentDB;
+import org.example.jobswap.Persistence.Interfaces.ProfileDBInterface;
 import org.example.jobswap.Persistence.JobCategoryDB;
 import org.example.jobswap.Persistence.ProfileDB;
 import org.example.jobswap.Service.BorderedVBox;
@@ -90,8 +91,9 @@ public class UserTabProfile extends javafx.scene.control.Tab {
             System.out.println("Profile Diff: " + !changedProfile.equals(MainSceneController.getCurrentProfile()));
             if (!changedProfile.equals(MainSceneController.getCurrentProfile())) {
                 MainSceneController.setCurrentProfile(new Profile(changedProfile));
-                ProfileDB.deleteProfile(MainSceneController.getCurrentProfile().getProfileID());
-                ProfileDB.createNewProfile(MainSceneController.getCurrentProfile());
+                ProfileDBInterface profileDB = new ProfileDB();
+                profileDB.deleteProfile(MainSceneController.getCurrentProfile().getProfileID());
+                profileDB.createNewProfile(MainSceneController.getCurrentProfile());
             }
         });
         optionsBox.getChildren().add(applyButton);

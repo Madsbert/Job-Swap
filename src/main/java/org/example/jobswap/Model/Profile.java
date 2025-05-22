@@ -158,11 +158,11 @@ public class Profile {
         if (this.level != ((Profile) o).level) return false;
         if (this.profileID != ((Profile) o).profileID) return false;
         if (!Objects.equals(this.name, ((Profile) o).name)) return false;
-        if (!Objects.equals(this.username, ((Profile) o).Username)) return false;
+        if (!Objects.equals(this.username, ((Profile) o).username)) return false;
         if (!Objects.equals(this.department, ((Profile) o).department)) return false;
         if (!Objects.equals(this.jobTitle, ((Profile) o).jobTitle)) return false;
-        if (!Objects.equals(this.jobDescription, ((Profile) o).JobDescription)) return false;
-        if (!Objects.equals(this.jobCategory, ((Profile) o).JobCategory)) return false;
+        if (!Objects.equals(this.jobDescription, ((Profile) o).jobDescription)) return false;
+        if (!Objects.equals(this.jobCategory, ((Profile) o).jobCategory)) return false;
         if (this.activelySeeking != ((Profile) o).activelySeeking) return false;
         return true;
     }

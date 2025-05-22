@@ -19,8 +19,8 @@ public class Profile {
         this.Username = Username;
         this.department = department;
         this.jobTitle = jobTitle;
-        JobDescription = jobDescription;
-        JobCategory = jobCategory;
+        this.JobDescription = jobDescription;
+        this.JobCategory = jobCategory;
         this.activelySeeking = activelySeeking;
         this.isLocked = false;
     }
@@ -31,9 +31,9 @@ public class Profile {
         this.level = level;
         this.department = department;
         this.jobTitle = jobTitle;
-        JobCategory = jobCategory;
+        this.JobCategory = jobCategory;
         this.activelySeeking = activelySeeking;
-        JobDescription = jobDescription;
+        this.JobDescription = jobDescription;
         this.isLocked = false;
     }
 

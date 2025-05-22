@@ -11,16 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MatchDB implements MatchDBInterface {
-    public List<Match> getMatches(int profileID, MatchState state)
-    {
+    public List<Match> getMatches(int profileID, MatchState state) {
         return null;
     }
 
-    public void createMatch(Match match)
-    {
+    public void createMatch(Match match) {
         String sp = "{call create_new_match(?,?,?,?)}";
         Connection conn = DBConnection.getConnection();
-        try (CallableStatement cstmt = conn.prepareCall(sp)){
+        try (CallableStatement cstmt = conn.prepareCall(sp)) {
             cstmt.setInt(1, match.getOwnerProfile().getProfileID());
             cstmt.setInt(2, match.getOtherProfile().getProfileID());
             cstmt.setInt(3, match.getMatchStateInt());
@@ -28,16 +26,28 @@ public class MatchDB implements MatchDBInterface {
             cstmt.executeUpdate();
             System.out.println("Effected rows" + cstmt.getUpdateCount());
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println("Something went wrong in createMatch");
             throw new RuntimeException(e);
         }
     }
 
-    public void updateMatchState(int matchID, MatchState state)
-    {
+    public void updateMatchStateFromBothInterestedToMatch(Match match,Profile LoggedInProfile) {
+        String sp = "{call update_matchstate_of_both_interested_to_complete_match(?,?,?) }";
+        Connection conn = DBConnection.getConnection();
+        try (CallableStatement cstmt = conn.prepareCall(sp)) {
+            cstmt.setInt(1, match.getOwnerProfile().getProfileID());
+            cstmt.setInt(2, match.getOtherProfile().getProfileID());
+            cstmt.setInt(3, LoggedInProfile.getProfileID());
+            cstmt.executeUpdate();
+            System.out.println("Effected rows" + cstmt.getUpdateCount());
 
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Something went wrong in updateMatchStateFromBothInterestedToMatch");
+            throw new RuntimeException(e);
+        }
     }
     public List<Profile> seekAllPossibleProfileMatches(int profileID, String wantedDepartment){
         String sp = "{call seek_all_possible_profile_matches(?,?) }";
@@ -77,7 +87,7 @@ public class MatchDB implements MatchDBInterface {
 
     public void confirmJobswap(int matchID)
     {
-        // Not implemented
+        // HR - Not implemented
     }
 
     public int getMatchIDFromProfile(int profileID)

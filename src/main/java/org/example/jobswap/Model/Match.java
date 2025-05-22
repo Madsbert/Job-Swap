@@ -8,6 +8,13 @@ public class Match {
     private Profile otherProfile;
     private LocalDateTime timeOfMatch;
 
+    public Match(MatchState state, Profile ownerProfile, Profile otherProfile) {
+        this.state = state;
+        this.ownerProfile = ownerProfile;
+        this.otherProfile = otherProfile;
+        this.timeOfMatch = LocalDateTime.now();
+    }
+
 
     public Profile getOwnerProfile() {
         return ownerProfile;

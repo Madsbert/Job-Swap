@@ -10,7 +10,7 @@ import java.util.List;
 public interface MatchDBInterface {
     List<Match> getMatches(int profileID, MatchState state);
     void createMatch(Match match);
-    void updateMatchState(int matchID, MatchState state);
+    void updateMatchStateFromBothInterestedToMatch(Match match,Profile LoggedInProfile);
     Match getProfileAcceptedMatch();
     void confirmJobswap(int matchID);
     int getMatchIDFromProfile(int profileID);

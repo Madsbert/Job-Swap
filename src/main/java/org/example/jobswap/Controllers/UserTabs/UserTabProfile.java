@@ -33,9 +33,8 @@ public class UserTabProfile extends javafx.scene.control.Tab {
 
     private CheckBox editModeCheckBox;
     private CheckBox activeCheckBox;
-    private Button applyButton;
 
-    private Profile changedProfile;
+    private final Profile changedProfile;
 
     public UserTabProfile() {
         super("Profile");
@@ -79,7 +78,15 @@ public class UserTabProfile extends javafx.scene.control.Tab {
         activeCheckBox.setOnAction(event -> MainSceneController.getCurrentProfile().setActivelySeeking(activeCheckBox.isSelected()));
         optionsBox.getChildren().add(activeCheckBox);
 
-        applyButton = new Button("Save Changes");
+        Button applyButton = getApplyButton();
+        optionsBox.getChildren().add(applyButton);
+
+
+        updateEditableState();
+    }
+
+    private Button getApplyButton() {
+        Button applyButton = new Button("Save Changes");
         applyButton.setOnAction((event) -> {
             changedProfile.setDepartment(departmentChoiceBox.getSelectionModel().getSelectedItem().toString());
             changedProfile.setJobCategory(jobCategoryChoiceBox.getSelectionModel().getSelectedItem().toString());
@@ -93,10 +100,7 @@ public class UserTabProfile extends javafx.scene.control.Tab {
                 ProfileDB.updateProfile(changedProfile);
             }
         });
-        optionsBox.getChildren().add(applyButton);
-
-
-        updateEditableState();
+        return applyButton;
     }
 
     private void setupProfileDetails() {

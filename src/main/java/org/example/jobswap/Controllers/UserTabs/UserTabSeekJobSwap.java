@@ -1,6 +1,7 @@
 package org.example.jobswap.Controllers.UserTabs;
 
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -9,10 +10,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import org.example.jobswap.Controllers.MainSceneController;
-import org.example.jobswap.Model.AccessLevel;
-import org.example.jobswap.Model.Department;
-import org.example.jobswap.Model.Profile;
+import org.example.jobswap.Model.*;
 import org.example.jobswap.Persistence.DepartmentDB;
+import org.example.jobswap.Persistence.Interfaces.MatchDBInterface;
 import org.example.jobswap.Persistence.MatchDB;
 import org.example.jobswap.Service.BorderedVBox;
 import org.example.jobswap.Service.Header;
@@ -115,6 +115,9 @@ public class UserTabSeekJobSwap extends javafx.scene.control.Tab {
             gridPane.add(new Label("Department: " + profile.getDepartment()), 0, 1);
             gridPane.add(new Label("Job Titel: " + profile.getJobTitle()), 1, 0);
             gridPane.add(new Label("Job Description: " + profile.getJobDescription()), 1, 1);
+            Button applyButton = new Button("Apply for Swap");
+            applyButton.setOnAction(event -> {applyForJobswap(profile);});
+            gridPane.add(applyButton, 2, 1);
 
             gridPane.autosize();
             matchingProfilesHBoxes.add(gridPane);
@@ -123,8 +126,11 @@ public class UserTabSeekJobSwap extends javafx.scene.control.Tab {
         swapsBox.getChildren().addAll(matchingProfilesHBoxes);
     }
 
-    private void applyForJobswap()
+    private void applyForJobswap(Profile profileToApplyTo)
     {
+        MatchDBInterface db = new MatchDB();
+        Match newMatch = new Match(MatchState.APPLICATION, MainSceneController.getCurrentProfile(), profileToApplyTo);
 
+        db.createMatch(newMatch);
     }
 }

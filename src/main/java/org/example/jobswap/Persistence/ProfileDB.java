@@ -72,7 +72,7 @@ public class ProfileDB implements ProfileDBInterface {
     }
 
     /**
-     * method to create a new profile in the database
+     * method to create a new {@link Profile} in the database
      * @param profile an employee in the system
      */
     public boolean createNewProfile(Profile profile)

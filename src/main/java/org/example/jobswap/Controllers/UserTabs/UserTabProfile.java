@@ -113,7 +113,7 @@ public class UserTabProfile extends javafx.scene.control.Tab {
     }
 
     /**
-     * Sets up the Profile details area. Left side of page.
+     * Sets up the {@link Profile} details area. Left side of page.
      * This calls the setup methods for all the details in order.
      */
     private void setupProfileDetails() {
@@ -129,7 +129,7 @@ public class UserTabProfile extends javafx.scene.control.Tab {
     }
 
     /**
-     * Sets up name label and the label containing the profile name.
+     * Sets up name label and the label containing the {@link Profile} name.
      */
     private void setupNameBox()
     {
@@ -161,8 +161,8 @@ public class UserTabProfile extends javafx.scene.control.Tab {
     }
 
     /**
-     * Sets up Department label and a ChoiceBox containing all the Departments, which it gets from the Database.
-     * It also sets the profiles current Department to be selected in the ChoiceBox if it is valid.
+     * Sets up {@link Department} label and a {@link ChoiceBox} containing all the Departments, which it gets from the Database.
+     * It also sets the profiles current {@link Department} to be selected in the {@link ChoiceBox} if it is valid.
      */
     private void setupDepartmentBox()
     {
@@ -193,8 +193,8 @@ public class UserTabProfile extends javafx.scene.control.Tab {
     }
 
     /**
-     * Sets up JobCategory label and a ChoiceBox containing all the JobCategory, which it gets from the Database.
-     * It also sets the profiles current JobCategory to be selected in the ChoiceBox if it is valid.
+     * Sets up Job category label and a {@link ChoiceBox} containing all the Job categories, which it gets from the Database.
+     * It also sets the {@link Profile}s current Job category to be selected in the {@link ChoiceBox} if it is valid.
      */
     private void setupJobCategoryBox()
     {
@@ -219,7 +219,7 @@ public class UserTabProfile extends javafx.scene.control.Tab {
     }
 
     /**
-     * Sets up JobTitle label and a TextField containing the current profile job title.
+     * Sets up JobTitle label and a TextField containing the current {@link Profile} job title.
      */
     private void setupJobTitleBox()
     {
@@ -237,7 +237,7 @@ public class UserTabProfile extends javafx.scene.control.Tab {
     }
 
     /**
-     * Sets up JobDescription label and a TextField containing the current profile job description.
+     * Sets up JobDescription label and a TextField containing the current {@link Profile} job description.
      */
     private void setupJobDescription()
     {

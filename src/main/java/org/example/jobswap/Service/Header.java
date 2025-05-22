@@ -4,6 +4,9 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.stage.Screen;
 
+/**
+ * UI Class to add a label with Danfoss/Default Red color as background.
+ */
 public class Header extends Label {
 
     public Header(String text) {
@@ -25,6 +28,10 @@ public class Header extends Label {
         setUnifiedPadding(padding);
     }
 
+    /**
+     * Makes the padding is the same on all sides.
+     * @param padding
+     */
     public void setUnifiedPadding(double padding) {
         setPadding(new Insets(padding, padding, padding, padding));
     }

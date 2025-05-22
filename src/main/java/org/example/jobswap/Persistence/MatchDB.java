@@ -22,7 +22,7 @@ public class MatchDB implements MatchDBInterface {
      * creates a new match and in SQL it makes sure the match doesn't exist
      * and changes state if Person 1 has sent an application and then person 2 also sends an application
      * the state will then be both interested
-     * @param match two profiles are connected
+     * @param match two {@link Profile}s are connected
      */
     public void createMatch(Match match)
     {
@@ -67,10 +67,10 @@ public class MatchDB implements MatchDBInterface {
     }
 
     /**
-     * a class which seeks for all the possible matches for the profile with their current jobcategory and
+     * a class which seeks for all the possible matches for the {@link Profile} with their current jobcategory and
      * the department they wish to work in
-     * @param profileID an id for a profile
-     * @param wantedDepartment the department the profile is seeking
+     * @param profileID an id for a {@link Profile}
+     * @param wantedDepartment the department the {@link Profile} is seeking
      * @return
      */
     public static List<Profile> seekAllPossibleProfileMatches(int profileID, String wantedDepartment){

@@ -43,6 +43,12 @@ public class MatchDB implements MatchDBInterface {
         }
     }
 
+    /**
+     * The Stored procedure makes sure that one profile cant puch the button twice so its a match.
+     * and it makes the state go from 3- interested to
+     * @param match
+     * @param LoggedInProfile
+     */
     public void updateMatchStateFromBothInterestedToMatch(Match match,Profile LoggedInProfile) {
         String sp = "{call update_matchstate_of_both_interested_to_complete_match(?,?,?) }";
         Connection conn = DBConnection.getConnection();

@@ -9,6 +9,6 @@ public enum MatchState {
     BOTH_INTERESTED,
     MATCH,
     ONE_PROFILE_IS_READY_TO_MATCH,
-    TWO_PROFILE_IS_READY_TO_MATCH,
+    SIX,
     ACCEPTED_MATCH,
 }

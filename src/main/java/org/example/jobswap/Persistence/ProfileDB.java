@@ -15,6 +15,12 @@ import java.util.List;
  * Class to do CRUD in Profiles
  */
 public class ProfileDB implements ProfileDBInterface {
+
+    /**
+     * gets the profile from ID
+     * @param profileID
+     * @return a Profile
+     */
     public Profile getProfileFromID(int profileID) {
         String sp = "{call getProfileFromID(?)}";
         Connection conn = DBConnection.getConnection();

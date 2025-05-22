@@ -7,6 +7,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import org.example.jobswap.Controllers.MainSceneController;
+import org.example.jobswap.Foundation.DBConnection;
 import org.example.jobswap.Model.Department;
 import org.example.jobswap.Model.Profile;
 import org.example.jobswap.Persistence.DepartmentDB;

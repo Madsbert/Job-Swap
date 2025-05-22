@@ -67,6 +67,9 @@ public class UserTabMatches extends javafx.scene.control.Tab {
 
     }
 
+    /**
+     * Displays application matches in Boxes.
+     */
     private void showMatchApplications()
     {
         List<Profile> matchingProfiles = MatchDB.seekAllPossibleProfileMatches(MainSceneController.getCurrentProfile().getProfileID(),

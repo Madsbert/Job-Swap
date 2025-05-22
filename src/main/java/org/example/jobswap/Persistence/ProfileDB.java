@@ -75,7 +75,7 @@ public class ProfileDB implements ProfileDBInterface {
      * method to create a new profile in the database
      * @param profile an employee in the system
      */
-    public static void createNewProfile(Profile profile)
+    public boolean createNewProfile(Profile profile)
     {
         String sp = "{call create_new_profile(?,?,?,?,?,?,?,?,?,?)}";
         Connection conn = DBConnection.getConnection();
@@ -92,16 +92,17 @@ public class ProfileDB implements ProfileDBInterface {
             cstmt.setBoolean(10, profile.isLocked());
             cstmt.executeUpdate();
             System.out.println("Effected rows" + cstmt.getUpdateCount());
+            return true;
 
         }catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println("something went wrong in create_new_profile");
-            throw new RuntimeException(e);
+            return false;
         }
 
     }
 
-    public static void updateProfile(Profile profile)
+    public void updateProfile(Profile profile)
     {
         String sp = "{call update_profile(?,?,?,?,?,?,?,?,?,?)}";
 
@@ -127,7 +128,7 @@ public class ProfileDB implements ProfileDBInterface {
         }
     }
 
-    public static void deleteProfile(int profileID)
+    public void deleteProfile(int profileID)
     {
         String query = "DELETE from tbl_Profile WHERE ProfileID = ?";
 

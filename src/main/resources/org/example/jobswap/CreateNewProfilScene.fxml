@@ -6,7 +6,7 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
@@ -63,7 +63,7 @@
                 <!-- Row 5: Username -->
                 <Label text="Username:" GridPane.rowIndex="4" />
                 <TextField fx:id="usernameField" promptText="Enter username" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                <PasswordField fx:id="passwordField" promptText="Enter password" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                <TextField fx:id="passwordField" promptText="Enter password" GridPane.columnIndex="1" GridPane.rowIndex="5" />
 
                 <!-- Row 7: Job Information Header -->
                 <Label styleClass="section-title" text="Job Information" GridPane.columnSpan="2" GridPane.rowIndex="6" />
@@ -72,22 +72,22 @@
                 <Label text="Department:" GridPane.rowIndex="7" />
 
                 <!-- Row 9: Job Title -->
-                <Label text="Job Title:" GridPane.rowIndex="8" />
-                <TextField fx:id="jobTitleField" promptText="Enter job title" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                <Label text="Job Title:" GridPane.rowIndex="10" />
+                <TextField fx:id="jobTitleField" promptText="Enter job title" GridPane.columnIndex="1" GridPane.rowIndex="10" />
 
                 <!-- Row 10: Job Description -->
                 <Label text="Job Description:" GridPane.rowIndex="9" />
                 <TextArea fx:id="jobDescriptionField" prefHeight="58.0" prefRowCount="3" prefWidth="789.0" promptText="Enter job description" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="9" />
 
                 <!-- Row 11: Job Category -->
-                <Label text="Job Category:" GridPane.rowIndex="10" />
+                <Label text="Job Category:" GridPane.rowIndex="8" />
 
                 <!-- Row 12: Actively Seeking -->
                 <Label text="Actively Seeking New Job:" GridPane.rowIndex="11" />
                 <CheckBox fx:id="activelySeekingCheckbox" GridPane.columnIndex="1" GridPane.rowIndex="11" />
             <Label text="Password:" GridPane.rowIndex="5" />
-            <ChoiceBox fx:id="DepartmentChoiceBox" prefHeight="28.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <ChoiceBox fx:id="JobCategoryChoiceBox" prefHeight="28.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+            <ChoiceBox fx:id="departmentChoiceBox" prefHeight="28.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <ChoiceBox fx:id="jobCategoryChoiceBox" prefHeight="28.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
             <rowConstraints>
                <RowConstraints />
                <RowConstraints />

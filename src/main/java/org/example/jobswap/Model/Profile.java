@@ -31,7 +31,7 @@ public class Profile {
     }
 
     public Profile(AccessLevel level, int profileID, String name,String Username, String department, String jobTitle, String jobDescription, String jobCategory, boolean activelySeeking) {
-        this.level = AccessLevel.EMPLOYEE;
+        this.level = level;
         this.profileID = profileID;
         this.name = name;
         this.username = Username;

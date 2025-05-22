@@ -37,7 +37,11 @@ public class LoginDB implements LoginDBInterface {
         return false;
     }
 
-
+    /**
+     * makes a login- record in tbl login.
+     * @param profileID
+     * @param password
+     */
     public void addLoginToDataBase(int profileID, String password){
         String query = "INSERT INTO tbl_Login VALUES (?,?)";
         try {

@@ -102,6 +102,10 @@ public class ProfileDB implements ProfileDBInterface {
 
     }
 
+    /**
+     * updates the profile information in database
+     * @param profile a profile
+     */
     public void updateProfile(Profile profile)
     {
         String sp = "{call update_profile(?,?,?,?,?,?,?,?,?,?)}";
@@ -128,6 +132,10 @@ public class ProfileDB implements ProfileDBInterface {
         }
     }
 
+    /**
+     * delets Profile from database
+     * @param profileID
+     */
     public void deleteProfile(int profileID)
     {
         String query = "DELETE from tbl_Profile WHERE ProfileID = ?";

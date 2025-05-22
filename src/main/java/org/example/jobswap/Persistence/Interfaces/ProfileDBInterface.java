@@ -14,6 +14,10 @@ public interface ProfileDBInterface {
 
     }
 
+    static void updateProfile(Profile profile) {
+
+    }
+
     static void deleteProfile(int workerId) {
 
     }

@@ -2,6 +2,7 @@ package org.example.jobswap.Persistence;
 
 import javafx.scene.effect.Effect;
 import org.example.jobswap.Foundation.DBConnection;
+import org.example.jobswap.Model.Department;
 import org.example.jobswap.Model.Profile;
 import org.example.jobswap.Persistence.Interfaces.ProfileDBInterface;
 
@@ -45,7 +46,7 @@ public class ProfileDB implements ProfileDBInterface {
      * method to create a new profile in the database
      * @param profile an employee in the system
      */
-    public void createNewProfile(Profile profile)
+    public static void createNewProfile(Profile profile)
     {
         String sp = "{call create_new_profile(?,?,?,?,?,?,?,?,?)}";
         Connection conn = DBConnection.getConnection();
@@ -70,9 +71,21 @@ public class ProfileDB implements ProfileDBInterface {
 
     }
 
-    public void deleteProfile(int workerId)
+    public static void deleteProfile(int profileID)
     {
+        String query = "DELETE from tbl_Profile WHERE ProfileID = ?";
 
+        try {
+            Connection connection = DBConnection.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.executeQuery();
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println(e.getCause());
+            System.out.println(e.getStackTrace());
+        }
     }
 
     public void grantHRRights(int workerId)

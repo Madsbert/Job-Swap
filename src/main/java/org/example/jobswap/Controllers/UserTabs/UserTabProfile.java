@@ -8,8 +8,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import org.example.jobswap.Controllers.MainSceneController;
 import org.example.jobswap.Model.Department;
+import org.example.jobswap.Model.Profile;
 import org.example.jobswap.Persistence.DepartmentDB;
 import org.example.jobswap.Persistence.JobCategoryDB;
+import org.example.jobswap.Persistence.ProfileDB;
 import org.example.jobswap.Service.BorderedVBox;
 import org.example.jobswap.Service.Header;
 
@@ -31,9 +33,14 @@ public class UserTabProfile extends javafx.scene.control.Tab {
 
     private CheckBox editModeCheckBox;
     private CheckBox activeCheckBox;
+    private Button applyButton;
+
+    private Profile changedProfile;
 
     public UserTabProfile() {
         super("Profile");
+
+        changedProfile = new Profile(MainSceneController.getCurrentProfile());
 
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setFitToHeight(true);
@@ -71,6 +78,17 @@ public class UserTabProfile extends javafx.scene.control.Tab {
 
         activeCheckBox.setOnAction(event -> MainSceneController.getCurrentProfile().setActivelySeeking(activeCheckBox.isSelected()));
         optionsBox.getChildren().add(activeCheckBox);
+
+        applyButton = new Button("Save Changes");
+        applyButton.setOnAction((event) -> {
+            if (!changedProfile.equals(MainSceneController.getCurrentProfile())) {
+                MainSceneController.setCurrentProfile(changedProfile);
+                ProfileDB.deleteProfile(MainSceneController.getCurrentProfile().getProfileID());
+                ProfileDB.createNewProfile(MainSceneController.getCurrentProfile());
+            }
+        });
+        optionsBox.getChildren().add(applyButton);
+
 
         updateEditableState();
     }

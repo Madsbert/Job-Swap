@@ -150,6 +150,12 @@ public class UserTabProfile extends javafx.scene.control.Tab {
         departmentChoiceBox = new ChoiceBox<String>();
         departmentChoiceBox.getItems().addAll(departments);
 
+        for (int i = 0; i < departments.size(); i++) {
+            if (MainSceneController.getCurrentProfile().getDepartment().equals(departments.get(i))) {
+                departmentChoiceBox.getSelectionModel().select(i);
+            }
+        }
+
         Label t3Label = new Label("Departments:");
         t3Label.setPrefWidth(140);
         t3Label.setStyle("-fx-padding: 0 0 0 10;");
@@ -166,6 +172,7 @@ public class UserTabProfile extends javafx.scene.control.Tab {
 
         jobCategoryChoiceBox = new ChoiceBox<String>();
         jobCategoryChoiceBox.getItems().addAll(jobCategories);
+
         for (int i = 0; i < jobCategories.size(); i++) {
             if (MainSceneController.getCurrentProfile().getJobCategory().equals(jobCategories.get(i))) {
                 jobCategoryChoiceBox.getSelectionModel().select(i);

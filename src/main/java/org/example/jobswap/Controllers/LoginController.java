@@ -25,10 +25,10 @@ public class LoginController {
                 1,
                 "Mikkel",
                 "MikkerMan",
-                "Sønderborg",
+                "Gemina Termix Production",
                 "Afløser",
                 "Rykker pakker",
-                "Pakkeri",
+                "Sales",
                 false
         );
 

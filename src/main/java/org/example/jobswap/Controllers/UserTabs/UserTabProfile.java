@@ -9,10 +9,12 @@ import javafx.stage.Screen;
 import org.example.jobswap.Controllers.MainSceneController;
 import org.example.jobswap.Model.Department;
 import org.example.jobswap.Persistence.DepartmentDB;
+import org.example.jobswap.Persistence.JobCategoryDB;
 import org.example.jobswap.Service.BorderedVBox;
 import org.example.jobswap.Service.Header;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * class which sets up the tab Profile
@@ -136,10 +138,8 @@ public class UserTabProfile extends javafx.scene.control.Tab {
     private void setupJobCategoryBox()
     {
         HBox jobCategoryBox = new HBox();
-        ArrayList<String> jobCategories = new ArrayList<>();
-        jobCategories.add("Sanitet");
-        jobCategories.add("Produktion");
-        jobCategories.add("Pakkeri");
+        List<String> jobCategories = JobCategoryDB.getCategories();
+
         jobCategoryChoiceBox = new ChoiceBox<String>();
         jobCategoryChoiceBox.getItems().addAll(jobCategories);
         for (int i = 0; i < jobCategories.size(); i++) {

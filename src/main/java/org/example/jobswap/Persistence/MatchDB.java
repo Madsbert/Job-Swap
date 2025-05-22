@@ -3,10 +3,13 @@ package org.example.jobswap.Persistence;
 import org.example.jobswap.Foundation.DBConnection;
 import org.example.jobswap.Model.*;
 import org.example.jobswap.Persistence.Interfaces.MatchDBInterface;
+import org.example.jobswap.Persistence.Interfaces.ProfileDBInterface;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,9 +107,30 @@ public class MatchDB implements MatchDBInterface {
 
     }
 
-    public Match getProfileAcceptedMatch()
+    public List<Match> getProfileMatches(int profileID)
     {
-        return null;
+        String sql = "SELECT * FROM tbl_Match where Profile1ID=? OR Profile2ID=?";
+        Connection conn = DBConnection.getConnection();
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, profileID);
+            ps.setInt(2, profileID);
+            ResultSet rs = ps.executeQuery();
+            List<Match> matches = new ArrayList<>();
+            ProfileDBInterface profileDB = new ProfileDB();
+            while (rs.next()) {
+                MatchState state = MatchState.values()[rs.getInt("MatchStateID")];
+                Profile profile1 = profileDB.getProfileFromID(rs.getInt("Profile1ID"));
+                Profile profile2 = profileDB.getProfileFromID(rs.getInt("Profile2ID"));
+                LocalDateTime timeOfMatch = rs.getTimestamp("TimeOfMatch").toLocalDateTime();
+
+                matches.add(new Match(state,profile1,profile2,timeOfMatch));
+            }
+            return matches;
+        }catch (Exception e){
+            System.out.println(e.getMessage() + "couldn't get matches in GetProfileMatches");
+            return null;
+        }
     }
 
     public void confirmJobswap(int matchID)

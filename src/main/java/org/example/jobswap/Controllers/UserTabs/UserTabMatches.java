@@ -7,6 +7,7 @@ import javafx.scene.layout.*;
 import org.example.jobswap.Controllers.MainSceneController;
 import org.example.jobswap.Model.Match;
 import org.example.jobswap.Model.Profile;
+import org.example.jobswap.Persistence.Interfaces.MatchDBInterface;
 import org.example.jobswap.Persistence.MatchDB;
 import org.example.jobswap.Service.BorderedVBox;
 import org.example.jobswap.Service.Header;
@@ -24,6 +25,8 @@ public class UserTabMatches extends javafx.scene.control.Tab {
     private static VBox requestVBox;
     private static VBox applicationsVBox;
     private static VBox bothVBox;
+
+    private List<Match> matches;
 
     public UserTabMatches() {
         super("Matches");
@@ -55,10 +58,15 @@ public class UserTabMatches extends javafx.scene.control.Tab {
         this.setContent(scrollPane);
 
         showMatchApplications();
+
+        MatchDBInterface matchDB = new MatchDB();
+        matches=matchDB.getProfileMatches(MainSceneController.getCurrentProfile().getProfileID());
     }
 
     private void showAcceptedMatches()
     {
+
+
 
     }
 

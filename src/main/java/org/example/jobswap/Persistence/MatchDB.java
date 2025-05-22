@@ -10,6 +10,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDateTime;
+import java.sql.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,13 +31,13 @@ public class MatchDB implements MatchDBInterface {
      */
     public void createMatch(Match match)
     {
-        String sp = "{call create_new_match(?,?,?,?)}";
+        String sp = "{call create_match(?,?,?,?)}";
         Connection conn = DBConnection.getConnection();
         try (CallableStatement cstmt = conn.prepareCall(sp)){
             cstmt.setInt(1, match.getOwnerProfile().getProfileID());
             cstmt.setInt(2, match.getOtherProfile().getProfileID());
             cstmt.setInt(3, match.getMatchStateInt());
-            cstmt.setObject(4, match.getTimeOfMatch());
+            cstmt.setObject(4, Timestamp.valueOf(match.getTimeOfMatch()));
             cstmt.executeUpdate();
             System.out.println("Effected rows" + cstmt.getUpdateCount());
 

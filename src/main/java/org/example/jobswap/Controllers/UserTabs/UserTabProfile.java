@@ -7,6 +7,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import org.example.jobswap.Controllers.MainSceneController;
+import org.example.jobswap.Foundation.DBConnection;
 import org.example.jobswap.Model.Department;
 import org.example.jobswap.Model.Profile;
 import org.example.jobswap.Persistence.DepartmentDB;
@@ -34,9 +35,8 @@ public class UserTabProfile extends javafx.scene.control.Tab {
 
     private CheckBox editModeCheckBox;
     private CheckBox activeCheckBox;
-    private Button applyButton;
 
-    private Profile changedProfile;
+    private final Profile changedProfile;
 
     public UserTabProfile() {
         super("Profile");
@@ -80,7 +80,15 @@ public class UserTabProfile extends javafx.scene.control.Tab {
         activeCheckBox.setOnAction(event -> MainSceneController.getCurrentProfile().setActivelySeeking(activeCheckBox.isSelected()));
         optionsBox.getChildren().add(activeCheckBox);
 
-        applyButton = new Button("Save Changes");
+        Button applyButton = getApplyButton();
+        optionsBox.getChildren().add(applyButton);
+
+
+        updateEditableState();
+    }
+
+    private Button getApplyButton() {
+        Button applyButton = new Button("Save Changes");
         applyButton.setOnAction((event) -> {
             changedProfile.setDepartment(departmentChoiceBox.getSelectionModel().getSelectedItem().toString());
             changedProfile.setJobCategory(jobCategoryChoiceBox.getSelectionModel().getSelectedItem().toString());
@@ -91,15 +99,10 @@ public class UserTabProfile extends javafx.scene.control.Tab {
             System.out.println("Profile Diff: " + !changedProfile.equals(MainSceneController.getCurrentProfile()));
             if (!changedProfile.equals(MainSceneController.getCurrentProfile())) {
                 MainSceneController.setCurrentProfile(new Profile(changedProfile));
-                ProfileDBInterface profileDB = new ProfileDB();
-                profileDB.deleteProfile(MainSceneController.getCurrentProfile().getProfileID());
-                profileDB.createNewProfile(MainSceneController.getCurrentProfile());
+                ProfileDB.updateProfile(changedProfile);
             }
         });
-        optionsBox.getChildren().add(applyButton);
-
-
-        updateEditableState();
+        return applyButton;
     }
 
     private void setupProfileDetails() {
@@ -152,6 +155,12 @@ public class UserTabProfile extends javafx.scene.control.Tab {
 
         departmentChoiceBox = new ChoiceBox<String>();
         departmentChoiceBox.getItems().addAll(departments);
+
+        for (int i = 0; i < departments.size(); i++) {
+            if (MainSceneController.getCurrentProfile().getDepartment().equals(departments.get(i))) {
+                departmentChoiceBox.getSelectionModel().select(i);
+            }
+        }
 
         Label t3Label = new Label("Departments:");
         t3Label.setPrefWidth(140);

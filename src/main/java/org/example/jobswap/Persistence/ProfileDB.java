@@ -93,9 +93,36 @@ public class ProfileDB implements ProfileDBInterface {
             System.out.println("something went wrong in create_new_profile");
             return false;
         }
+
     }
 
-    public void deleteProfile(int profileID)
+    public static void updateProfile(Profile profile)
+    {
+        String sp = "{call update_profile(?,?,?,?,?,?,?,?,?,?)}";
+
+        Connection conn = DBConnection.getConnection();
+        try (CallableStatement cstmt = conn.prepareCall(sp)){
+            cstmt.setInt(1, profile.getProfileID());
+            cstmt.setString(2, profile.getDepartment());
+            cstmt.setString(3, profile.getJobCategory());
+            cstmt.setInt(4,profile.getAccessLevel());
+            cstmt.setString(5, profile.getName());
+            cstmt.setString(6, profile.getUsername());
+            cstmt.setString(7, profile.getJobTitle());
+            cstmt.setBoolean(8, profile.isActivelySeeking());
+            cstmt.setString(9, profile.getJobDescription());
+            cstmt.setBoolean(10, profile.isLocked());
+            cstmt.executeUpdate();
+            System.out.println("Effected rows" + cstmt.getUpdateCount());
+
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("something went wrong in update_profile");
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void deleteProfile(int profileID)
     {
         String query = "DELETE from tbl_Profile WHERE ProfileID = ?";
 

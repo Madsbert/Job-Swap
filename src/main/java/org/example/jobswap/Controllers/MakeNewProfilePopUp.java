@@ -6,7 +6,6 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import org.example.jobswap.Model.Department;
 import org.example.jobswap.Model.Profile;
 import org.example.jobswap.Persistence.DepartmentDB;
 import org.example.jobswap.Persistence.Interfaces.LoginDBInterface;
@@ -47,10 +46,11 @@ public class MakeNewProfilePopUp {
     public String fullName;
     public String username;
     public String password;
-    public String Department;
-    public String JobCategory;
-    public String Description;
-    public boolean ActivelySeeking;
+    public String department;
+    public String jobCategory;
+    public String description;
+    public String jobTitle;
+    public boolean activelySeeking;
 
     public void initialize(){
         setupDepartmentChoiceBox();
@@ -62,23 +62,31 @@ public class MakeNewProfilePopUp {
         profileID = Integer.parseInt(profileIdField.getText());
         fullName = nameField.getText();
         username = usernameField.getText();
+        department = departmentChoiceBox.getValue().toString();
+        jobCategory = jobCategoryChoiceBox.getSelectionModel().getSelectedItem().toString();
+        description = jobDescriptionField.getText();
+        jobTitle = jobTitleField.getText();
+        activelySeeking = activelySeekingCheckbox.isSelected();
+
         password = passwordField.getText();
-        Department = jobTitleField.getText();
-        Description = jobDescriptionField.getText();
-        ActivelySeeking = activelySeekingCheckbox.isSelected();
 
         //create new profile object
-        Profile newProfile = new Profile(profileID,fullName,username,password,Department,JobCategory,Description,ActivelySeeking);
+        Profile newProfile = new Profile(profileID,fullName,username, department, jobTitle, description, jobCategory,activelySeeking);
         ProfileDBInterface profileDB = new ProfileDB();
         boolean isProfileCreated;
+
+        System.out.println(newProfile);
+        newProfile.toString();
+
         //create new profile in database, if it was created, create a login with the ID and password
         isProfileCreated = profileDB.createNewProfile(newProfile);
 
         if (isProfileCreated) {
             LoginDBInterface loginDB = new LoginDB();
             loginDB.addLoginToDataBase(profileID,password);
+            SceneService.shiftScene(actionEvent,"Login Screen","/org/example/jobswap/Login.fxml");
         }
-        SceneService.shiftScene(actionEvent,"Login Screen","/org/example/jobswap/Login.fxml");
+
     }
 
     public void setupDepartmentChoiceBox(){

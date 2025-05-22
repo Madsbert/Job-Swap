@@ -4,8 +4,10 @@ import javafx.geometry.Insets;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
 import org.example.jobswap.Controllers.MainSceneController;
 import org.example.jobswap.Model.AccessLevel;
 import org.example.jobswap.Model.Department;
@@ -99,18 +101,23 @@ public class UserTabSeekJobSwap extends javafx.scene.control.Tab {
         List<Profile> matchingProfiles = MatchDB.seekAllPossibleProfileMatches(MainSceneController.getCurrentProfile().getProfileID(),
                 departmentChoiceBox.getSelectionModel().getSelectedItem());
 
-        List<HBox> matchingProfilesHBoxes = new ArrayList<>();
+        List<GridPane> matchingProfilesHBoxes = new ArrayList<>();
 
         for (Profile profile : matchingProfiles) {
-            HBox hbox = new HBox();
-            hbox.setSpacing(10);
-            hbox.setPadding(new Insets(25, 25, 25, 25));
-            hbox.getChildren().add(new Label("Username: " + profile.getUsername()));
-            hbox.getChildren().add(new Label("Department: " + profile.getDepartment()));
-            hbox.getChildren().add(new Label("Job Titel: " + profile.getJobTitle()));
-            hbox.getChildren().add(new Label("Job Description: " + profile.getJobDescription()));
+            GridPane gridPane = new GridPane();
+            gridPane.setHgap(150);
+            gridPane.setVgap(5);
+            gridPane.setPrefSize(Screen.getPrimary().getBounds().getWidth(), 40);
+            gridPane.setStyle("-fx-background-color: #fff; -fx-border-color: #da291c; -fx-border-width: 1.5;");
 
-            matchingProfilesHBoxes.add(hbox);
+            gridPane.setPadding(new Insets(25, 25, 25, 25));
+            gridPane.add(new Label("Username: " + profile.getUsername()), 0, 0);
+            gridPane.add(new Label("Department: " + profile.getDepartment()), 0, 1);
+            gridPane.add(new Label("Job Titel: " + profile.getJobTitle()), 1, 0);
+            gridPane.add(new Label("Job Description: " + profile.getJobDescription()), 1, 1);
+
+            gridPane.autosize();
+            matchingProfilesHBoxes.add(gridPane);
         }
 
         swapsBox.getChildren().addAll(matchingProfilesHBoxes);

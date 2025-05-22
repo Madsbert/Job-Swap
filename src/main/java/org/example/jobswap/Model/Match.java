@@ -50,7 +50,7 @@ public class Match {
         this.timeOfMatch = timeOfMatch;
     }
 
-    public void UpdateState(MatchState newState)
+    public void updateState(MatchState newState)
     {
         this.state = newState;
     }
@@ -60,4 +60,6 @@ public class Match {
     }
 
     public MatchState getMatchState() {return state;}
+
+
 }

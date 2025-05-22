@@ -21,9 +21,9 @@ public class LoginDB implements LoginDBInterface {
      */
     public boolean checkCredentials(int ProfileId, String password)
     {
-        Connection conn = DBConnection.getConnection();
         String query = "SELECT 1 FROM dbo.tbl_Login WHERE ProfileID = ? AND LoginPassword = ?";
-        try (PreparedStatement ps = conn.prepareStatement(query)){
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)){
             ps.setInt(1, ProfileId);
             ps.setString(2, password);
             try (ResultSet rs = ps.executeQuery()) {
@@ -44,9 +44,8 @@ public class LoginDB implements LoginDBInterface {
      */
     public void addLoginToDataBase(int profileID, String password){
         String query = "INSERT INTO tbl_Login VALUES (?,?)";
-        try {
-            Connection connection = DBConnection.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+        try(Connection connection = DBConnection.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);) {
             preparedStatement.setInt(1, profileID);
             preparedStatement.setString(2, password);
             preparedStatement.executeUpdate();

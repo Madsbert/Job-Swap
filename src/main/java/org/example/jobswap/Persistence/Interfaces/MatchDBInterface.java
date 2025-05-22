@@ -13,7 +13,8 @@ public interface MatchDBInterface {
     void updateMatchStateFromBothInterestedToMatch(Match match,Profile LoggedInProfile);
     List<Match> getProfileMatches(int profileID);
     void confirmJobswap(int matchID);
-    int getMatchIDFromProfile(int profileID);
+    Match getMatchFromProfileIDs(int ownerProfileID, int otherProfile);
+    public boolean updateMatch(Match match);
 
     static List<Profile> seekAllPossibleProfileMatches(int profileID, String wantedDepartment) {
         return null;

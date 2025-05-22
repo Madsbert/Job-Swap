@@ -102,7 +102,8 @@ public class ProfileDB implements ProfileDBInterface {
         try {
             Connection connection = DBConnection.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.executeQuery();
+            preparedStatement.setInt(1, profileID);
+            preparedStatement.executeUpdate();
         }
         catch (Exception e)
         {

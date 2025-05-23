@@ -13,6 +13,7 @@ import org.example.jobswap.Persistence.Interfaces.ProfileDBInterface;
 import org.example.jobswap.Persistence.JobCategoryDB;
 import org.example.jobswap.Persistence.LoginDB;
 import org.example.jobswap.Persistence.ProfileDB;
+import org.example.jobswap.Service.PasswordEncrypter;
 import org.example.jobswap.Service.SceneService;
 
 import java.io.IOException;
@@ -68,7 +69,7 @@ public class MakeNewProfilePopUp {
         jobTitle = jobTitleField.getText();
         activelySeeking = activelySeekingCheckbox.isSelected();
 
-        password = passwordField.getText();
+        password = PasswordEncrypter.encrypt(passwordField.getText());
 
         //create new profile object
         Profile newProfile = new Profile(profileID,fullName,username, department, jobTitle, description, jobCategory,activelySeeking);

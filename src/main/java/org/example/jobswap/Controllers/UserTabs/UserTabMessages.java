@@ -12,8 +12,10 @@ import org.example.jobswap.Model.MatchState;
 import org.example.jobswap.Model.Message;
 import org.example.jobswap.Model.Profile;
 import org.example.jobswap.Persistence.Interfaces.MessageDBInterface;
+import org.example.jobswap.Persistence.Interfaces.ProfileDBInterface;
 import org.example.jobswap.Persistence.MatchDB;
 import org.example.jobswap.Persistence.MessageDB;
+import org.example.jobswap.Persistence.ProfileDB;
 import org.example.jobswap.Service.BorderedVBox;
 import org.example.jobswap.Service.Header;
 
@@ -54,6 +56,7 @@ public class UserTabMessages extends javafx.scene.control.Tab {
         vbox.getChildren().add(oldChatVBow);
         oldChatBox = new VBox();
         oldChatVBow.getChildren().add(oldChatBox);
+        showOldChats(MainSceneController.getCurrentProfile());
 
         newContactVBox = new BorderedVBox();
         newContactVBox.getChildren().add(new Header("New Contact Options"));
@@ -97,6 +100,45 @@ public class UserTabMessages extends javafx.scene.control.Tab {
         newContactBox.getChildren().addAll(matchingProfilesHBoxes);
 
     }
+
+    public void showNewChats(){
+
+    }
+    public void showOldChats(Profile loggedInProfile){
+        MessageDBInterface messageDB = new MessageDB();
+        ProfileDBInterface profileDB = new ProfileDB();
+        List<Integer> profileIDsWhereLoggedInProfileHasChattedWithBefore = messageDB.getAllPossibleChatsBasedOnState(loggedInProfile.getProfileID();
+        List<Profile> profilesWhereLoggedInProfileHasChattedWithBefore = new ArrayList<>();
+
+        for (Integer profileID : profileIDsWhereLoggedInProfileHasChattedWithBefore) {
+            profilesWhereLoggedInProfileHasChattedWithBefore.add(profileDB.getProfileFromID(profileID));
+        }
+
+        List<GridPane> profilesHBoxes = new ArrayList<>();
+
+        for (Profile matchingProfile : profilesWhereLoggedInProfileHasChattedWithBefore) {
+            GridPane gridPane = new GridPane();
+            gridPane.setHgap(150);
+            gridPane.setVgap(5);
+            gridPane.setPrefSize(Screen.getPrimary().getBounds().getWidth(), 40);
+            gridPane.setStyle("-fx-background-color: #fff; -fx-border-color: #da291c; -fx-border-width: 1.5;");
+
+            gridPane.setPadding(new Insets(25, 25, 25, 25));
+            gridPane.add(new Label("Username: " + matchingProfile.getUsername()), 0, 0);
+            gridPane.add(new Label("Department: " + matchingProfile.getDepartment()), 0, 1);
+            gridPane.add(new Label("Job Titel: " + matchingProfile.getJobTitle()), 1, 0);
+            gridPane.add(new Label("Job Description: " + matchingProfile.getJobDescription()), 1, 1);
+            Button openChatButton = new Button("Open Chat");
+            openChatButton.setOnAction(event -> {openChat(MainSceneController.getCurrentProfile().getProfileID(), matchingProfile.getProfileID());});
+            gridPane.add(openChatButton, 2, 1);
+
+            gridPane.autosize();
+            profilesHBoxes.add(gridPane);
+        }
+        oldChatBox.getChildren().addAll(profilesHBoxes);
+
+    }
+
     public void openChat(int profileIDLoggedIn,int ProfileIDReceiver){
         MessageDBInterface messageDB = new MessageDB();
         messageDB.createMessage(new Message(profileIDLoggedIn,ProfileIDReceiver,"THIS IS A TEST MESSAGE FOR TESTING!"));

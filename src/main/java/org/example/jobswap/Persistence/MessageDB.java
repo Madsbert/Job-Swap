@@ -4,6 +4,7 @@ import org.example.jobswap.Foundation.DBConnection;
 import org.example.jobswap.Model.*;
 import org.example.jobswap.Persistence.Interfaces.MatchDBInterface;
 import org.example.jobswap.Persistence.Interfaces.MessageDBInterface;
+import org.example.jobswap.Persistence.Interfaces.ProfileDBInterface;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -35,13 +36,37 @@ public class MessageDB implements MessageDBInterface {
         MatchDBInterface matchDB = new MatchDB();
         List<Match> matches = matchDB.getProfileMatches(LoggedInProfileID);
         List<Profile> possibleChats = new ArrayList<>();
+        List<Integer> allProfilesThatHasBeenMessagedBefore = allChatsOfProfile(LoggedInProfileID);
+
         for (Match match : matches) {
             if (match.getMatchState() == stateOfMatch) {
-                possibleChats.add(match.getOtherProfile());
+                for (Integer allChatsOfProfileID : allProfilesThatHasBeenMessagedBefore) {
+                    if (match.getOwnerProfile().getProfileID() == allChatsOfProfileID) {
+                        possibleChats.add(match.getOtherProfile());
+                    }
+                }
             }
         }
             return possibleChats;
 
+    }
+    public List<Integer> allChatsOfProfile(int LoggedInProfileID) {
+            String preparedStatement = "SELECT * FROM tbl_Message WHERE ProfileIDOfSender = ? OR ProfileIDOfReceiver = ?";
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(preparedStatement);) {
+            ps.setInt(1, LoggedInProfileID);
+            ResultSet rs = ps.executeQuery();
+            List<Integer> profileIDs = new ArrayList<>();
+            while (rs.next()) {
+               profileIDs.add(rs.getInt("ProfileIDOfSender"));
+            }
+            return profileIDs;
+
+        }catch (Exception e){
+            System.out.println(e.getMessage() + "couldn't get matches in GetProfileMatches");
+            throw new RuntimeException(e);
+        }
     }
 
     public List<Message> getMessages(int userId, int otherId, int matchId)

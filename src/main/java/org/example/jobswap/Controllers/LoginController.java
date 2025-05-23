@@ -32,9 +32,9 @@ public class LoginController {
      */
     private boolean checkCredentials()
     {
-        int id = Integer.parseInt(employeeID.getText());
-        String pass = PasswordEncrypter.encrypt(password.getText());
         try {
+            int id = Integer.parseInt(employeeID.getText());
+            String pass = PasswordEncrypter.encrypt(password.getText());
             LoginDBInterface db = new LoginDB();
             return db.checkCredentials(id, pass);
         }catch(NumberFormatException e) {

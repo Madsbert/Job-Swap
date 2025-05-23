@@ -98,7 +98,8 @@ public class UserTabMessages extends javafx.scene.control.Tab {
 
     }
     public void openChat(int profileIDLoggedIn,int ProfileIDReceiver){
-
+        MessageDBInterface messageDB = new MessageDB();
+        messageDB.createMessage(new Message(profileIDLoggedIn,ProfileIDReceiver,"THIS IS A TEST MESSAGE FOR TESTING!"));
     }
 
     private void writeNewMessage(Message message)

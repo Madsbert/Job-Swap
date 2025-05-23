@@ -1,38 +1,33 @@
 package org.example.jobswap.Model;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 /**
  * class to define a message
  */
 public class Message {
-    private Profile sender;
-    private Profile receiver;
-    private Date time;
+    private int senderID;
+    private int receiverID;
+    private LocalDateTime time;
     private String text;
 
-    public Profile getSender() {
-        return sender;
+    public Message(int sender, int receiver, String text) {
+        this.senderID = sender;
+        this.receiverID = receiver;
+        this.text = text;
+        this.time = LocalDateTime.now();
     }
 
-    public void setSender(Profile sender) {
-        this.sender = sender;
-    }
 
-    public Profile getReceiver() {
-        return receiver;
+    public int getSenderID() {
+        return senderID;
     }
-
-    public void setReceiver(Profile receiver) {
-        this.receiver = receiver;
+    public int getReceiverID() {
+        return receiverID;
     }
-
-    public Date getTime() {
+    public LocalDateTime getTime() {
         return time;
-    }
-
-    public void setTime(Date time) {
-        this.time = time;
     }
 
     public String getText() {

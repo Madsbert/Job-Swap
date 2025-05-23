@@ -103,10 +103,7 @@ public class MakeNewProfilePopUp {
         List<String> jobCategories = JobCategoryDB.getCategories();
         jobCategoryChoiceBox.getItems().addAll(jobCategories);
     }
-    public String encryptedPassword(String password){
-        String newPassword = String.valueOf(password.hashCode());
-        return newPassword;
-    }
+
     public void Cancel(ActionEvent actionEvent) throws IOException {
         SceneService.shiftScene(actionEvent,"Login Screen","/org/example/jobswap/Login.fxml");
     }

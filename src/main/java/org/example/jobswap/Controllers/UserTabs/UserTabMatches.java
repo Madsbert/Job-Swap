@@ -142,12 +142,18 @@ public class UserTabMatches extends javafx.scene.control.Tab {
                 gridPane.add(new Label("Department: " + profile.getDepartment()), 0, 1);
                 gridPane.add(new Label("Job Titel: " + profile.getJobTitle()), 1, 0);
                 gridPane.add(new Label("Job Description: " + profile.getJobDescription()), 1, 1);
-                Button iAmInterestedTooButton = new Button("I am interested too");
+                Button iAmInterestedTooButton = new Button("I'm interested too");
                 iAmInterestedTooButton.setOnAction(event -> {interestedToo(currentProfileID,profile.getProfileID());});
                 gridPane.add(iAmInterestedTooButton, 2, 1);
 
-                gridPane.autosize();
+                Button denyButton = new Button("Deny Match");
+                denyButton.setOnAction(event -> {denyMatch(currentProfileID,profile.getProfileID());});
+                gridPane.add(denyButton, 2, 2);
+
                 matchingProfilesHBoxes.add(gridPane);
+                gridPane.autosize();
+
+
             }
         requestVBox.getChildren().addAll(matchingProfilesHBoxes);
         }
@@ -195,26 +201,48 @@ public class UserTabMatches extends javafx.scene.control.Tab {
                 gridPane.add(new Label("Department: " + profile.getDepartment()), 0, 1);
                 gridPane.add(new Label("Job Titel: " + profile.getJobTitle()), 1, 0);
                 gridPane.add(new Label("Job Description: " + profile.getJobDescription()), 1, 1);
-                //Button applyButton = new Button("Apply for Swap");
-                //applyButton.setOnAction(event -> {applyForJobswap(profile);});
-                //gridPane.add(applyButton, 2, 1);
+
+                Button acceptMatchButton = new Button("Accept Match");
+                acceptMatchButton.setOnAction(event -> {acceptMatch(currentProfileID,profile.getProfileID());});
+                gridPane.add(acceptMatchButton, 2, 1);
+
+                Button denyButton = new Button("Deny Match");
+                denyButton.setOnAction(event -> {denyMatch(currentProfileID,profile.getProfileID());});
+                gridPane.add(denyButton, 2, 2);
 
                 gridPane.autosize();
                 matchingProfilesHBoxes.add(gridPane);
+
+
+
             }
             bothVBox.getChildren().addAll(matchingProfilesHBoxes);
         }
     }
 
-    private void acceptMatch(String matchId)
+    private void acceptMatch(int ownerProfile, int otherProfile )
     {
+        MatchDBInterface db = new MatchDB();
+        Match existingMatch = db.getMatchFromProfileIDs(ownerProfile,otherProfile);
 
+        if(existingMatch!=null) {
+            existingMatch.updateState(MatchState.BOTH_INTERESTED);
+            db.updateMatch(existingMatch);
+        }
+        refreshMatchDisplay();
     }
 
-    private void denyMatch(String matchId)
+    private void denyMatch(int ownerProfile, int otherProfile)
     {
+        MatchDBInterface db = new MatchDB();
+        Match existingMatch = db.getMatchFromProfileIDs(ownerProfile,otherProfile);
 
+        if(existingMatch!=null) {
+            db.deleteMatch(ownerProfile,otherProfile);
+        }
+        refreshMatchDisplay();
     }
+
 
     private void sendMessage(String matchId)
     {
@@ -227,8 +255,7 @@ public class UserTabMatches extends javafx.scene.control.Tab {
         Match existingMatch = db.getMatchFromProfileIDs(ownerProfile,otherProfile);
 
         if(existingMatch!=null) {
-            existingMatch.updateState(MatchState.BOTH_INTERESTED);
-            db.updateMatch(existingMatch);
+            db.updateMatchStateFromBothInterestedToMatch(existingMatch,MainSceneController.getCurrentProfile());
         }
         refreshMatchDisplay();
     }

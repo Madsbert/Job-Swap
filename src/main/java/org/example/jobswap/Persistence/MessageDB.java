@@ -14,16 +14,15 @@ import java.util.List;
 public class MessageDB implements MessageDBInterface {
 
     public void createMessage(Message message) {
-        String sql = "INSERT INTO tbl_Message (sender, receiver, date, MessageText) VALUES (?, ?, ?, ?)";
+        String ps = "INSERT INTO tbl_Message (ProfileIDOfSender, ProfileIDOfReceiver, TimeOfMessage, MessageText) VALUES (?, ?, ?, ?)";
 
-        Connection conn = DBConnection.getConnection();
-
-        try {
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
-            preparedStatement.setInt(1, message.getSenderID());
-            preparedStatement.setInt(2, message.getReceiverID());
-            preparedStatement.setTimestamp(3, java.sql.Timestamp.valueOf(message.getTime()));
-            preparedStatement.setString(4, message.getText());
+        try (Connection conn = DBConnection.getConnection(); CallableStatement cstmt = conn.prepareCall(ps)){
+            cstmt.setInt(1, message.getSenderID());
+            cstmt.setInt(2, message.getReceiverID());
+            cstmt.setTimestamp(3, java.sql.Timestamp.valueOf(message.getTime()));
+            cstmt.setString(4, message.getText());
+            cstmt.execute();
+            System.out.println("Effected rows" + cstmt.getUpdateCount());
         }
         catch (Exception e) {
             throw new RuntimeException(e);

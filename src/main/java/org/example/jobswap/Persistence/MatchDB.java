@@ -190,4 +190,24 @@ public class MatchDB implements MatchDBInterface {
             return null;
         }
     }
+
+    public boolean deleteMatch(int ownerProfileID, int otherProfile){
+        String sql = "DELETE FROM tbl_Match WHERE (Profile1ID=? AND Profile2ID=?) OR (Profile1ID=? AND Profile2ID=?) " ;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);) {
+            ps.setInt(1, ownerProfileID);
+            ps.setInt(2, otherProfile);
+            ps.setInt(3, otherProfile);
+            ps.setInt(4, ownerProfileID);
+            ps.executeUpdate();
+            return true;
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            System.out.println("something went wrong in deleteMatch");
+            throw new RuntimeException(e);
+        }
+
+
+    }
 }

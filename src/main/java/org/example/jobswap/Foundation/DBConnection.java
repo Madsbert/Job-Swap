@@ -23,13 +23,35 @@ public class DBConnection {
                 {
                     Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
                     conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-                    System.out.println("Connected to the database.");
+                    if (!conn.isClosed())
+                    {
+                        System.out.println("Connected to database");
+                    }
+                    else
+                    {
+                        System.out.println("Not connected to database");
+                        conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+                    }
                 }
                 catch (Exception e)
                 {
                     System.out.println("Failed to connect to database.");
                 }
             }
+
+            try {
+                if (conn.isClosed())
+                {
+                    conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+                }
+            }
+            catch (Exception e)
+            {
+                System.out.println("Failed to connect to database.");
+                e.printStackTrace();
+                System.out.println(e.getMessage());
+            }
+
             return conn;
         }
 

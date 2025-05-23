@@ -17,6 +17,13 @@ public class Match {
         this.otherProfile = otherProfile;
         this.timeOfMatch = LocalDateTime.now();
     }
+    public Match(MatchState state, Profile ownerProfile, Profile otherProfile, LocalDateTime timeOfMatch) {
+        this.state = state;
+        this.ownerProfile = ownerProfile;
+        this.otherProfile = otherProfile;
+        this.timeOfMatch = timeOfMatch;
+    }
+
 
 
     public Profile getOwnerProfile() {
@@ -43,7 +50,7 @@ public class Match {
         this.timeOfMatch = timeOfMatch;
     }
 
-    public void UpdateState(MatchState newState)
+    public void updateState(MatchState newState)
     {
         this.state = newState;
     }
@@ -53,4 +60,6 @@ public class Match {
     }
 
     public MatchState getMatchState() {return state;}
+
+
 }

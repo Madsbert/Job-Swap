@@ -11,9 +11,10 @@ public interface MatchDBInterface {
     List<Match> getMatches(int profileID, MatchState state);
     void createMatch(Match match);
     void updateMatchStateFromBothInterestedToMatch(Match match,Profile LoggedInProfile);
-    Match getProfileAcceptedMatch();
+    List<Match> getProfileMatches(int profileID);
     void confirmJobswap(int matchID);
-    int getMatchIDFromProfile(int profileID);
+    Match getMatchFromProfileIDs(int ownerProfileID, int otherProfile);
+    public boolean updateMatch(Match match);
 
     static List<Profile> seekAllPossibleProfileMatches(int profileID, String wantedDepartment) {
         return null;

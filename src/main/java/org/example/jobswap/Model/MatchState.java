@@ -4,6 +4,7 @@ package org.example.jobswap.Model;
  * enum of the states a match can have
  */
 public enum MatchState {
+    BUFFER, // DO NOT USE.
     REQUESTED,
     APPLICATION,
     BOTH_INTERESTED,

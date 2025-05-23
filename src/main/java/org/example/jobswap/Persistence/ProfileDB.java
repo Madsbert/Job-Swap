@@ -23,8 +23,10 @@ public class ProfileDB implements ProfileDBInterface {
      */
     public Profile getProfileFromID(int profileID) {
         String sp = "{call getProfileFromID(?)}";
-        Connection conn = DBConnection.getConnection();
-        try (CallableStatement cstmt = conn.prepareCall(sp)) {
+        try {
+            Connection conn = DBConnection.getConnection();
+
+            CallableStatement cstmt = conn.prepareCall(sp);
             cstmt.setInt(1, profileID);
             ResultSet rs = cstmt.executeQuery();
             Profile profile = null;
@@ -78,8 +80,8 @@ public class ProfileDB implements ProfileDBInterface {
     public boolean createNewProfile(Profile profile)
     {
         String sp = "{call create_new_profile(?,?,?,?,?,?,?,?,?,?)}";
-        Connection conn = DBConnection.getConnection();
-        try (CallableStatement cstmt = conn.prepareCall(sp)){
+        try (Connection conn = DBConnection.getConnection();
+             CallableStatement cstmt = conn.prepareCall(sp)){
             cstmt.setInt(1, profile.getProfileID());
             cstmt.setString(2, profile.getDepartment());
             cstmt.setString(3, profile.getJobCategory());
@@ -110,8 +112,8 @@ public class ProfileDB implements ProfileDBInterface {
     {
         String sp = "{call update_profile(?,?,?,?,?,?,?,?,?,?)}";
 
-        Connection conn = DBConnection.getConnection();
-        try (CallableStatement cstmt = conn.prepareCall(sp)){
+        try (Connection conn = DBConnection.getConnection();
+             CallableStatement cstmt = conn.prepareCall(sp)){
             cstmt.setInt(1, profile.getProfileID());
             cstmt.setString(2, profile.getDepartment());
             cstmt.setString(3, profile.getJobCategory());
@@ -140,9 +142,8 @@ public class ProfileDB implements ProfileDBInterface {
     {
         String query = "DELETE from tbl_Profile WHERE ProfileID = ?";
 
-        try {
-            Connection connection = DBConnection.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query);){
             preparedStatement.setInt(1, profileID);
             preparedStatement.executeUpdate();
         }

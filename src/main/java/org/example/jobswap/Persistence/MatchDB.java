@@ -3,7 +3,13 @@ package org.example.jobswap.Persistence;
 import org.example.jobswap.Foundation.DBConnection;
 import org.example.jobswap.Model.*;
 import org.example.jobswap.Persistence.Interfaces.MatchDBInterface;
+import org.example.jobswap.Persistence.Interfaces.ProfileDBInterface;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.time.LocalDateTime;
 import java.sql.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -17,6 +23,24 @@ public class MatchDB implements MatchDBInterface {
         return null;
     }
 
+    public boolean updateMatch(Match match) {
+        String sql = "UPDATE tbl_Match SET MatchStateID=?, TimeOfMatch=? WHERE Profile1ID=? AND Profile2ID=?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, match.getMatchState().ordinal());
+            ps.setTimestamp(2, Timestamp.valueOf(match.getTimeOfMatch()));
+            ps.setInt(3, match.getOwnerProfile().getProfileID());
+            ps.setInt(4, match.getOtherProfile().getProfileID());
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error updating match: " + e.getMessage());
+            return false;
+        }
+    }
+
     /**
      * creates a new match and in SQL it makes sure the match doesn't exist
      * and changes state if Person 1 has sent an application and then person 2 also sends an application
@@ -26,13 +50,14 @@ public class MatchDB implements MatchDBInterface {
     public void createMatch(Match match)
     {
         String sp = "{call create_match(?,?,?,?)}";
-        Connection conn = DBConnection.getConnection();
-        try (CallableStatement cstmt = conn.prepareCall(sp)){
+        try (Connection conn = DBConnection.getConnection();
+             CallableStatement cstmt = conn.prepareCall(sp))
+        {
             cstmt.setInt(1, match.getOwnerProfile().getProfileID());
             cstmt.setInt(2, match.getOtherProfile().getProfileID());
             cstmt.setInt(3, match.getMatchStateInt());
             cstmt.setObject(4, Timestamp.valueOf(match.getTimeOfMatch()));
-            cstmt.executeUpdate();
+            cstmt.execute();
             System.out.println("Effected rows" + cstmt.getUpdateCount());
 
         }catch (Exception e) {
@@ -51,7 +76,8 @@ public class MatchDB implements MatchDBInterface {
     public void updateMatchStateFromBothInterestedToMatch(Match match,Profile LoggedInProfile) {
         String sp = "{call update_matchstate_of_both_interested_to_complete_match(?,?,?) }";
         Connection conn = DBConnection.getConnection();
-        try (CallableStatement cstmt = conn.prepareCall(sp)) {
+        try (CallableStatement cstmt = conn.prepareCall(sp))
+        {
             cstmt.setInt(1, match.getOwnerProfile().getProfileID());
             cstmt.setInt(2, match.getOtherProfile().getProfileID());
             cstmt.setInt(3, LoggedInProfile.getProfileID());
@@ -74,8 +100,10 @@ public class MatchDB implements MatchDBInterface {
      */
     public static List<Profile> seekAllPossibleProfileMatches(int profileID, String wantedDepartment){
         String sp = "{call seek_all_possible_profile_matches(?,?) }";
-        Connection conn = DBConnection.getConnection();
-        try (CallableStatement cstmt = conn.prepareCall(sp)){
+
+        try (Connection conn = DBConnection.getConnection();
+             CallableStatement cstmt = conn.prepareCall(sp))
+        {
             cstmt.setInt(1, profileID);
             cstmt.setString(2, wantedDepartment);
             ResultSet rs = cstmt.executeQuery();
@@ -103,9 +131,30 @@ public class MatchDB implements MatchDBInterface {
 
     }
 
-    public Match getProfileAcceptedMatch()
+    public List<Match> getProfileMatches(int profileID)
     {
-        return null;
+        String sql = "SELECT * FROM tbl_Match where Profile1ID=? OR Profile2ID=?";
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);) {
+            ps.setInt(1, profileID);
+            ps.setInt(2, profileID);
+            ResultSet rs = ps.executeQuery();
+            List<Match> matches = new ArrayList<>();
+            ProfileDBInterface profileDB = new ProfileDB();
+            while (rs.next()) {
+                MatchState state = MatchState.values()[rs.getInt("MatchStateID")];
+                Profile profile1 = profileDB.getProfileFromID(rs.getInt("Profile1ID"));
+                Profile profile2 = profileDB.getProfileFromID(rs.getInt("Profile2ID"));
+                LocalDateTime timeOfMatch = rs.getTimestamp("TimeOfMatch").toLocalDateTime();
+
+                matches.add(new Match(state,profile1,profile2,timeOfMatch));
+            }
+            return matches;
+        }catch (Exception e){
+            System.out.println(e.getMessage() + "couldn't get matches in GetProfileMatches");
+            throw new RuntimeException(e);
+        }
     }
 
     public void confirmJobswap(int matchID)
@@ -114,8 +163,31 @@ public class MatchDB implements MatchDBInterface {
         // Will not be implemented in this iteration
     }
 
-    public int getMatchIDFromProfile(int profileID)
+    public Match getMatchFromProfileIDs(int ownerProfileID, int otherProfile)
     {
-        return -1;
+        String sql = "SELECT * FROM tbl_Match WHERE (Profile1ID=? AND Profile2ID=?) OR (Profile1ID=? AND Profile2ID=?)";
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);) {
+            ps.setInt(1, ownerProfileID);
+            ps.setInt(2, otherProfile);
+            ps.setInt(3, otherProfile);
+            ps.setInt(4, ownerProfileID);
+            ResultSet rs = ps.executeQuery();
+            Match match = null;
+            ProfileDBInterface profileDB = new ProfileDB();
+            if (rs.next()) {
+                MatchState state = MatchState.values()[rs.getInt("MatchStateID")];
+                Profile profile1 = profileDB.getProfileFromID(rs.getInt("Profile1ID"));
+                Profile profile2 = profileDB.getProfileFromID(rs.getInt("Profile2ID"));
+                LocalDateTime timeOfMatch = rs.getTimestamp("TimeOfMatch").toLocalDateTime();
+
+                match= new Match(state,profile1,profile2,timeOfMatch);
+            }
+            return match;
+        }catch (Exception e){
+            System.out.println(e.getMessage() + "couldn't get matches in GetProfileMatches");
+            return null;
+        }
     }
 }

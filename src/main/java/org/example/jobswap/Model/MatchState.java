@@ -1,7 +1,7 @@
 package org.example.jobswap.Model;
 
 /**
- * enum of the states a match can have
+ * enum of the states a {@link Match} can have
  */
 public enum MatchState {
     BUFFER, // DO NOT USE.

@@ -3,7 +3,8 @@ package org.example.jobswap.Model;
 import java.time.LocalDateTime;
 
 /**
- * a class which defines a Match
+ * A class which defines a Match
+ * A {@link Match} has different states, two profiles and a Time of match
  */
 public class Match {
     private MatchState state;

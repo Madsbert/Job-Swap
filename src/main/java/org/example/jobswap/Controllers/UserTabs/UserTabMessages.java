@@ -21,8 +21,7 @@ import org.example.jobswap.Persistence.ProfileDB;
 import org.example.jobswap.Service.BorderedVBox;
 import org.example.jobswap.Service.Header;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * class which sets up the tab Messages
@@ -157,29 +156,45 @@ public class UserTabMessages extends javafx.scene.control.Tab {
         List<Profile> possibleChats = new ArrayList<>();
         for (Match match : matches) {
             if (match.getMatchState() == stateOfMatch) {
-                possibleChats.add(match.getOtherProfile());
-            }
-        }
-        return possibleChats;
-
-    }
-
-    public List<Profile> getAllPossibleChats(int LoggedInProfileID) {
-        MatchDBInterface matchDB = new MatchDB();
-        MessageDBInterface messageDB = new MessageDB();
-        List<Match> matches = matchDB.getProfileMatches(LoggedInProfileID);
-        List<Profile> possibleChats = new ArrayList<>();
-        List<Integer> allProfilesThatHasBeenMessagedBefore = messageDB.allChatsOfProfile(LoggedInProfileID);
-
-        for (Match match : matches) {
-            {
-                for (Integer allChatsOfProfileID : allProfilesThatHasBeenMessagedBefore) {
-                    if (match.getOwnerProfile().getProfileID() != allChatsOfProfileID) {
-                        possibleChats.add(match.getOtherProfile());
-                    }
+                if (match.getOwnerProfile().getProfileID() == LoggedInProfileID) {
+                    possibleChats.add(match.getOtherProfile());
+                }
+                if (match.getOtherProfile().getProfileID() == LoggedInProfileID){
+                        possibleChats.add(match.getOwnerProfile());
                 }
             }
         }
+        return possibleChats;
+    }
+
+    public List<Profile> getAllPossibleChats(int loggedInProfileID) {
+        MessageDBInterface messageDB = new MessageDB();
+        ProfileDBInterface profileDB = new ProfileDB();
+        //Get stored in a Set since it handles Dubs.
+        Set<Integer> uniqueProfileIDs = new HashSet<>();
+
+        HashMap<Integer, Integer> allChats = messageDB.allChatsOfProfile(loggedInProfileID);
+
+        for (Map.Entry<Integer, Integer> entry : allChats.entrySet()) {
+            int senderID = entry.getKey();
+            int receiverID = entry.getValue();
+            // Add the other ID (not the loggedInProfileID)
+            if (senderID == loggedInProfileID) {
+                uniqueProfileIDs.add(receiverID);
+            } else {
+                uniqueProfileIDs.add(senderID);
+            }
+        }
+
+        // Convert the unique IDs to Profile objects.
+        // This could be done before adding it to the Set, but it doublechecks for dubs.
+        List<Profile> possibleChats = new ArrayList<>();
+        for (int profileID : uniqueProfileIDs) {
+            if (profileID != loggedInProfileID) {
+                possibleChats.add(profileDB.getProfileFromID(profileID));
+            }
+        }
+
         return possibleChats;
     }
 }

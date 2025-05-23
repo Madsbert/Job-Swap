@@ -10,6 +10,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MessageDB implements MessageDBInterface {
@@ -32,7 +33,7 @@ public class MessageDB implements MessageDBInterface {
     }
 
 
-    public List<Integer> allChatsOfProfile(int LoggedInProfileID) {
+    public HashMap<Integer,Integer> allChatsOfProfile(int LoggedInProfileID) {
         String preparedStatement = "SELECT * FROM tbl_Message WHERE ProfileIDOfSender = ? OR ProfileIDOfReceiver = ?";
 
         try(Connection conn = DBConnection.getConnection();
@@ -40,9 +41,9 @@ public class MessageDB implements MessageDBInterface {
             ps.setInt(1, LoggedInProfileID);
             ps.setInt(2, LoggedInProfileID);
             ResultSet rs = ps.executeQuery();
-            List<Integer> profileIDs = new ArrayList<>();
+            HashMap<Integer,Integer> profileIDs = new HashMap();
             while (rs.next()) {
-               profileIDs.add(rs.getInt("ProfileIDOfSender"));
+               profileIDs.put(rs.getInt("ProfileIDOfSender"), rs.getInt("ProfileIDOfReceiver"));
             }
             return profileIDs;
 

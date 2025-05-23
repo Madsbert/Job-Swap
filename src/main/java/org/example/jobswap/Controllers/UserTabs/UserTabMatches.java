@@ -84,25 +84,24 @@ public class UserTabMatches extends javafx.scene.control.Tab {
         allMatches=matchDB.getProfileMatches(currentProfileID);
 
         for (Match match : allMatches) {
-            if(match.getOwnerProfile().getProfileID()==currentProfileID){
+         if (match.getMatchState()== MatchState.BOTH_INTERESTED){
+            if(match.getOwnerProfile().getProfileID()==currentProfileID) {
+                this.bothProfiles.add(match.getOtherProfile());
+            }else{
+                this.bothProfiles.add(match.getOwnerProfile());
+            }
+         }else if(match.getMatchState()==MatchState.MATCH) {
+             if (match.getOtherProfile().getProfileID() == currentProfileID) {
+                 this.match = match.getOwnerProfile();
+             } else {
+                 this.match = match.getOtherProfile();
+             }
+         }else if(match.getOwnerProfile().getProfileID()==currentProfileID){
                 this.applicationProfiles.add(match.getOtherProfile());
             }else if (match.getOtherProfile().getProfileID()==currentProfileID){
                 this.requestProfiles.add(match.getOwnerProfile());
-            } else if (match.getMatchState()== MatchState.BOTH_INTERESTED){
-                if(match.getOwnerProfile().getProfileID()==currentProfileID) {
-                    this.bothProfiles.add(match.getOtherProfile());
-                }else{
-                    this.bothProfiles.add(match.getOwnerProfile());
-                }
-            }else if(match.getMatchState()==MatchState.MATCH){
-                if(match.getOtherProfile().getProfileID()==currentProfileID){
-                    this.match=match.getOwnerProfile();
-                }else {
-                    this.match=match.getOtherProfile();
-                }
 
             }
-
         }
     }
     private void showAcceptedMatch() {

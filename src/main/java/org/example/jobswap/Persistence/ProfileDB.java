@@ -23,8 +23,9 @@ public class ProfileDB implements ProfileDBInterface {
      */
     public Profile getProfileFromID(int profileID) {
         String sp = "{call getProfileFromID(?)}";
-        Connection conn = DBConnection.getConnection();
-        try (CallableStatement cstmt = conn.prepareCall(sp)) {
+        try {
+            Connection conn = DBConnection.getConnection();
+            CallableStatement cstmt = conn.prepareCall(sp);
             cstmt.setInt(1, profileID);
             ResultSet rs = cstmt.executeQuery();
             Profile profile = null;

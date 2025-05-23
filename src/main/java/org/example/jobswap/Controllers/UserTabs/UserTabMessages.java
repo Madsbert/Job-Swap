@@ -22,6 +22,7 @@ import org.example.jobswap.Service.BorderedVBox;
 import org.example.jobswap.Service.Header;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * class which sets up the tab Messages
@@ -152,15 +153,34 @@ public class UserTabMessages extends javafx.scene.control.Tab {
 
     public List<Profile> getAllPossibleChatsBasedOnState(int LoggedInProfileID, MatchState stateOfMatch) {
         MatchDBInterface matchDB = new MatchDB();
+        MessageDBInterface messageDB = new MessageDB();
+
+        // Gets all matches
         List<Match> matches = matchDB.getProfileMatches(LoggedInProfileID);
+        // Gets the profileID of profiles LoggedInProfile has chatted with before.
+        Set<Integer> alreadyChattedProfiles = getAllPossibleChats(LoggedInProfileID)
+                .stream()
+                .map(Profile::getProfileID)
+                .collect(Collectors.toSet());
+        // Return List
         List<Profile> possibleChats = new ArrayList<>();
+
         for (Match match : matches) {
             if (match.getMatchState() == stateOfMatch) {
-                if (match.getOwnerProfile().getProfileID() == LoggedInProfileID) {
-                    possibleChats.add(match.getOtherProfile());
+                Profile owner = match.getOwnerProfile();
+                Profile other = match.getOtherProfile();
+
+                // Determine which profile is not the logged-in user
+                Profile potentialChat;
+                if (owner.getProfileID() == LoggedInProfileID) {
+                    potentialChat = other;
+                } else {
+                    potentialChat = owner;
                 }
-                if (match.getOtherProfile().getProfileID() == LoggedInProfileID){
-                        possibleChats.add(match.getOwnerProfile());
+
+                // Only add if not already chatted with
+                if (!alreadyChattedProfiles.contains(potentialChat.getProfileID())) {
+                    possibleChats.add(potentialChat);
                 }
             }
         }

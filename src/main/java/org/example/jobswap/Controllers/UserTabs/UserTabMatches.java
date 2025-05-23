@@ -37,7 +37,15 @@ public class UserTabMatches extends javafx.scene.control.Tab {
 
     private int currentProfileID=MainSceneController.getCurrentProfile().getProfileID();
 
-    public UserTabMatches() {
+    private static UserTabMatches instance;
+    public static UserTabMatches getInstance() {
+        if (instance == null) {
+            instance = new UserTabMatches();
+        }
+        return instance;
+    }
+
+    private UserTabMatches() {
         super("Matches");
 
         initializeUI();
@@ -144,11 +152,11 @@ public class UserTabMatches extends javafx.scene.control.Tab {
                 gridPane.add(new Label("Job Description: " + profile.getJobDescription()), 1, 1);
                 Button iAmInterestedTooButton = new Button("I'm interested too");
                 iAmInterestedTooButton.setOnAction(event -> {interestedToo(currentProfileID,profile.getProfileID());});
-                gridPane.add(iAmInterestedTooButton, 2, 1);
+                gridPane.add(iAmInterestedTooButton, 2, 0);
 
                 Button denyButton = new Button("Deny Match");
                 denyButton.setOnAction(event -> {denyMatch(currentProfileID,profile.getProfileID());});
-                gridPane.add(denyButton, 2, 2);
+                gridPane.add(denyButton, 2, 1);
 
                 matchingProfilesHBoxes.add(gridPane);
                 gridPane.autosize();
@@ -204,11 +212,11 @@ public class UserTabMatches extends javafx.scene.control.Tab {
 
                 Button acceptMatchButton = new Button("Accept Match");
                 acceptMatchButton.setOnAction(event -> {acceptMatch(currentProfileID,profile.getProfileID());});
-                gridPane.add(acceptMatchButton, 2, 1);
+                gridPane.add(acceptMatchButton, 2, 0);
 
                 Button denyButton = new Button("Deny Match");
                 denyButton.setOnAction(event -> {denyMatch(currentProfileID,profile.getProfileID());});
-                gridPane.add(denyButton, 2, 2);
+                gridPane.add(denyButton, 2, 1);
 
                 gridPane.autosize();
                 matchingProfilesHBoxes.add(gridPane);
@@ -260,7 +268,7 @@ public class UserTabMatches extends javafx.scene.control.Tab {
         refreshMatchDisplay();
     }
 
-    private void refreshMatchDisplay() {
+    public void refreshMatchDisplay() {
         // Clear existing data
         applicationProfiles.clear();
         requestProfiles.clear();

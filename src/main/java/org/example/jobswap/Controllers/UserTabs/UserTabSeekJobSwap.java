@@ -132,5 +132,7 @@ public class UserTabSeekJobSwap extends javafx.scene.control.Tab {
         Match newMatch = new Match(MatchState.APPLICATION, MainSceneController.getCurrentProfile(), profileToApplyTo);
 
         db.createMatch(newMatch);
+        updateJobList();
+        UserTabMatches.getInstance().refreshMatchDisplay();
     }
 }

@@ -18,7 +18,7 @@ public class MainSceneController {
     private static Profile currentProfile;
 
     public void initialize() {
-        tabPane.getTabs().add(new UserTabMatches());
+        tabPane.getTabs().add(UserTabMatches.getInstance());
         tabPane.getTabs().add(new UserTabSeekJobSwap());
         tabPane.getTabs().add(new UserTabProfile());
         tabPane.getTabs().add(new UserTabMessages());

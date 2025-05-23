@@ -53,7 +53,7 @@ public class ProfileDB implements ProfileDBInterface {
 
     public List<Profile> getAllProfiles()
     {
-      //Will not be implemented in this iteration
+        //Will not be implemented in this iteration
         return null;
     }
 
@@ -157,6 +157,6 @@ public class ProfileDB implements ProfileDBInterface {
 
     public void grantHRRights(int workerId)
     {
-//will not be implemented in this iteration
+        //will not be implemented in this iteration
     }
 }

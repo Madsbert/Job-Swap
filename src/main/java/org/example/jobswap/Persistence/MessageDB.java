@@ -32,30 +32,13 @@ public class MessageDB implements MessageDBInterface {
     }
 
 
-    public List<Profile> getAllPossibleChatsBasedOnState(int LoggedInProfileID, MatchState stateOfMatch) {
-        MatchDBInterface matchDB = new MatchDB();
-        List<Match> matches = matchDB.getProfileMatches(LoggedInProfileID);
-        List<Profile> possibleChats = new ArrayList<>();
-        List<Integer> allProfilesThatHasBeenMessagedBefore = allChatsOfProfile(LoggedInProfileID);
-
-        for (Match match : matches) {
-            if (match.getMatchState() == stateOfMatch) {
-                for (Integer allChatsOfProfileID : allProfilesThatHasBeenMessagedBefore) {
-                    if (match.getOwnerProfile().getProfileID() == allChatsOfProfileID) {
-                        possibleChats.add(match.getOtherProfile());
-                    }
-                }
-            }
-        }
-            return possibleChats;
-
-    }
     public List<Integer> allChatsOfProfile(int LoggedInProfileID) {
-            String preparedStatement = "SELECT * FROM tbl_Message WHERE ProfileIDOfSender = ? OR ProfileIDOfReceiver = ?";
+        String preparedStatement = "SELECT * FROM tbl_Message WHERE ProfileIDOfSender = ? OR ProfileIDOfReceiver = ?";
 
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(preparedStatement);) {
             ps.setInt(1, LoggedInProfileID);
+            ps.setInt(2, LoggedInProfileID);
             ResultSet rs = ps.executeQuery();
             List<Integer> profileIDs = new ArrayList<>();
             while (rs.next()) {
@@ -64,7 +47,7 @@ public class MessageDB implements MessageDBInterface {
             return profileIDs;
 
         }catch (Exception e){
-            System.out.println(e.getMessage() + "couldn't get matches in GetProfileMatches");
+            System.out.println(e.getMessage() + "couldn't get matches in allChatsOfProfile");
             throw new RuntimeException(e);
         }
     }

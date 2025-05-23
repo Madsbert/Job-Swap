@@ -8,9 +8,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import org.example.jobswap.Controllers.MainSceneController;
+import org.example.jobswap.Model.Match;
 import org.example.jobswap.Model.MatchState;
 import org.example.jobswap.Model.Message;
 import org.example.jobswap.Model.Profile;
+import org.example.jobswap.Persistence.Interfaces.MatchDBInterface;
 import org.example.jobswap.Persistence.Interfaces.MessageDBInterface;
 import org.example.jobswap.Persistence.Interfaces.ProfileDBInterface;
 import org.example.jobswap.Persistence.MatchDB;
@@ -72,8 +74,7 @@ public class UserTabMessages extends javafx.scene.control.Tab {
 
     private void showAllAvailableChats(MatchState state)
     {
-        MessageDBInterface messageDB = new MessageDB();
-        List<Profile> matchingProfiles = messageDB.getAllPossibleChatsBasedOnState(MainSceneController.getCurrentProfile().getProfileID(), state);
+        List<Profile> matchingProfiles = getAllPossibleChatsBasedOnState(MainSceneController.getCurrentProfile().getProfileID(), state);
 
         List<GridPane> matchingProfilesHBoxes = new ArrayList<>();
 
@@ -105,16 +106,9 @@ public class UserTabMessages extends javafx.scene.control.Tab {
 
     }
     public void showOldChats(Profile loggedInProfile){
-        MessageDBInterface messageDB = new MessageDB();
-        ProfileDBInterface profileDB = new ProfileDB();
-        List<Integer> profileIDsWhereLoggedInProfileHasChattedWithBefore = messageDB.getAllPossibleChatsBasedOnState(loggedInProfile.getProfileID();
-        List<Profile> profilesWhereLoggedInProfileHasChattedWithBefore = new ArrayList<>();
+        List<Profile> profilesWhereLoggedInProfileHasChattedWithBefore = getAllPossibleChats(loggedInProfile.getProfileID());
 
-        for (Integer profileID : profileIDsWhereLoggedInProfileHasChattedWithBefore) {
-            profilesWhereLoggedInProfileHasChattedWithBefore.add(profileDB.getProfileFromID(profileID));
-        }
-
-        List<GridPane> profilesHBoxes = new ArrayList<>();
+        List<GridPane> matchingProfilesHBoxes = new ArrayList<>();
 
         for (Profile matchingProfile : profilesWhereLoggedInProfileHasChattedWithBefore) {
             GridPane gridPane = new GridPane();
@@ -133,9 +127,9 @@ public class UserTabMessages extends javafx.scene.control.Tab {
             gridPane.add(openChatButton, 2, 1);
 
             gridPane.autosize();
-            profilesHBoxes.add(gridPane);
+            matchingProfilesHBoxes.add(gridPane);
         }
-        oldChatBox.getChildren().addAll(profilesHBoxes);
+        oldChatBox.getChildren().addAll(matchingProfilesHBoxes);
 
     }
 
@@ -151,6 +145,41 @@ public class UserTabMessages extends javafx.scene.control.Tab {
 
     private void showHelpInformation()
     {
+    }
 
+
+
+
+
+    public List<Profile> getAllPossibleChatsBasedOnState(int LoggedInProfileID, MatchState stateOfMatch) {
+        MatchDBInterface matchDB = new MatchDB();
+        List<Match> matches = matchDB.getProfileMatches(LoggedInProfileID);
+        List<Profile> possibleChats = new ArrayList<>();
+        for (Match match : matches) {
+            if (match.getMatchState() == stateOfMatch) {
+                possibleChats.add(match.getOtherProfile());
+            }
+        }
+        return possibleChats;
+
+    }
+
+    public List<Profile> getAllPossibleChats(int LoggedInProfileID) {
+        MatchDBInterface matchDB = new MatchDB();
+        MessageDBInterface messageDB = new MessageDB();
+        List<Match> matches = matchDB.getProfileMatches(LoggedInProfileID);
+        List<Profile> possibleChats = new ArrayList<>();
+        List<Integer> allProfilesThatHasBeenMessagedBefore = messageDB.allChatsOfProfile(LoggedInProfileID);
+
+        for (Match match : matches) {
+            {
+                for (Integer allChatsOfProfileID : allProfilesThatHasBeenMessagedBefore) {
+                    if (match.getOwnerProfile().getProfileID() != allChatsOfProfileID) {
+                        possibleChats.add(match.getOtherProfile());
+                    }
+                }
+            }
+        }
+        return possibleChats;
     }
 }

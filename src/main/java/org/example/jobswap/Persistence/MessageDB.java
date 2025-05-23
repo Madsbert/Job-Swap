@@ -21,7 +21,7 @@ public class MessageDB implements MessageDBInterface {
         try (Connection conn = DBConnection.getConnection(); CallableStatement cstmt = conn.prepareCall(ps)){
             cstmt.setInt(1, message.getSenderID());
             cstmt.setInt(2, message.getReceiverID());
-            cstmt.setTimestamp(3, java.sql.Timestamp.valueOf(message.getTime()));
+            cstmt.setTimestamp(3, Timestamp.valueOf(message.getTime()));
             cstmt.setString(4, message.getText());
             cstmt.execute();
             System.out.println("Effected rows" + cstmt.getUpdateCount());
@@ -35,7 +35,6 @@ public class MessageDB implements MessageDBInterface {
 
     public HashMap<Integer,Integer> allChatsOfProfile(int LoggedInProfileID) {
         String preparedStatement = "SELECT * FROM tbl_Message WHERE ProfileIDOfSender = ? OR ProfileIDOfReceiver = ?";
-
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(preparedStatement);) {
             ps.setInt(1, LoggedInProfileID);
@@ -48,9 +47,37 @@ public class MessageDB implements MessageDBInterface {
             return profileIDs;
 
         }catch (Exception e){
-            System.out.println(e.getMessage() + "couldn't get matches in allChatsOfProfile");
+            System.out.println(e.getMessage() + "couldn't get profiles in allChatsOfProfile");
             throw new RuntimeException(e);
         }
+    }
+
+    public Message newestMessageByLoggedInProfile(int LoggedInProfileID) {
+        String preparedStatement = "SELECT TOP 1 * FROM tbl_Message WHERE ProfileIDOfSender = ? OR ProfileIDOfReceiver = ? ORDER BY TimeOfMessage DESC";
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(preparedStatement);) {
+
+            ps.setInt(1, LoggedInProfileID);
+            ps.setInt(2, LoggedInProfileID);
+            ResultSet rs = ps.executeQuery();
+            Message newestMessage = null;
+
+            ProfileDBInterface profileDB = new ProfileDB();
+            while (rs.next()) {
+                Profile profileIDOfSender = profileDB.getProfileFromID(rs.getInt("ProfileIDOfSender"));
+                Profile profileIDOfReceiver = profileDB.getProfileFromID(rs.getInt("ProfileIDOfReceiver"));
+                String messageText = rs.getString("MessageText");
+                LocalDateTime timeOfMatch = rs.getTimestamp("TimeOfMessage").toLocalDateTime();
+
+                newestMessage = new Message(profileIDOfSender.getProfileID(),profileIDOfReceiver.getProfileID(),messageText,timeOfMatch);
+            }
+                 return newestMessage;
+        }catch (Exception e){
+            System.out.println(e.getMessage() + "couldn't get message in newestMessageByLoggedInProfile");
+            throw new RuntimeException(e);
+        }
+
+
     }
 
     public List<Message> getMessages(int userId, int otherId, int matchId)

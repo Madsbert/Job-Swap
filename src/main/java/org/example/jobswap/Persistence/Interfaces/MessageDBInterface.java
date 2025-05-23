@@ -11,5 +11,5 @@ public interface MessageDBInterface {
     void createMessage(Message message);
     List<Message> getMessages(int userId, int otherId, int matchId);
     HashMap<Integer,Integer> allChatsOfProfile(int LoggedInProfileID);
-
+    Message newestMessageByLoggedInProfile(int LoggedInProfileID);
 }

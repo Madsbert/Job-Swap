@@ -4,7 +4,9 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import org.example.jobswap.Controllers.MainSceneController;
@@ -21,18 +23,19 @@ import org.example.jobswap.Persistence.ProfileDB;
 import org.example.jobswap.Service.BorderedVBox;
 import org.example.jobswap.Service.Header;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * class which sets up the tab Messages
  */
-public class UserTabMessages extends javafx.scene.control.Tab {
+public class UserTabMessages extends Tab {
     private static ScrollPane scrollPane;
     private static VBox newContactBox;
     private static VBox oldChatBox;
-    private static VBox newChatBox;
-    private static VBox newChatVBox;
+    private static VBox lastmessageBox;
+    private static VBox lastMessageVBox;
     private static VBox oldChatVBow;
     private static VBox newContactVBox;
 
@@ -47,11 +50,13 @@ public class UserTabMessages extends javafx.scene.control.Tab {
         VBox vbox = new VBox();
         scrollPane.setContent(vbox);
 
-        newChatVBox = new BorderedVBox();
-        newChatVBox.getChildren().add(new Header("New Chats"));
-        vbox.getChildren().add(newChatVBox);
-        newChatBox = new VBox();
-        newChatVBox.getChildren().add(newChatBox);
+        lastMessageVBox = new BorderedVBox();
+        lastMessageVBox.getChildren().add(new Header("Last Messaged"));
+        vbox.getChildren().add(lastMessageVBox);
+        lastmessageBox = new VBox();
+        lastMessageVBox.getChildren().add(lastmessageBox);
+        showLastMessageChats(MainSceneController.getCurrentProfile());
+
 
         oldChatVBow = new BorderedVBox();
         oldChatVBow.getChildren().add(new Header("Old Chats"));
@@ -102,9 +107,44 @@ public class UserTabMessages extends javafx.scene.control.Tab {
 
     }
 
-    public void showNewChats(){
+    public void showLastMessageChats(Profile loggedInProfile){
+        MessageDBInterface messageDB = new MessageDB();
+        ProfileDBInterface profileDB = new ProfileDB();
 
+        Message newestMessage = messageDB.newestMessageByLoggedInProfile(loggedInProfile.getProfileID());
+        Profile receiverProfile;
+        HBox newestProfileHBox = new HBox();
+
+        if (newestMessage != null) {
+            if (loggedInProfile.getProfileID() == newestMessage.getSenderID()) {
+                receiverProfile = profileDB.getProfileFromID(newestMessage.getReceiverID());
+            } else {
+                receiverProfile = null;
+            }
+        } else {
+            receiverProfile = loggedInProfile;
+        }
+
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(150);
+        gridPane.setVgap(5);
+        gridPane.setPrefSize(Screen.getPrimary().getBounds().getWidth(), 40);
+        gridPane.setStyle("-fx-background-color: #fff; -fx-border-color: #da291c; -fx-border-width: 1.5;");
+
+        gridPane.setPadding(new Insets(25, 25, 25, 25));
+        gridPane.add(new Label("Username: " + receiverProfile.getUsername()), 0, 0);
+        gridPane.add(new Label("Department: " + receiverProfile.getDepartment()), 0, 1);
+        gridPane.add(new Label("Job Titel: " + receiverProfile.getJobTitle()), 1, 0);
+        gridPane.add(new Label("Job Description: " + receiverProfile.getJobDescription()), 1, 1);
+        Button openChatButton = new Button("Open Chat");
+        openChatButton.setOnAction(event -> {openChat(MainSceneController.getCurrentProfile().getProfileID(), receiverProfile.getProfileID());});
+        gridPane.add(openChatButton, 2, 1);
+        gridPane.autosize();
+
+        newestProfileHBox.getChildren().add(gridPane);
+        lastmessageBox.getChildren().addAll(newestProfileHBox);
     }
+
     public void showOldChats(Profile loggedInProfile){
         List<Profile> profilesWhereLoggedInProfileHasChattedWithBefore = getAllPossibleChats(loggedInProfile.getProfileID());
 

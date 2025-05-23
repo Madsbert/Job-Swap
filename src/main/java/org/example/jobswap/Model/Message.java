@@ -18,6 +18,12 @@ public class Message {
         this.text = text;
         this.time = LocalDateTime.now();
     }
+    public Message(int senderID, int receiverID, String text, LocalDateTime time) {
+        this.senderID = senderID;
+        this.receiverID = receiverID;
+        this.text = text;
+        this.time = time;
+    }
 
 
     public int getSenderID() {

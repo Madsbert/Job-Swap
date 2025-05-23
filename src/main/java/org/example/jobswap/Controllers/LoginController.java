@@ -9,6 +9,7 @@ import org.example.jobswap.Model.Profile;
 import org.example.jobswap.Persistence.Interfaces.LoginDBInterface;
 import org.example.jobswap.Persistence.LoginDB;
 import org.example.jobswap.Persistence.ProfileDB;
+import org.example.jobswap.Service.PasswordEncrypter;
 import org.example.jobswap.Service.SceneService;
 
 import java.io.IOException;
@@ -32,7 +33,7 @@ public class LoginController {
     private boolean checkCredentials()
     {
         int id = Integer.parseInt(employeeID.getText());
-        String pass = password.getText();
+        String pass = PasswordEncrypter.encrypt(password.getText());
         try {
             LoginDBInterface db = new LoginDB();
             return db.checkCredentials(id, pass);
@@ -52,17 +53,7 @@ public class LoginController {
      */
     public void login(ActionEvent event) throws IOException {
 
-//        Profile tempTestProfile = new Profile(
-//                AccessLevel.EMPLOYEE,
-//                1,
-//                "Mikkel",
-//                "MikkerMan",
-//                "Sønderborg",
-//                "Afløser",
-//                "Rykker pakker",
-//                "Pakkeri",
-//                false
-//        );
+
         if (!checkCredentials()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Wrong Credentials");

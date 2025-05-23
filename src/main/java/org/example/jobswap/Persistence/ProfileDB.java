@@ -4,6 +4,7 @@ import javafx.scene.effect.Effect;
 import org.example.jobswap.Foundation.DBConnection;
 import org.example.jobswap.Model.AccessLevel;
 import org.example.jobswap.Model.Department;
+import org.example.jobswap.Model.MatchState;
 import org.example.jobswap.Model.Profile;
 import org.example.jobswap.Persistence.Interfaces.ProfileDBInterface;
 
@@ -17,9 +18,9 @@ import java.util.List;
 public class ProfileDB implements ProfileDBInterface {
 
     /**
-     * gets the profile from ID
-     * @param profileID
-     * @return a Profile
+     * Gets the {@link Profile} from ID
+     * @param profileID an ID of a {@link Profile}
+     * @return a {@link Profile}
      */
     public Profile getProfileFromID(int profileID) {
         String sp = "{call getProfileFromID(?)}";
@@ -74,7 +75,7 @@ public class ProfileDB implements ProfileDBInterface {
     }
 
     /**
-     * method to create a new {@link Profile} in the database
+     * Method to create a new {@link Profile} in the database
      * @param profile an employee in the system
      */
     public boolean createNewProfile(Profile profile)
@@ -105,8 +106,8 @@ public class ProfileDB implements ProfileDBInterface {
     }
 
     /**
-     * updates the profile information in database
-     * @param profile a profile
+     * Updates the {@link Profile} information in database
+     * @param profile the {@link Profile} which needs to be updated
      */
     public void updateProfile(Profile profile)
     {
@@ -135,8 +136,8 @@ public class ProfileDB implements ProfileDBInterface {
     }
 
     /**
-     * delets Profile from database
-     * @param profileID
+     * Delets a {@link Profile} from database
+     * @param profileID an id of a {@link Profile} which needs to be deleted
      */
     public void deleteProfile(int profileID)
     {

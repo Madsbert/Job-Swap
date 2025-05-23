@@ -9,7 +9,7 @@ import org.example.jobswap.Controllers.UserTabs.UserTabSeekJobSwap;
 import org.example.jobswap.Model.Profile;
 
 /**
- * class which sets up the MAinescene.fxml
+ * Class which sets up the Mainescene.fxml
  */
 public class MainSceneController {
     @FXML

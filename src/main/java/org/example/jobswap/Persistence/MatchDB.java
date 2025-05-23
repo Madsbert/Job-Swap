@@ -23,6 +23,11 @@ public class MatchDB implements MatchDBInterface {
         return null;
     }
 
+    /**
+     * Updates the {@link MatchState} in an {@link Match}
+     * @param match the {@link Match} which needs to be updated
+     * @return a {@code boolean} if the match is updated or not
+     */
     public boolean updateMatch(Match match) {
         String sql = "UPDATE tbl_Match SET MatchStateID=?, TimeOfMatch=? WHERE Profile1ID=? AND Profile2ID=?";
 
@@ -42,9 +47,9 @@ public class MatchDB implements MatchDBInterface {
     }
 
     /**
-     * creates a new match and in SQL it makes sure the match doesn't exist
-     * and changes state if Person 1 has sent an application and then person 2 also sends an application
-     * the state will then be both interested
+     * creates a new {@link Match} and in SQL it makes sure the {@link Match} doesn't exist
+     * and changes {@link MatchState} if {@link Profile}1 has sent an application and then {@link Profile}2 also sends an application
+     * the {@link MatchState} will then be both interested
      * @param match two {@link Profile}s are connected
      */
     public void createMatch(Match match)
@@ -68,10 +73,10 @@ public class MatchDB implements MatchDBInterface {
     }
 
     /**
-     * The Stored procedure makes sure that one profile cant puch the button twice so its a match.
-     * and it makes the state go from 3- interested to
-     * @param match
-     * @param LoggedInProfile
+     * The Stored procedure makes sure that one {@link Profile} cant push the button twice so its a {@link Match}.
+     * and it makes the {@link MatchState} go from 3- interested to 5 - One Profile is interested and then to 4 - Match
+     * @param match {@link Match} which state needs to be changed
+     * @param LoggedInProfile the {@link Profile}  for the one who is logged in
      */
     public void updateMatchStateFromBothInterestedToMatch(Match match,Profile LoggedInProfile) {
         String sp = "{call update_matchstate_of_both_interested_to_complete_match(?,?,?) }";
@@ -92,7 +97,7 @@ public class MatchDB implements MatchDBInterface {
     }
 
     /**
-     * a class which seeks for all the possible matches for the {@link Profile} with their current jobcategory and
+     * A class which seeks for all the possible matches for the {@link Profile} with their current jobcategory and
      * the department they wish to work in
      * @param profileID an id for a {@link Profile}
      * @param wantedDepartment the department the {@link Profile} is seeking
@@ -131,6 +136,11 @@ public class MatchDB implements MatchDBInterface {
 
     }
 
+    /**
+     * Gets all the profiles which the owner {@link Profile} has a {@link Match} with.
+     * @param profileID an id for a {@link Profile}
+     * @return a list of {@link Profile}
+     */
     public List<Match> getProfileMatches(int profileID)
     {
         String sql = "SELECT * FROM tbl_Match where Profile1ID=? OR Profile2ID=?";
@@ -163,6 +173,13 @@ public class MatchDB implements MatchDBInterface {
         // Will not be implemented in this iteration
     }
 
+    /**
+     * Gets the {@link Match} from the IDs of two {@link Profile}s the Owner of the {@link Profile} and the
+     * other {@link Profile} in the {@link Match}
+     * @param ownerProfileID the ownerID of a {@link Profile}
+     * @param otherProfile
+     * @return a {@link Match}
+     */
     public Match getMatchFromProfileIDs(int ownerProfileID, int otherProfile)
     {
         String sql = "SELECT * FROM tbl_Match WHERE (Profile1ID=? AND Profile2ID=?) OR (Profile1ID=? AND Profile2ID=?)";
@@ -191,6 +208,12 @@ public class MatchDB implements MatchDBInterface {
         }
     }
 
+    /**
+     * Deletes a {@link Match} based on the profiles
+     * @param ownerProfileID the {@link Profile}id of the Owner{@link Profile}
+     * @param otherProfile the {@link Profile}id of the other{@link Profile}
+     * @return a {@code boolean} if the {@link Match} is deleted
+     */
     public boolean deleteMatch(int ownerProfileID, int otherProfile){
         String sql = "DELETE FROM tbl_Match WHERE (Profile1ID=? AND Profile2ID=?) OR (Profile1ID=? AND Profile2ID=?) " ;
 

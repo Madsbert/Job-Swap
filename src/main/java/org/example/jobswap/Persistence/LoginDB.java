@@ -14,7 +14,7 @@ import java.sql.ResultSet;
 public class LoginDB implements LoginDBInterface {
 
     /**
-     * read in database the password and profileID
+     * Read in database the password and profileID
      * @param ProfileId
      * @param password the password the employee have chosen
      * @return a boolean returns true if password and employeeID matches
@@ -38,7 +38,7 @@ public class LoginDB implements LoginDBInterface {
     }
 
     /**
-     * makes a login- record in tbl login.
+     * Makes a login- record in tbl login.
      * @param profileID
      * @param password
      */

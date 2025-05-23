@@ -45,6 +45,9 @@ public class UserTabMatches extends javafx.scene.control.Tab {
         return instance;
     }
 
+    /**
+     *Constructor for UserTabMatches
+     */
     private UserTabMatches() {
         super("Matches");
 
@@ -59,6 +62,9 @@ public class UserTabMatches extends javafx.scene.control.Tab {
 
     }
 
+    /**
+     * Sets up UI in {@link UserTabMatches}
+     */
     private void initializeUI(){
         scrollPane = new ScrollPane();
         scrollPane.setFitToHeight(true);
@@ -87,6 +93,9 @@ public class UserTabMatches extends javafx.scene.control.Tab {
         this.setContent(scrollPane);
     }
 
+    /**
+     * Loads all {@link Match}es and sorts them to the relevant ArrayLists
+     */
     private void  loadMatchData(){
         MatchDBInterface matchDB = new MatchDB();
         allMatches=matchDB.getProfileMatches(currentProfileID);
@@ -113,6 +122,10 @@ public class UserTabMatches extends javafx.scene.control.Tab {
             }
         }
     }
+
+    /**
+     *Adds a{@Profile}to the match{@code Vbox} if exists with the {@link Match} {@link Profile}
+     */
     private void showAcceptedMatch() {
         if (match != null) {
             List<GridPane> matchingProfilesHBoxes = new ArrayList<>();
@@ -135,6 +148,9 @@ public class UserTabMatches extends javafx.scene.control.Tab {
         }
     }
 
+    /**
+     * Adds {@link Profile}es to the request{@code Vbox} if exists with the requested {@link Match}es
+     */
     private void showRequestedMatches() {
         if (requestProfiles != null) {
             List<GridPane> matchingProfilesHBoxes = new ArrayList<>();
@@ -168,7 +184,7 @@ public class UserTabMatches extends javafx.scene.control.Tab {
     }
 
     /**
-     * Displays application matches in Boxes.
+     * Adds {@link Profile}es to the application{@code Vbox} if exists with the application {@link Match}es
      */
     private void showMatchApplications() {
         if (applicationProfiles != null) {
@@ -193,6 +209,9 @@ public class UserTabMatches extends javafx.scene.control.Tab {
         }
     }
 
+    /**
+     * Adds {@link Profile}es to the both{@code Vbox} if exists with the both interested {@link Match}es
+     */
     private void showBothInterested() {
         if (bothProfiles != null) {
             List<GridPane> matchingProfilesHBoxes = new ArrayList<>();
@@ -228,6 +247,11 @@ public class UserTabMatches extends javafx.scene.control.Tab {
         }
     }
 
+    /**
+     * Accepts an appliction so the {@link Match} now have the {@link MatchState} both interested
+     * @param ownerProfile a {@link Profile}id of the owners' {@link Profile}
+     * @param otherProfile a {@link Profile}id of the others' {@link Profile}
+     */
     private void acceptMatch(int ownerProfile, int otherProfile )
     {
         MatchDBInterface db = new MatchDB();
@@ -240,6 +264,11 @@ public class UserTabMatches extends javafx.scene.control.Tab {
         refreshMatchDisplay();
     }
 
+    /**
+     * Denys a Request or Both intersested so the {@link Match} will be deleted
+     * @param ownerProfile a {@link Profile}id of the owners' {@link Profile}
+     * @param otherProfile a {@link Profile}id of the others' {@link Profile}
+     */
     private void denyMatch(int ownerProfile, int otherProfile)
     {
         MatchDBInterface db = new MatchDB();
@@ -257,6 +286,12 @@ public class UserTabMatches extends javafx.scene.control.Tab {
 
     }
 
+    /**
+     * Accepts an Interested too so the {@link Match} now have the {@link MatchState} Match
+     * Or OneProfileIsReadyToMatch depending on whether the other {@link Profile} has pushed the Interested too {@code Button}
+     * @param ownerProfile a {@link Profile}id of the owners' {@link Profile}
+     * @param otherProfile a {@link Profile}id of the others' {@link Profile}
+     */
     private void interestedToo(int ownerProfile, int otherProfile )
     {
         MatchDBInterface db = new MatchDB();
@@ -268,6 +303,9 @@ public class UserTabMatches extends javafx.scene.control.Tab {
         refreshMatchDisplay();
     }
 
+    /**
+     * Refeshes the display so it matches the database
+     */
     public void refreshMatchDisplay() {
         // Clear existing data
         applicationProfiles.clear();

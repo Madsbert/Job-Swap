@@ -80,8 +80,31 @@ public class MessageDB implements MessageDBInterface {
 
     }
 
-    public List<Message> getMessages(int userId, int otherId)
+    public List<Message> getMessages(int LoggedInProfileID, int ProfileIDReceiver)
     {
-        return null;
+        //Dette skal nok laves til en Stored Procedure. profileLoggedIn kan også være reseiverID.
+        String preparedStatement = "SELECT * FROM tbl_Message WHERE ProfileIDOfSender = ? AND ProfileIDOfReceiver = ? ORDER BY TimeOfMessage DESC";
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(preparedStatement);) {
+            List<Message> messages = new ArrayList<>();
+
+            ps.setInt(1, LoggedInProfileID);
+            ps.setInt(2, ProfileIDReceiver);
+            ResultSet rs = ps.executeQuery();
+
+            ProfileDBInterface profileDB = new ProfileDB();
+            while (rs.next()) {
+                Profile profileIDOfSender = profileDB.getProfileFromID(rs.getInt("ProfileIDOfSender"));
+                Profile profileIDOfReceiver = profileDB.getProfileFromID(rs.getInt("ProfileIDOfReceiver"));
+                String messageText = rs.getString("MessageText");
+                LocalDateTime timeOfMatch = rs.getTimestamp("TimeOfMessage").toLocalDateTime();
+
+                messages.add(new Message(profileIDOfSender.getProfileID(),profileIDOfReceiver.getProfileID(),messageText,timeOfMatch));
+            }
+            return messages;
+        }catch (Exception e){
+            System.out.println(e.getMessage() + "couldn't get message in newestMessageByLoggedInProfile");
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -80,7 +80,7 @@ public class MessageDB implements MessageDBInterface {
 
     }
 
-    public List<Message> getMessages(int userId, int otherId, int matchId)
+    public List<Message> getMessages(int userId, int otherId)
     {
         return null;
     }

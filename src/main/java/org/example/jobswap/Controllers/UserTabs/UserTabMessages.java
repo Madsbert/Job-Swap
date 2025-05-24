@@ -34,6 +34,8 @@ public class UserTabMessages extends Tab {
     private static VBox oldChatVBow;
     private static VBox newContactVBox;
     private static BorderedVBox chatArea;
+    private static TextArea chatHistory;
+    private static Header chatHeader;
 
     public UserTabMessages() {
         super("Messages");
@@ -87,12 +89,14 @@ public class UserTabMessages extends Tab {
     private void setupChatUI(){
         //setup RightSide
         chatArea = new BorderedVBox();
+        chatHeader = new Header("Chat");
         chatArea.setPadding(new Insets(25, 25, 25, 25));
-        chatArea.getChildren().add(new Header("Chat"));
+        chatArea.getChildren().add(chatHeader);
 
         //chat history created with a textfield, has build in scroll if there is a lot of text.
-        TextArea chatHistory = new TextArea();
+        chatHistory = new TextArea();
         chatHistory.setEditable(false);
+        chatHistory.setWrapText(true);
         VBox.setVgrow(chatHistory, Priority.ALWAYS);  // Fill where there is space
         chatHistory.setPrefHeight(Region.USE_COMPUTED_SIZE);  //Region.USE_COMPUTED_SIZE = don't use fixed height.
 
@@ -130,7 +134,7 @@ public class UserTabMessages extends Tab {
             gridPane.add(new Label("Department: " + matchingProfile.getDepartment()), 0, 1);
             gridPane.add(new Label("Job Titel: " + matchingProfile.getJobTitle()), 1, 0);
             gridPane.add(new Label("Job Description: " + matchingProfile.getJobDescription()), 1, 1);
-            Button openChatButton = new Button("Open Chat");
+            Button openChatButton = new Button("Chat with");
             openChatButton.setOnAction(event -> {openChat(MainSceneController.getCurrentProfile().getProfileID(), matchingProfile.getProfileID());});
             gridPane.add(openChatButton, 2, 1);
 
@@ -171,7 +175,7 @@ public class UserTabMessages extends Tab {
         gridPane.add(new Label("Department: " + receiverProfile.getDepartment()), 0, 1);
         gridPane.add(new Label("Job Titel: " + receiverProfile.getJobTitle()), 1, 0);
         gridPane.add(new Label("Job Description: " + receiverProfile.getJobDescription()), 1, 1);
-        Button openChatButton = new Button("Open Chat");
+        Button openChatButton = new Button("Chat with");
         openChatButton.setOnAction(event -> {openChat(MainSceneController.getCurrentProfile().getProfileID(), receiverProfile.getProfileID());});
         gridPane.add(openChatButton, 2, 1);
         gridPane.autosize();
@@ -197,7 +201,7 @@ public class UserTabMessages extends Tab {
             gridPane.add(new Label("Department: " + matchingProfile.getDepartment()), 0, 1);
             gridPane.add(new Label("Job Titel: " + matchingProfile.getJobTitle()), 1, 0);
             gridPane.add(new Label("Job Description: " + matchingProfile.getJobDescription()), 1, 1);
-            Button openChatButton = new Button("Open Chat");
+            Button openChatButton = new Button("Chat with");
             openChatButton.setOnAction(event -> {openChat(MainSceneController.getCurrentProfile().getProfileID(), matchingProfile.getProfileID());});
             gridPane.add(openChatButton, 2, 1);
 
@@ -209,8 +213,36 @@ public class UserTabMessages extends Tab {
     }
 
     public void openChat(int profileIDLoggedIn,int ProfileIDReceiver){
+        ProfileDBInterface profileDB = new ProfileDB();
+        chatHeader.setText("Chat with "+profileDB.getProfileFromID(ProfileIDReceiver).getUsername());
+
+        //clear it.
+        chatHistory.clear();
+
+        //array of messages from database between the 2 profiles
+        List<Message> AllmessagesBetweenProfiles = new ArrayList<>();
         MessageDBInterface messageDB = new MessageDB();
-        messageDB.createMessage(new Message(profileIDLoggedIn,ProfileIDReceiver,"THIS IS A TEST MESSAGE FOR TESTING!"));
+        AllmessagesBetweenProfiles = messageDB.getMessages(profileIDLoggedIn,ProfileIDReceiver);
+
+        for (Message message : AllmessagesBetweenProfiles) {
+            String LeftOrRight;
+            String color;
+
+            if (message.getSenderID() == profileIDLoggedIn) {
+                LeftOrRight = "-fx-text-alignment: right;";
+                color = "-fx-background-color: #DCF8C6;"; //#1CDA29
+            }
+            else {
+                LeftOrRight = "-fx-text-alignment: left;";
+                color = "-fx-background-color: #da291c;";  // Light gray
+            }
+
+            //change the font and placement of 1 message, based on who send it.
+            String messageStyle = LeftOrRight + color;
+            chatHistory.setStyle(messageStyle);
+
+            chatHistory.appendText(message.getText() + "\n");
+        }
     }
 
     private void writeNewMessage(Message message)

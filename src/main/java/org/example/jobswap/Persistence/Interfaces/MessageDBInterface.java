@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface MessageDBInterface {
     void createMessage(Message message);
-    List<Message> getMessages(int userId, int otherId, int matchId);
+    List<Message> getMessages(int userId, int otherId);
     HashMap<Integer,Integer> allChatsOfProfile(int LoggedInProfileID);
     Message newestMessageByLoggedInProfile(int LoggedInProfileID);
 }

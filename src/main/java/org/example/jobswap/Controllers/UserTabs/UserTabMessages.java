@@ -188,9 +188,6 @@ public class UserTabMessages extends Tab {
     }
 
 
-
-
-
     public List<Profile> getAllPossibleChatsBasedOnState(int LoggedInProfileID, MatchState stateOfMatch) {
         MatchDBInterface matchDB = new MatchDB();
         MessageDBInterface messageDB = new MessageDB();

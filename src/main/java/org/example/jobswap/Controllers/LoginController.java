@@ -3,6 +3,7 @@ package org.example.jobswap.Controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import org.example.jobswap.Model.Profile;
@@ -25,6 +26,16 @@ public class LoginController {
 
     @FXML
     private PasswordField passwordField;
+
+    @FXML
+    private Button loginButton;
+
+
+    @FXML
+    public void initialize() {
+        // Allows "Enter" key to log in
+        loginButton.setDefaultButton(true);
+    }
 
     /**
      * Method that checks if the password and employeeID matches in database

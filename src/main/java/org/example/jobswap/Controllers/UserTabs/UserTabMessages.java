@@ -19,6 +19,7 @@ import org.example.jobswap.Persistence.ProfileDB;
 import org.example.jobswap.Service.BorderedVBox;
 import org.example.jobswap.Service.Header;
 
+import java.awt.event.ActionEvent;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -36,6 +37,9 @@ public class UserTabMessages extends Tab {
     private static BorderedVBox chatArea;
     private static TextArea chatHistory;
     private static Header chatHeader;
+    private static TextField messageInputField;
+
+    private Profile reseiverProfile;
 
     public UserTabMessages() {
         super("Messages");
@@ -104,11 +108,13 @@ public class UserTabMessages extends Tab {
         HBox messageInputBox = new HBox(10);
         messageInputBox.setAlignment(Pos.CENTER_RIGHT);
 
-        TextField messageInputField = new TextField();
+        messageInputField = new TextField();
         messageInputField.setPrefWidth(chatArea.getWidth());
         HBox.setHgrow(messageInputField, Priority.ALWAYS); //Dynamic spacing for messageField.
         messageInputField.setPromptText("Type your message...");
+        //setup button
         Button sendButton = new Button("Send");
+        sendButton.setOnAction(event -> {sendMessage(MainSceneController.getCurrentProfile(),reseiverProfile);});
 
         //adds it to the RightSide VBox.
         messageInputBox.getChildren().addAll(messageInputField, sendButton);
@@ -135,7 +141,7 @@ public class UserTabMessages extends Tab {
             gridPane.add(new Label("Job Titel: " + matchingProfile.getJobTitle()), 1, 0);
             gridPane.add(new Label("Job Description: " + matchingProfile.getJobDescription()), 1, 1);
             Button openChatButton = new Button("Chat with");
-            openChatButton.setOnAction(event -> {openChat(MainSceneController.getCurrentProfile().getProfileID(), matchingProfile.getProfileID());});
+            openChatButton.setOnAction(event -> {openChat(MainSceneController.getCurrentProfile(), matchingProfile);});
             gridPane.add(openChatButton, 2, 1);
 
             gridPane.autosize();
@@ -176,7 +182,7 @@ public class UserTabMessages extends Tab {
         gridPane.add(new Label("Job Titel: " + receiverProfile.getJobTitle()), 1, 0);
         gridPane.add(new Label("Job Description: " + receiverProfile.getJobDescription()), 1, 1);
         Button openChatButton = new Button("Chat with");
-        openChatButton.setOnAction(event -> {openChat(MainSceneController.getCurrentProfile().getProfileID(), receiverProfile.getProfileID());});
+        openChatButton.setOnAction(event -> {openChat(MainSceneController.getCurrentProfile(), receiverProfile);});
         gridPane.add(openChatButton, 2, 1);
         gridPane.autosize();
 
@@ -202,7 +208,7 @@ public class UserTabMessages extends Tab {
             gridPane.add(new Label("Job Titel: " + matchingProfile.getJobTitle()), 1, 0);
             gridPane.add(new Label("Job Description: " + matchingProfile.getJobDescription()), 1, 1);
             Button openChatButton = new Button("Chat with");
-            openChatButton.setOnAction(event -> {openChat(MainSceneController.getCurrentProfile().getProfileID(), matchingProfile.getProfileID());});
+            openChatButton.setOnAction(event -> {openChat(MainSceneController.getCurrentProfile(), matchingProfile);});
             gridPane.add(openChatButton, 2, 1);
 
             gridPane.autosize();
@@ -212,23 +218,23 @@ public class UserTabMessages extends Tab {
 
     }
 
-    public void openChat(int profileIDLoggedIn,int ProfileIDReceiver){
-        ProfileDBInterface profileDB = new ProfileDB();
-        chatHeader.setText("Chat with "+profileDB.getProfileFromID(ProfileIDReceiver).getUsername());
+    public void openChat(Profile loggedInProfile,Profile receiverProfile){
+        reseiverProfile = receiverProfile;
 
+        chatHeader.setText("Chat with "+receiverProfile.getUsername());
         //clear it.
         chatHistory.clear();
 
         //array of messages from database between the 2 profiles
         List<Message> AllmessagesBetweenProfiles = new ArrayList<>();
         MessageDBInterface messageDB = new MessageDB();
-        AllmessagesBetweenProfiles = messageDB.getMessages(profileIDLoggedIn,ProfileIDReceiver);
+        AllmessagesBetweenProfiles = messageDB.getMessages(loggedInProfile.getProfileID(),receiverProfile.getProfileID());
 
         for (Message message : AllmessagesBetweenProfiles) {
             String LeftOrRight;
             String color;
 
-            if (message.getSenderID() == profileIDLoggedIn) {
+            if (message.getSenderID() == loggedInProfile.getProfileID()) {
                 LeftOrRight = "-fx-text-alignment: right;";
                 color = "-fx-background-color: #DCF8C6;"; //#1CDA29
             }
@@ -245,8 +251,11 @@ public class UserTabMessages extends Tab {
         }
     }
 
-    private void writeNewMessage(Message message)
+    private void sendMessage(Profile loggedInProfileID, Profile receiverProfileID)
     {
+        MessageDBInterface messageDB = new MessageDB();
+        Message newMessage = new Message(loggedInProfileID.getProfileID(),receiverProfileID.getProfileID(),messageInputField.getText());
+        messageDB.createMessage(newMessage);
 
     }
 
@@ -257,7 +266,6 @@ public class UserTabMessages extends Tab {
 
     public List<Profile> getAllPossibleChatsBasedOnState(int LoggedInProfileID, MatchState stateOfMatch) {
         MatchDBInterface matchDB = new MatchDB();
-        MessageDBInterface messageDB = new MessageDB();
 
         // Gets all matches
         List<Match> matches = matchDB.getProfileMatches(LoggedInProfileID);

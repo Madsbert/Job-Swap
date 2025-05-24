@@ -83,9 +83,9 @@ public class MessageDB implements MessageDBInterface {
     public List<Message> getMessages(int LoggedInProfileID, int ProfileIDReceiver)
     {
         //Dette skal nok laves til en Stored Procedure. profileLoggedIn kan også være reseiverID.
-        String preparedStatement = "SELECT * FROM tbl_Message WHERE ProfileIDOfSender = ? AND ProfileIDOfReceiver = ? ORDER BY TimeOfMessage DESC";
+        String storeProcedure = "{call get_all_messages_between_2_profiles_sort_by_time(?,?) }";
         try(Connection conn = DBConnection.getConnection();
-            PreparedStatement ps = conn.prepareStatement(preparedStatement);) {
+            PreparedStatement ps = conn.prepareStatement(storeProcedure);) {
             List<Message> messages = new ArrayList<>();
 
             ps.setInt(1, LoggedInProfileID);

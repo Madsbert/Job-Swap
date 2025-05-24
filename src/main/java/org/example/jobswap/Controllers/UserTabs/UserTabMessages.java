@@ -1,13 +1,9 @@
 package org.example.jobswap.Controllers.UserTabs;
 
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Tab;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import javafx.stage.Screen;
 import org.example.jobswap.Controllers.MainSceneController;
 import org.example.jobswap.Model.Match;
@@ -23,7 +19,6 @@ import org.example.jobswap.Persistence.ProfileDB;
 import org.example.jobswap.Service.BorderedVBox;
 import org.example.jobswap.Service.Header;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,49 +26,89 @@ import java.util.stream.Collectors;
  * class which sets up the tab Messages
  */
 public class UserTabMessages extends Tab {
-    private static ScrollPane scrollPane;
+    private static ScrollPane messageSectionLeftPane;
     private static VBox newContactBox;
     private static VBox oldChatBox;
     private static VBox lastmessageBox;
     private static VBox lastMessageVBox;
     private static VBox oldChatVBow;
     private static VBox newContactVBox;
+    private static BorderedVBox chatArea;
 
     public UserTabMessages() {
         super("Messages");
 
-        scrollPane = new ScrollPane();
-        scrollPane.setFitToHeight(true);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setPadding(new Insets(25, 25, 25, 25));
+        //setup SplitPane, the same as a HBox but dynamic
+        SplitPane primarySplitPane = new SplitPane();
+        primarySplitPane.setDividerPositions(0.70); //70% left 30% right
 
-        VBox vbox = new VBox();
-        scrollPane.setContent(vbox);
+        //setup LeftSide
+        messageSectionLeftPane = new ScrollPane();
+        messageSectionLeftPane.setFitToHeight(true);
+        messageSectionLeftPane.setFitToWidth(true);
+        messageSectionLeftPane.setPadding(new Insets(25, 25, 25, 25));
 
+        VBox messageUnderTabs = new VBox();
+        messageSectionLeftPane.setContent(messageUnderTabs);
+
+        //Sets up the Last Messaged UnderTab
         lastMessageVBox = new BorderedVBox();
         lastMessageVBox.getChildren().add(new Header("Last Messaged"));
-        vbox.getChildren().add(lastMessageVBox);
+        messageUnderTabs.getChildren().add(lastMessageVBox);
         lastmessageBox = new VBox();
         lastMessageVBox.getChildren().add(lastmessageBox);
         showLastMessageChats(MainSceneController.getCurrentProfile());
 
-
+        //Sets up the old Message UnderTab
         oldChatVBow = new BorderedVBox();
         oldChatVBow.getChildren().add(new Header("Old Chats"));
-        vbox.getChildren().add(oldChatVBow);
+        messageUnderTabs.getChildren().add(oldChatVBow);
         oldChatBox = new VBox();
         oldChatVBow.getChildren().add(oldChatBox);
         showOldChats(MainSceneController.getCurrentProfile());
 
+        //Sets up the new contact Message UnderTab
         newContactVBox = new BorderedVBox();
         newContactVBox.getChildren().add(new Header("New Contact Options"));
         newContactBox = new VBox();
         newContactVBox.getChildren().add(newContactBox);
         showAllAvailableChats(MatchState.BOTH_INTERESTED);
+        messageUnderTabs.getChildren().add(newContactVBox);
 
-        vbox.getChildren().add(newContactVBox);
+        setupChatUI();
 
-        this.setContent(scrollPane);
+        //adds each BorderedVBox to the side of the SplitPane
+        primarySplitPane.getItems().addAll(messageSectionLeftPane,chatArea);
+
+        this.setContent(primarySplitPane);
+
+    }
+
+    private void setupChatUI(){
+        //setup RightSide
+        chatArea = new BorderedVBox();
+        chatArea.setPadding(new Insets(25, 25, 25, 25));
+        chatArea.getChildren().add(new Header("Chat"));
+
+        //chat history created with a textfield, has build in scroll if there is a lot of text.
+        TextArea chatHistory = new TextArea();
+        chatHistory.setEditable(false);
+        VBox.setVgrow(chatHistory, Priority.ALWAYS);  // Fill where there is space
+        chatHistory.setPrefHeight(Region.USE_COMPUTED_SIZE);  //Region.USE_COMPUTED_SIZE = don't use fixed height.
+
+        //setup bottom of chat.
+        HBox messageInputBox = new HBox(10);
+        messageInputBox.setAlignment(Pos.CENTER_RIGHT);
+
+        TextField messageInputField = new TextField();
+        messageInputField.setPrefWidth(chatArea.getWidth());
+        HBox.setHgrow(messageInputField, Priority.ALWAYS); //Dynamic spacing for messageField.
+        messageInputField.setPromptText("Type your message...");
+        Button sendButton = new Button("Send");
+
+        //adds it to the RightSide VBox.
+        messageInputBox.getChildren().addAll(messageInputField, sendButton);
+        chatArea.getChildren().addAll(chatHistory,messageInputBox);
 
     }
 

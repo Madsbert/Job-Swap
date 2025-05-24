@@ -103,7 +103,7 @@ public class MessageDB implements MessageDBInterface {
             }
             return messages;
         }catch (Exception e){
-            System.out.println(e.getMessage() + "couldn't get message in newestMessageByLoggedInProfile");
+            System.out.println(e.getMessage() + "couldn't get messages in GetMessages");
             throw new RuntimeException(e);
         }
     }

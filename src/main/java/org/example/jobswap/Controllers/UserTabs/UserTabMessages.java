@@ -19,7 +19,6 @@ import org.example.jobswap.Persistence.ProfileDB;
 import org.example.jobswap.Service.BorderedVBox;
 import org.example.jobswap.Service.Header;
 
-import java.awt.event.ActionEvent;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -35,7 +34,9 @@ public class UserTabMessages extends Tab {
     private static VBox oldChatVBow;
     private static VBox newContactVBox;
     private static BorderedVBox chatArea;
-    private static TextArea chatHistory;
+    private static HBox chatHistoryHbox;
+    private static TextArea chatHistoryReceiver;
+    private static TextArea chatHistorySender;
     private static Header chatHeader;
     private static TextField messageInputField;
 
@@ -97,12 +98,27 @@ public class UserTabMessages extends Tab {
         chatArea.setPadding(new Insets(25, 25, 25, 25));
         chatArea.getChildren().add(chatHeader);
 
-        //chat history created with a textfield, has build in scroll if there is a lot of text.
-        chatHistory = new TextArea();
-        chatHistory.setEditable(false);
-        chatHistory.setWrapText(true);
-        VBox.setVgrow(chatHistory, Priority.ALWAYS);  // Fill where there is space
-        chatHistory.setPrefHeight(Region.USE_COMPUTED_SIZE);  //Region.USE_COMPUTED_SIZE = don't use fixed height.
+        //chat history created with 2 textArea inside of a Hbox, has build in scroll if there is a lot of text.
+        chatHistoryHbox = new HBox();
+
+        //Receiver Section
+        chatHistoryReceiver = new TextArea();
+        chatHistoryReceiver.setEditable(false);
+        chatHistoryReceiver.setWrapText(true);
+        VBox.setVgrow(chatHistoryReceiver, Priority.ALWAYS);  // Fill where there is space
+        chatHistoryReceiver.setPrefHeight(Region.USE_COMPUTED_SIZE);  //Region.USE_COMPUTED_SIZE = don't use fixed height.
+        chatHistoryReceiver.setStyle("-fx-text-fill: #da291c");
+
+        //Sender Section
+        chatHistorySender = new TextArea();
+        chatHistorySender.setEditable(false);
+        chatHistorySender.setWrapText(true);
+        VBox.setVgrow(chatHistorySender, Priority.ALWAYS);  // Fill where there is space
+        chatHistorySender.setPrefHeight(Region.USE_COMPUTED_SIZE);  //Region.USE_COMPUTED_SIZE = don't use fixed height.
+        chatHistorySender.setStyle("-fx-text-alignment: right;");
+        chatHistorySender.setStyle("-fx-text-fill: #1CDA29;");
+
+        chatHistoryHbox.getChildren().addAll(chatHistoryReceiver,chatHistorySender);
 
         //setup bottom of chat.
         HBox messageInputBox = new HBox(10);
@@ -118,7 +134,7 @@ public class UserTabMessages extends Tab {
 
         //adds it to the RightSide VBox.
         messageInputBox.getChildren().addAll(messageInputField, sendButton);
-        chatArea.getChildren().addAll(chatHistory,messageInputBox);
+        chatArea.getChildren().addAll(chatHistoryHbox,messageInputBox);
 
     }
 
@@ -223,31 +239,35 @@ public class UserTabMessages extends Tab {
 
         chatHeader.setText("Chat with "+receiverProfile.getUsername());
         //clear it.
-        chatHistory.clear();
+        chatHistoryReceiver.clear();
+        chatHistorySender.clear();
 
         //array of messages from database between the 2 profiles
-        List<Message> AllmessagesBetweenProfiles = new ArrayList<>();
+
         MessageDBInterface messageDB = new MessageDB();
-        AllmessagesBetweenProfiles = messageDB.getMessages(loggedInProfile.getProfileID(),receiverProfile.getProfileID());
+        List<Message> allMessagesBetweenProfiles = messageDB.getMessages(loggedInProfile.getProfileID(),receiverProfile.getProfileID());
+        List<String> messagesSender = new ArrayList<>();
+        List<String> messagesReceiver = new ArrayList<>();
 
-        for (Message message : AllmessagesBetweenProfiles) {
-            String LeftOrRight;
-            String color;
-
+        //Sort array into sender and receiver arrays.
+        for (Message message : allMessagesBetweenProfiles) {
             if (message.getSenderID() == loggedInProfile.getProfileID()) {
-                LeftOrRight = "-fx-text-alignment: right;";
-                color = "-fx-background-color: #DCF8C6;"; //#1CDA29
+                messagesSender.add(message.getText());
+                messagesReceiver.add(" ");
             }
             else {
-                LeftOrRight = "-fx-text-alignment: left;";
-                color = "-fx-background-color: #da291c;";  // Light gray
+                messagesReceiver.add(message.getText());
+                messagesSender.add(" ");
             }
+        }
 
-            //change the font and placement of 1 message, based on who send it.
-            String messageStyle = LeftOrRight + color;
-            chatHistory.setStyle(messageStyle);
+        //add message text to each text area.
+        for (String text : messagesSender) {
+            chatHistorySender.appendText(text+"\n");
 
-            chatHistory.appendText(message.getText() + "\n");
+        }
+        for (String text : messagesReceiver) {
+            chatHistoryReceiver.appendText(text+"\n");
         }
     }
 

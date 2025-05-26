@@ -157,18 +157,17 @@ public class UserTabMessages extends Tab {
         ProfileDBInterface profileDB = new ProfileDB();
 
         Message newestMessage = messageDB.newestMessageByLoggedInProfile(loggedInProfile.getProfileID());
-        Profile receiverProfile;
         HBox newestProfileHBox = new HBox();
 
         if (newestMessage != null) {
             if (loggedInProfile.getProfileID() == newestMessage.getSenderID()) {
-                receiverProfile = profileDB.getProfileFromID(newestMessage.getReceiverID());
-            } else {
-                receiverProfile = null;
+                reseiverProfile = profileDB.getProfileFromID(newestMessage.getReceiverID());
             }
-        } else {
-            receiverProfile = loggedInProfile;
+            else {
+                reseiverProfile = loggedInProfile;
+            }
         }
+
 
         GridPane gridPane = new GridPane();
         gridPane.setHgap(150);
@@ -177,12 +176,12 @@ public class UserTabMessages extends Tab {
         gridPane.setStyle("-fx-background-color: #fff; -fx-border-color: #da291c; -fx-border-width: 1.5;");
 
         gridPane.setPadding(new Insets(25, 25, 25, 25));
-        gridPane.add(new Label("Username: " + receiverProfile.getUsername()), 0, 0);
-        gridPane.add(new Label("Department: " + receiverProfile.getDepartment()), 0, 1);
-        gridPane.add(new Label("Job Titel: " + receiverProfile.getJobTitle()), 1, 0);
-        gridPane.add(new Label("Job Description: " + receiverProfile.getJobDescription()), 1, 1);
+        gridPane.add(new Label("Username: " + reseiverProfile.getUsername()), 0, 0);
+        gridPane.add(new Label("Department: " + reseiverProfile.getDepartment()), 0, 1);
+        gridPane.add(new Label("Job Titel: " + reseiverProfile.getJobTitle()), 1, 0);
+        gridPane.add(new Label("Job Description: " + reseiverProfile.getJobDescription()), 1, 1);
         Button openChatButton = new Button("Chat with");
-        openChatButton.setOnAction(event -> {openChat(MainSceneController.getCurrentProfile(), receiverProfile);});
+        openChatButton.setOnAction(event -> {openChat(MainSceneController.getCurrentProfile(), reseiverProfile);});
         gridPane.add(openChatButton, 2, 1);
         gridPane.autosize();
 
@@ -231,23 +230,15 @@ public class UserTabMessages extends Tab {
         AllmessagesBetweenProfiles = messageDB.getMessages(loggedInProfile.getProfileID(),receiverProfile.getProfileID());
 
         for (Message message : AllmessagesBetweenProfiles) {
-            String LeftOrRight;
-            String color;
+
 
             if (message.getSenderID() == loggedInProfile.getProfileID()) {
-                LeftOrRight = "-fx-text-alignment: right;";
-                color = "-fx-background-color: #DCF8C6;"; //#1CDA29
+                chatHistory.appendText("Me: \n" + message.getText());
             }
             else {
-                LeftOrRight = "-fx-text-alignment: left;";
-                color = "-fx-background-color: #da291c;";  // Light gray
+                chatHistory.appendText(receiverProfile.getUsername()+": \n" + message.getText());
             }
-
-            //change the font and placement of 1 message, based on who send it.
-            String messageStyle = LeftOrRight + color;
-            chatHistory.setStyle(messageStyle);
-
-            chatHistory.appendText(message.getText() + "\n");
+            chatHistory.appendText("\n");
         }
     }
 

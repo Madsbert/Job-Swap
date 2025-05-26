@@ -12,6 +12,17 @@
     -fx-font-weight: bold;
     -fx-text-fill: white;
 }
+/* Username label style */
+.label.username-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-wrap-text: true;
+    -fx-max-width: infinity;
+    -fx-max-height: infinity;
+    -fx-pref-width: -1;
+    -fx-pref-height: -1;
+}
 
 /* Buttons */
 .button {

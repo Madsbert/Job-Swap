@@ -2,6 +2,7 @@ package org.example.jobswap.Controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
 import org.example.jobswap.Controllers.UserTabs.UserTabMatches;
 import org.example.jobswap.Controllers.UserTabs.UserTabMessages;
@@ -20,6 +21,9 @@ public class MainSceneController {
     private TabPane tabPane;
 
     @FXML
+    private Label usernameLabel;
+
+    @FXML
     private Button logoutButton;
 
     private static Profile currentProfile;
@@ -30,6 +34,8 @@ public class MainSceneController {
         tabPane.getTabs().add(new UserTabProfile());
         tabPane.getTabs().add(new UserTabMessages());
 
+        usernameLabel.setText("Hello " + currentProfile.getUsername() + "!");
+
         logoutButton.setOnMouseClicked(event -> {
             try {
                 MainSceneController.setCurrentProfile(null);
@@ -38,6 +44,9 @@ public class MainSceneController {
                 throw new RuntimeException(e);
             }
         });
+
+
+
     }
 
     public static Profile getCurrentProfile() {

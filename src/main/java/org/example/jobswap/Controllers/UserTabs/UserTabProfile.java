@@ -27,6 +27,7 @@ public class UserTabProfile extends javafx.scene.control.Tab {
     private ChoiceBox jobCategoryChoiceBox;
     private TextField jobTitleField;
     private TextField jobDescriptionField;
+    private TextField usernameField;
 
     private VBox optionsBox;
     private VBox profileDetailsBox;
@@ -126,6 +127,7 @@ public class UserTabProfile extends javafx.scene.control.Tab {
         setupJobCategoryBox();
         setupJobTitleBox();
         setupJobDescription();
+        setupUsernameBox();
     }
 
     /**
@@ -252,6 +254,22 @@ public class UserTabProfile extends javafx.scene.control.Tab {
         JobDescriptionBox.getChildren().add(jobDescriptionField);
         profileDetailsBox.getChildren().add(JobDescriptionBox);
     }
+    /**
+     * Sets up JobTitle label and a TextField containing the current {@link Profile} job title.
+     */
+    private void setupUsernameBox()
+    {
+        HBox usernameBox = new HBox();
+
+        usernameField = new TextField(MainSceneController.getCurrentProfile().getJobTitle());
+
+        Label t7Label = new Label("Username:");
+        t7Label.setPrefWidth(140);
+        t7Label.setStyle("-fx-padding: 0 0 0 10;");
+        usernameBox.getChildren().add(t7Label);
+        usernameBox.getChildren().add(usernameField);
+        profileDetailsBox.getChildren().add(usernameBox);
+    }
 
     /**
      * Updates the logic behind the edit mode.
@@ -264,6 +282,7 @@ public class UserTabProfile extends javafx.scene.control.Tab {
             jobCategoryChoiceBox.setDisable(false);
             jobTitleField.setDisable(false);
             jobDescriptionField.setDisable(false);
+            usernameField.setDisable(false);
         }
         else
         {
@@ -271,6 +290,7 @@ public class UserTabProfile extends javafx.scene.control.Tab {
             jobCategoryChoiceBox.setDisable(true);
             jobTitleField.setDisable(true);
             jobDescriptionField.setDisable(true);
+            usernameField.setDisable(true);
         }
     }
 }

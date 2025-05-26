@@ -252,7 +252,6 @@ public class UserTabMessages extends Tab {
         messageInputField.clear();
         // Update
         refreshMessageTab();
-
     }
 
     public List<Profile> getAllPossibleChatsBasedOnState(int LoggedInProfileID, MatchState stateOfMatch) {

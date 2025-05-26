@@ -37,6 +37,11 @@ public class LoginDB implements LoginDBInterface {
         return false;
     }
 
+    /**
+     * checks if a profile with isLocked or not.
+     * @param ProfileId
+     * @return
+     */
     public boolean checkIsLocked(int ProfileId){
         String query = "SELECT IsLocked FROM dbo.tbl_Profile WHERE ProfileID = ?";
         try (Connection conn = DBConnection.getConnection();

@@ -45,6 +45,7 @@ public class LoginController {
      */
     private boolean checkCredentials() {
         try {
+            //check if fields aren't empty
             if (!employeeIDFields.getText().isBlank() && !passwordField.getText().isBlank()) {
                 int id = Integer.parseInt(employeeIDFields.getText());
                 String pass = PasswordEncrypter.encrypt(passwordField.getText());
@@ -65,7 +66,8 @@ public class LoginController {
     }
 
     /**
-     * {@code Buttonevent} that shiftsscene if credentials are correct else it shows {@code Alert}
+     * {@code Buttonevent} that shiftsscene if credentials are correct else it shows {@code Alert}, and add to a wrongIDcounter
+     * if counter hits 5, update the profile with the tried ID to "isLocked = true"
      * @param event click on a button
      */
     public void login(ActionEvent event){

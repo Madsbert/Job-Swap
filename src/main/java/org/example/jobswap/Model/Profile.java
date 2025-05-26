@@ -42,6 +42,7 @@ public class Profile {
         this.activelySeeking = activelySeeking;
         this.isLocked = false;
     }
+    //used for update IsLocked
     public Profile(AccessLevel level, int profileID, String name,String username, String department, String jobTitle, String jobDescription, String jobCategory, boolean activelySeeking, boolean isLocked) {
         this.level = level;
         this.profileID = profileID;

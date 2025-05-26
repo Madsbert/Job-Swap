@@ -52,6 +52,7 @@ public class NewProfileController {
     public String jobTitle;
     public boolean activelySeeking;
 
+    //initialize and add listeners to the Text Fields.
     public void initialize(){
         setupDepartmentChoiceBox();
         setupJobCategoryChoiceBox();
@@ -69,6 +70,12 @@ public class NewProfileController {
 
     }
 
+    /**
+     * This method it triggered by the createButton, it checks if everything is valid.
+     * If it is valid, return to loginScene, if not, an alert pops up.
+     * @param actionEvent
+     * @throws IOException
+     */
     public void createProfileInDatabase(ActionEvent actionEvent) throws IOException {
         //set variables
         profileID = Integer.parseInt(profileIdField.getText());
@@ -105,6 +112,9 @@ public class NewProfileController {
 
     }
 
+    /**
+     * Setups the Department ChoiceBox, and auto selects the first option.
+     */
     public void setupDepartmentChoiceBox(){
         ArrayList<String> departments = new ArrayList<>();
 
@@ -115,12 +125,19 @@ public class NewProfileController {
         departmentChoiceBox.getItems().addAll(departments);
         departmentChoiceBox.getSelectionModel().selectFirst();
     }
+
+    /**
+     * Setups the JobCategory ChoiceBox, and auto selects the first option.
+     */
     public void setupJobCategoryChoiceBox(){
         List<String> jobCategories = JobCategoryDB.getCategories();
         jobCategoryChoiceBox.getItems().addAll(jobCategories);
         jobCategoryChoiceBox.getSelectionModel().selectFirst();
     }
 
+    /**
+     * The method that is checked by the listener, and makes the create button not disable if everything is valid.
+     */
     public void checkButtonState(){
             boolean validID = validateIDField();
             boolean validName = !nameField.getText().isBlank();
@@ -134,6 +151,10 @@ public class NewProfileController {
                     validJobTitle && validActivelySeeking));
     }
 
+    /**
+     * Checks if profileIDField is valid. If not, changes the Text Field Border.
+     * @return
+     */
     private boolean validateIDField() {
         if (!profileIdField.getText().isBlank()) {
             try {
@@ -149,6 +170,11 @@ public class NewProfileController {
         return false;
     }
 
+    /**
+     * is called from the Cancel button, saves nothing, and returns to the loginScene.
+     * @param actionEvent
+     * @throws IOException
+     */
     public void Cancel(ActionEvent actionEvent) throws IOException {
         SceneService.shiftScene(actionEvent,"Login Screen","/org/example/jobswap/Login.fxml");
     }

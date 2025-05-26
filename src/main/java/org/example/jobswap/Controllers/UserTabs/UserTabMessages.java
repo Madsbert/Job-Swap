@@ -24,7 +24,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * class which sets up the tab Messages
+ * class which sets up the tab Messages.
+ *
+ * The tab is divided into two main sections:
+ *  - Left side: Displays contact lists categorized by conversation status
+ *  - Right side: Shows the chat history and provides input for new messages
  */
 public class UserTabMessages extends Tab {
     private static ScrollPane messageSectionLeftPane;
@@ -41,6 +45,9 @@ public class UserTabMessages extends Tab {
 
     private Profile reseiverProfile;
 
+    /**
+     * Constructs a new Messages tab with all UI components and method-usage.
+     */
     public UserTabMessages() {
         super("Messages");
 
@@ -90,6 +97,9 @@ public class UserTabMessages extends Tab {
 
     }
 
+    /**
+     * Sets up the UI components of the ChatSection.
+     */
     private void setupChatUI(){
         //setup RightSide
         chatArea = new BorderedVBox();
@@ -121,6 +131,12 @@ public class UserTabMessages extends Tab {
         chatArea.getChildren().addAll(chatHistory,messageInputBox);
     }
 
+    /**
+     * Displays all available chat options based on the specified match state.
+     * Only shows profiles that haven't been chatted with before.
+     *
+     * @param state The match state to filter available chats.
+     */
     private void showAllAvailableChats(MatchState state)
     {
         List<Profile> matchingProfiles = getAllPossibleChatsBasedOnState(MainSceneController.getCurrentProfile().getProfileID(), state);
@@ -151,13 +167,18 @@ public class UserTabMessages extends Tab {
 
     }
 
+    /**
+     * Displays the Profile Information of the most recent conversation, in the "Last Messaged" section.
+     * Adds a "Chat with" Button.
+     * @param loggedInProfile
+     */
     public void showLastMessageChats(Profile loggedInProfile){
         MessageDBInterface messageDB = new MessageDB();
         ProfileDBInterface profileDB = new ProfileDB();
 
         Message newestMessage = messageDB.newestMessageByLoggedInProfile(loggedInProfile.getProfileID());
         HBox newestProfileHBox = new HBox();
-
+        //does nothing if there is no messages at all.
         if (newestMessage != null) {
             if (loggedInProfile.getProfileID() == newestMessage.getSenderID()) {
                 reseiverProfile = profileDB.getProfileFromID(newestMessage.getReceiverID());
@@ -190,6 +211,11 @@ public class UserTabMessages extends Tab {
         }
     }
 
+    /**
+     * Displays the Profile Information of all conversations, in the "Old Messages" section.
+     * Adds a "Chat with" Button.
+     * @param loggedInProfile
+     */
     public void showOldChats(Profile loggedInProfile){
         List<Profile> profilesWhereLoggedInProfileHasChattedWithBefore = getAllPossibleChats(loggedInProfile.getProfileID());
 
@@ -218,6 +244,13 @@ public class UserTabMessages extends Tab {
 
     }
 
+    /**
+     * Opens a chat conversation between two profiles.
+     * Displays the chat history and updates the UI to show the active conversation.
+     *
+     * @param loggedInProfile The currently logged in user's profile
+     * @param receiverProfile The profile of the user being chatted with
+     */
     public void openChat(Profile loggedInProfile,Profile receiverProfile){
         reseiverProfile = receiverProfile;
 
@@ -242,7 +275,13 @@ public class UserTabMessages extends Tab {
             chatHistory.appendText("\n");
         }
     }
-
+    /**
+     * Sends a new message in the current conversation.
+     * Updates the database and refreshes the chat display.
+     *
+     * @param loggedInProfileID The profile of the message sender
+     * @param receiverProfileID The profile of the message recipient
+     */
     private void sendMessage(Profile loggedInProfileID, Profile receiverProfileID)
     {
         MessageDBInterface messageDB = new MessageDB();
@@ -253,7 +292,15 @@ public class UserTabMessages extends Tab {
         // Update
         refreshMessageTab();
     }
-
+    /**
+     * Retrieves all possible chat partners based on match state.
+     * Filters out profiles that have already been chatted with.
+     * A Set Collection is used since it doesn't allow duplicates.
+     *
+     * @param LoggedInProfileID The ID of the logged in user
+     * @param stateOfMatch The match state to filter by
+     * @return List of Profile objects representing potential chat partners
+     */
     public List<Profile> getAllPossibleChatsBasedOnState(int LoggedInProfileID, MatchState stateOfMatch) {
         MatchDBInterface matchDB = new MatchDB();
 
@@ -288,11 +335,17 @@ public class UserTabMessages extends Tab {
         }
         return possibleChats;
     }
-
+    /**
+     * Retrieves all profiles the logged in user has previously chatted with.
+     * A Set Collection is used since it doesn't allow duplicates.
+     *
+     * @param loggedInProfileID The ID of the logged in user
+     * @return List of Profile objects representing previous chat partners
+     */
     public List<Profile> getAllPossibleChats(int loggedInProfileID) {
         MessageDBInterface messageDB = new MessageDB();
         ProfileDBInterface profileDB = new ProfileDB();
-        //Get stored in a Set since it handles Dubs.
+        //Get stored in a Set since it handles Dups.
         Set<Integer> uniqueProfileIDs = new HashSet<>();
 
         HashMap<Integer, Integer> allChats = messageDB.allChatsOfProfile(loggedInProfileID);
@@ -309,7 +362,7 @@ public class UserTabMessages extends Tab {
         }
 
         // Convert the unique IDs to Profile objects.
-        // This could be done before adding it to the Set, but it doublechecks for dubs.
+        // This could be done before adding it to the Set, but it doublechecks for dups.
         List<Profile> possibleChats = new ArrayList<>();
         for (int profileID : uniqueProfileIDs) {
             if (profileID != loggedInProfileID) {
@@ -319,7 +372,10 @@ public class UserTabMessages extends Tab {
 
         return possibleChats;
     }
-
+    /**
+     * Refreshes all message tab components.
+     * Reloads contact lists and reopens the current chat if one is active.
+     */
     private void refreshMessageTab(){
         // Clear existing content
         lastmessageBox.getChildren().clear();

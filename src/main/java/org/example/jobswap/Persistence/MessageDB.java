@@ -15,9 +15,12 @@ import java.util.List;
 
 public class MessageDB implements MessageDBInterface {
 
+    /**
+     * Creates a new record in tbl_Message
+     * @param message
+     */
     public void createMessage(Message message) {
         String ps = "INSERT INTO tbl_Message (ProfileIDOfSender, ProfileIDOfReceiver, TimeOfMessage, MessageText) VALUES (?, ?, ?, ?)";
-
         try (Connection conn = DBConnection.getConnection(); CallableStatement cstmt = conn.prepareCall(ps)){
             cstmt.setInt(1, message.getSenderID());
             cstmt.setInt(2, message.getReceiverID());
@@ -32,7 +35,12 @@ public class MessageDB implements MessageDBInterface {
 
     }
 
-
+    /**
+     * Return a HashMap of ProfileIDs and links them up, sender and receiver. LoggedInProfileID might be sender or receiver.
+     * It gets every profileID, LoggedInProfileID has ever messaged.
+     * @param LoggedInProfileID
+     * @return
+     */
     public HashMap<Integer,Integer> allChatsOfProfile(int LoggedInProfileID) {
         String preparedStatement = "SELECT * FROM tbl_Message WHERE ProfileIDOfSender = ? OR ProfileIDOfReceiver = ?";
         try(Connection conn = DBConnection.getConnection();
@@ -42,7 +50,8 @@ public class MessageDB implements MessageDBInterface {
             ResultSet rs = ps.executeQuery();
             HashMap<Integer,Integer> profileIDs = new HashMap();
             while (rs.next()) {
-               profileIDs.put(rs.getInt("ProfileIDOfSender"), rs.getInt("ProfileIDOfReceiver"));
+                profileIDs.put(rs.getInt("ProfileIDOfSender"),
+                       rs.getInt("ProfileIDOfReceiver"));
             }
             return profileIDs;
 
@@ -52,6 +61,11 @@ public class MessageDB implements MessageDBInterface {
         }
     }
 
+    /**
+     * returns the Message Object that has the newest time of creation.
+     * @param LoggedInProfileID
+     * @return
+     */
     public Message newestMessageByLoggedInProfile(int LoggedInProfileID) {
         String preparedStatement = "SELECT TOP 1 * FROM tbl_Message WHERE ProfileIDOfSender = ? OR ProfileIDOfReceiver = ? ORDER BY TimeOfMessage DESC";
         try(Connection conn = DBConnection.getConnection();
@@ -80,9 +94,15 @@ public class MessageDB implements MessageDBInterface {
 
     }
 
+    /**
+     * Returns a list of Message Obejct for every chat between two profileIDs.
+     * The Stored Procedure gets every record, not matter who is Sender and Receiver of the message.
+     * @param LoggedInProfileID
+     * @param ProfileIDReceiver
+     * @return
+     */
     public List<Message> getMessages(int LoggedInProfileID, int ProfileIDReceiver)
     {
-        //Dette skal nok laves til en Stored Procedure. profileLoggedIn kan også være reseiverID.
         String storeProcedure = "{call get_all_messages_between_2_profiles_sort_by_time(?,?) }";
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(storeProcedure);) {

@@ -44,6 +44,7 @@ public class MainSceneController {
 
         usernameLabel.setText("Hello " + currentProfile.getUsername() + "!");
 
+        //logout button setup
         logoutButton.setOnMouseClicked(event -> {
             try {
                 MainSceneController.setCurrentProfile(null);
@@ -53,6 +54,7 @@ public class MainSceneController {
             }
         });
 
+        //Help button setup
         getHelpButton.setOnMouseClicked(event -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             //new stage for the alert, to change the icon.

@@ -105,6 +105,7 @@ public class UserTabMessages extends Tab {
         chatHistoryReceiver = new TextArea();
         chatHistoryReceiver.setEditable(false);
         chatHistoryReceiver.setWrapText(true);
+        chatHistoryReceiver.setMouseTransparent(true);
         VBox.setVgrow(chatHistoryReceiver, Priority.ALWAYS);  // Fill where there is space
         chatHistoryReceiver.setPrefHeight(Region.USE_COMPUTED_SIZE);  //Region.USE_COMPUTED_SIZE = don't use fixed height.
         chatHistoryReceiver.setStyle("-fx-text-fill: #da291c");
@@ -113,12 +114,17 @@ public class UserTabMessages extends Tab {
         chatHistorySender = new TextArea();
         chatHistorySender.setEditable(false);
         chatHistorySender.setWrapText(true);
+        chatHistorySender.setMouseTransparent(true);
         VBox.setVgrow(chatHistorySender, Priority.ALWAYS);  // Fill where there is space
         chatHistorySender.setPrefHeight(Region.USE_COMPUTED_SIZE);  //Region.USE_COMPUTED_SIZE = don't use fixed height.
-        chatHistorySender.setStyle("-fx-text-alignment: right;");
-        chatHistorySender.setStyle("-fx-text-fill: #1CDA29;");
+        chatHistorySender.setStyle("-fx-text-fill: #1CDA29; -fx-text-alignment: right;");
 
-        chatHistoryHbox.getChildren().addAll(chatHistoryReceiver,chatHistorySender);
+        //add sender TextArea in a StackPane for right alignment
+        StackPane senderPane = new StackPane(chatHistorySender);
+        senderPane.setAlignment(Pos.CENTER_RIGHT);
+        HBox.setHgrow(senderPane, Priority.ALWAYS);
+
+        chatHistoryHbox.getChildren().addAll(chatHistoryReceiver,senderPane);
 
         //setup bottom of chat.
         HBox messageInputBox = new HBox(10);
@@ -132,7 +138,7 @@ public class UserTabMessages extends Tab {
         Button sendButton = new Button("Send");
         sendButton.setOnAction(event -> {sendMessage(MainSceneController.getCurrentProfile(),reseiverProfile);});
 
-        //adds it to the RightSide VBox.
+        //adds it to chatArea (right side VBox)
         messageInputBox.getChildren().addAll(messageInputField, sendButton);
         chatArea.getChildren().addAll(chatHistoryHbox,messageInputBox);
 
@@ -263,12 +269,15 @@ public class UserTabMessages extends Tab {
 
         //add message text to each text area.
         for (String text : messagesSender) {
-            chatHistorySender.appendText(text+"\n");
-
+            chatHistorySender.appendText(text + "\n");
         }
         for (String text : messagesReceiver) {
-            chatHistoryReceiver.appendText(text+"\n");
+            chatHistoryReceiver.appendText(text + "\n");
         }
+
+        // Scroll to bottom
+        chatHistoryReceiver.setScrollTop(Double.MAX_VALUE);
+        chatHistorySender.setScrollTop(Double.MAX_VALUE);
     }
 
     private void sendMessage(Profile loggedInProfileID, Profile receiverProfileID)

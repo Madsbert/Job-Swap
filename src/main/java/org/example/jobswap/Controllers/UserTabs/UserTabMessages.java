@@ -119,7 +119,6 @@ public class UserTabMessages extends Tab {
         //adds it to the RightSide VBox.
         messageInputBox.getChildren().addAll(messageInputField, sendButton);
         chatArea.getChildren().addAll(chatHistory,messageInputBox);
-
     }
 
     private void showAllAvailableChats(MatchState state)
@@ -163,30 +162,32 @@ public class UserTabMessages extends Tab {
             if (loggedInProfile.getProfileID() == newestMessage.getSenderID()) {
                 reseiverProfile = profileDB.getProfileFromID(newestMessage.getReceiverID());
             }
-            else {
-                reseiverProfile = loggedInProfile;
+            if (loggedInProfile.getProfileID() == newestMessage.getReceiverID()) {
+                reseiverProfile = profileDB.getProfileFromID(newestMessage.getSenderID());
             }
+
+            GridPane gridPane = new GridPane();
+            gridPane.setHgap(150);
+            gridPane.setVgap(5);
+            gridPane.setPrefSize(Screen.getPrimary().getBounds().getWidth(), 40);
+            gridPane.setStyle("-fx-background-color: #fff; -fx-border-color: #da291c; -fx-border-width: 1.5;");
+
+            gridPane.setPadding(new Insets(25, 25, 25, 25));
+            gridPane.add(new Label("Username: " + reseiverProfile.getUsername()), 0, 0);
+            gridPane.add(new Label("Department: " + reseiverProfile.getDepartment()), 0, 1);
+            gridPane.add(new Label("Job Titel: " + reseiverProfile.getJobTitle()), 1, 0);
+            gridPane.add(new Label("Job Description: " + reseiverProfile.getJobDescription()), 1, 1);
+            Button openChatButton = new Button("Chat with");
+            openChatButton.setOnAction(event -> {openChat(MainSceneController.getCurrentProfile(), reseiverProfile);});
+            gridPane.add(openChatButton, 2, 1);
+            gridPane.autosize();
+
+            newestProfileHBox.getChildren().add(gridPane);
+            lastmessageBox.getChildren().addAll(newestProfileHBox);
         }
-
-
-        GridPane gridPane = new GridPane();
-        gridPane.setHgap(150);
-        gridPane.setVgap(5);
-        gridPane.setPrefSize(Screen.getPrimary().getBounds().getWidth(), 40);
-        gridPane.setStyle("-fx-background-color: #fff; -fx-border-color: #da291c; -fx-border-width: 1.5;");
-
-        gridPane.setPadding(new Insets(25, 25, 25, 25));
-        gridPane.add(new Label("Username: " + reseiverProfile.getUsername()), 0, 0);
-        gridPane.add(new Label("Department: " + reseiverProfile.getDepartment()), 0, 1);
-        gridPane.add(new Label("Job Titel: " + reseiverProfile.getJobTitle()), 1, 0);
-        gridPane.add(new Label("Job Description: " + reseiverProfile.getJobDescription()), 1, 1);
-        Button openChatButton = new Button("Chat with");
-        openChatButton.setOnAction(event -> {openChat(MainSceneController.getCurrentProfile(), reseiverProfile);});
-        gridPane.add(openChatButton, 2, 1);
-        gridPane.autosize();
-
-        newestProfileHBox.getChildren().add(gridPane);
-        lastmessageBox.getChildren().addAll(newestProfileHBox);
+        else {
+            System.out.println("No new Message");
+        }
     }
 
     public void showOldChats(Profile loggedInProfile){

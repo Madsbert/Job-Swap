@@ -5,7 +5,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import org.example.jobswap.Controllers.UserTabs.UserTabMatches;
 import org.example.jobswap.Controllers.UserTabs.UserTabMessages;
 import org.example.jobswap.Controllers.UserTabs.UserTabProfile;
@@ -53,6 +55,10 @@ public class MainSceneController {
 
         getHelpButton.setOnMouseClicked(event -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            //new stage for the alert, to change the icon.
+            Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+            alertStage.getIcons().add(new Image(getClass().getResource("/org/example/jobswap/JobSwapIcon.png").toExternalForm()));
+            //information
             alert.setTitle("Help");
             alert.setHeaderText("If you have a problem with anything, please contact your department System Administrator");
             alert.setContentText("📞 +45 12 34 56 67 ");

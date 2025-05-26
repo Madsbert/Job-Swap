@@ -16,6 +16,7 @@ import org.example.jobswap.Persistence.ProfileDB;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Objects;
@@ -29,11 +30,9 @@ public class JobswapApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(JobswapApplication.class.getResource("/org/example/jobswap/Login.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Login");
-
-        Image icon = new Image("/src/main/resources/org/example/jobswap/Pictures/JobSwapIcon.png");
+        //adds icon
+        Image icon = new Image(getClass().getResource("/org/example/jobswap/JobSwapIcon.png").toExternalForm());
         stage.getIcons().add(icon);
-
-
         stage.setScene(scene);
         stage.show();
 

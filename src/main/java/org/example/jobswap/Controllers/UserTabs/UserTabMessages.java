@@ -249,12 +249,11 @@ public class UserTabMessages extends Tab {
         Message newMessage = new Message(loggedInProfileID.getProfileID(),receiverProfileID.getProfileID(),messageInputField.getText());
         messageDB.createMessage(newMessage);
 
-    }
+        messageInputField.clear();
+        // Update
+        refreshMessageTab();
 
-    private void showHelpInformation()
-    {
     }
-
 
     public List<Profile> getAllPossibleChatsBasedOnState(int LoggedInProfileID, MatchState stateOfMatch) {
         MatchDBInterface matchDB = new MatchDB();
@@ -320,5 +319,22 @@ public class UserTabMessages extends Tab {
         }
 
         return possibleChats;
+    }
+
+    private void refreshMessageTab(){
+        // Clear existing content
+        lastmessageBox.getChildren().clear();
+        oldChatBox.getChildren().clear();
+        newContactBox.getChildren().clear();
+
+        // Reload
+        showLastMessageChats(MainSceneController.getCurrentProfile());
+        showOldChats(MainSceneController.getCurrentProfile());
+        showAllAvailableChats(MatchState.BOTH_INTERESTED);
+
+        //open chat again
+        if (reseiverProfile != null) {
+            openChat(MainSceneController.getCurrentProfile(), reseiverProfile);
+        }
     }
 }

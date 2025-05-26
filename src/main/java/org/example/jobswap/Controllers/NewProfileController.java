@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * class which sets createNewProfileScene fxml and handles some logic for creating a new profile
  */
-public class MakeNewProfilePopUp {
+public class NewProfileController {
     @FXML
     private ChoiceBox departmentChoiceBox;
     @FXML

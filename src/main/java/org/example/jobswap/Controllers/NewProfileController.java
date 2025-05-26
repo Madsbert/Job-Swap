@@ -2,10 +2,7 @@ package org.example.jobswap.Controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import org.example.jobswap.Model.Profile;
 import org.example.jobswap.Persistence.DepartmentDB;
 import org.example.jobswap.Persistence.Interfaces.LoginDBInterface;
@@ -42,6 +39,8 @@ public class NewProfileController {
     private TextField jobTitleField;
     @FXML
     private CheckBox activelySeekingCheckbox;
+    @FXML
+    private Button createButton;
 
     public int profileID;
     public String fullName;
@@ -56,6 +55,17 @@ public class NewProfileController {
     public void initialize(){
         setupDepartmentChoiceBox();
         setupJobCategoryChoiceBox();
+        createButton.setDisable(true);
+
+        // Add listeners to all input fields
+        profileIdField.textProperty().addListener((obs, oldVal, newVal) -> checkButtonState());
+        nameField.textProperty().addListener((obs, oldVal, newVal) -> checkButtonState());
+        usernameField.textProperty().addListener((obs, oldVal, newVal) -> checkButtonState());
+        passwordField.textProperty().addListener((obs, oldVal, newVal) -> checkButtonState());
+        jobDescriptionField.textProperty().addListener((obs, oldVal, newVal) -> checkButtonState());
+        jobTitleField.textProperty().addListener((obs, oldVal, newVal) -> checkButtonState());
+
+
 
     }
 
@@ -77,9 +87,6 @@ public class NewProfileController {
         ProfileDBInterface profileDB = new ProfileDB();
         boolean isProfileCreated;
 
-        System.out.println(newProfile);
-        newProfile.toString();
-
         //create new profile in database, if it was created, create a login with the ID and password
         isProfileCreated = profileDB.createNewProfile(newProfile);
 
@@ -87,6 +94,13 @@ public class NewProfileController {
             LoginDBInterface loginDB = new LoginDB();
             loginDB.addLoginToDataBase(profileID,password);
             SceneService.shiftScene(actionEvent,"Login Screen","/org/example/jobswap/Login.fxml");
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("ID is already in use");
+            alert.setHeaderText("You have entered a wrong employee ID, this one is already in use");
+            alert.setContentText("Please try again");
+            alert.showAndWait();//This shows the alert
         }
 
     }
@@ -99,10 +113,40 @@ public class NewProfileController {
             departments.add(department.getDepartmentName());
         }
         departmentChoiceBox.getItems().addAll(departments);
+        departmentChoiceBox.getSelectionModel().selectFirst();
     }
     public void setupJobCategoryChoiceBox(){
         List<String> jobCategories = JobCategoryDB.getCategories();
         jobCategoryChoiceBox.getItems().addAll(jobCategories);
+        jobCategoryChoiceBox.getSelectionModel().selectFirst();
+    }
+
+    public void checkButtonState(){
+            boolean validID = validateIDField();
+            boolean validName = !nameField.getText().isBlank();
+            boolean validPassword = !passwordField.getText().isBlank();
+            boolean validUsername = !usernameField.getText().isBlank();
+            boolean validDescription = true;
+            boolean validJobTitle = true;
+            boolean validActivelySeeking = true;
+
+            createButton.setDisable(!(validID && validName && validPassword && validUsername && validDescription &&
+                    validJobTitle && validActivelySeeking));
+    }
+
+    private boolean validateIDField() {
+        if (!profileIdField.getText().isBlank()) {
+            try {
+                Integer.parseInt(profileIdField.getText());
+                profileIdField.setStyle(""); // Clear error styling if any
+                return true;
+            } catch (NumberFormatException e) {
+                profileIdField.setStyle("-fx-border-color: red;"); // Show error if text
+                return false;
+            }
+        }
+        profileIdField.setStyle("-fx-border-color: red;"); // Show error if blank field
+        return false;
     }
 
     public void Cancel(ActionEvent actionEvent) throws IOException {

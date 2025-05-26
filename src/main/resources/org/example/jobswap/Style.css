@@ -17,6 +17,7 @@
     -fx-font-size: 20px;
     -fx-font-weight: bold;
     -fx-text-fill: white;
+    /*dynamic size depending on username length*/
     -fx-wrap-text: true;
     -fx-max-width: infinity;
     -fx-max-height: infinity;

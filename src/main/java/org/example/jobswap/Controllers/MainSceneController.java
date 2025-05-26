@@ -1,9 +1,11 @@
 package org.example.jobswap.Controllers;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
+import javafx.scene.image.ImageView;
 import org.example.jobswap.Controllers.UserTabs.UserTabMatches;
 import org.example.jobswap.Controllers.UserTabs.UserTabMessages;
 import org.example.jobswap.Controllers.UserTabs.UserTabProfile;
@@ -11,6 +13,7 @@ import org.example.jobswap.Controllers.UserTabs.UserTabSeekJobSwap;
 import org.example.jobswap.Model.Profile;
 import org.example.jobswap.Service.SceneService;
 
+import java.awt.*;
 import java.io.IOException;
 
 /**
@@ -25,6 +28,9 @@ public class MainSceneController {
 
     @FXML
     private Button logoutButton;
+
+    @FXML
+    private Button getHelpButton;
 
     private static Profile currentProfile;
 
@@ -43,6 +49,14 @@ public class MainSceneController {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        });
+
+        getHelpButton.setOnMouseClicked(event -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Help");
+            alert.setHeaderText("If you have a problem with anything, please contact your department System Administrator");
+            alert.setContentText("📞 +45 12 34 56 67 ");
+            alert.showAndWait();//This shows the alert
         });
 
 

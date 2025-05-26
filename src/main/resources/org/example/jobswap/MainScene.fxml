@@ -28,7 +28,7 @@
                <HBox.margin>
                   <Insets right="20.0" />
                </HBox.margin></Button>
-                <Button minWidth="80.0" text="Help" />
+                <Button fx:id="getHelpButton" minWidth="80.0" text="Help" />
             </children>
         </HBox>
     </top>

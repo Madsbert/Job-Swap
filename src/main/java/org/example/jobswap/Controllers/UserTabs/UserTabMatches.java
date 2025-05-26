@@ -167,7 +167,7 @@ public class UserTabMatches extends javafx.scene.control.Tab {
                 gridPane.add(new Label("Job Titel: " + profile.getJobTitle()), 1, 0);
                 gridPane.add(new Label("Job Description: " + profile.getJobDescription()), 1, 1);
                 Button iAmInterestedTooButton = new Button("I'm interested too");
-                iAmInterestedTooButton.setOnAction(event -> {interestedToo(currentProfileID,profile.getProfileID());});
+                iAmInterestedTooButton.setOnAction(event -> {iAmInterestedToo(currentProfileID,profile.getProfileID());});
                 gridPane.add(iAmInterestedTooButton, 2, 0);
 
                 Button denyButton = new Button("Deny Match");
@@ -230,7 +230,8 @@ public class UserTabMatches extends javafx.scene.control.Tab {
                 gridPane.add(new Label("Job Description: " + profile.getJobDescription()), 1, 1);
 
                 Button acceptMatchButton = new Button("Accept Match");
-                acceptMatchButton.setOnAction(event -> {acceptMatch(currentProfileID,profile.getProfileID());});
+                acceptMatchButton.setOnAction(event -> {
+                    acceptMatch(currentProfileID,profile.getProfileID());});
                 gridPane.add(acceptMatchButton, 2, 0);
 
                 Button denyButton = new Button("Deny Match");
@@ -252,7 +253,7 @@ public class UserTabMatches extends javafx.scene.control.Tab {
      * @param ownerProfile a {@link Profile}id of the owners' {@link Profile}
      * @param otherProfile a {@link Profile}id of the others' {@link Profile}
      */
-    private void acceptMatch(int ownerProfile, int otherProfile )
+    private void iAmInterestedToo(int ownerProfile, int otherProfile )
     {
         MatchDBInterface db = new MatchDB();
         Match existingMatch = db.getMatchFromProfileIDs(ownerProfile,otherProfile);
@@ -292,7 +293,7 @@ public class UserTabMatches extends javafx.scene.control.Tab {
      * @param ownerProfile a {@link Profile}id of the owners' {@link Profile}
      * @param otherProfile a {@link Profile}id of the others' {@link Profile}
      */
-    private void interestedToo(int ownerProfile, int otherProfile )
+    private void acceptMatch(int ownerProfile, int otherProfile )
     {
         MatchDBInterface db = new MatchDB();
         Match existingMatch = db.getMatchFromProfileIDs(ownerProfile,otherProfile);

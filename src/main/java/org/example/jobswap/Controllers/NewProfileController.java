@@ -56,6 +56,7 @@ public class NewProfileController {
     public void initialize(){
         setupDepartmentChoiceBox();
         setupJobCategoryChoiceBox();
+
     }
 
     public void createProfileInDatabase(ActionEvent actionEvent) throws IOException {

@@ -19,6 +19,7 @@ import org.example.jobswap.Persistence.ProfileDB;
 import org.example.jobswap.Service.BorderedVBox;
 import org.example.jobswap.Service.Header;
 
+import java.awt.event.ActionEvent;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,9 +35,7 @@ public class UserTabMessages extends Tab {
     private static VBox oldChatVBow;
     private static VBox newContactVBox;
     private static BorderedVBox chatArea;
-    private static HBox chatHistoryHbox;
-    private static TextArea chatHistoryReceiver;
-    private static TextArea chatHistorySender;
+    private static TextArea chatHistory;
     private static Header chatHeader;
     private static TextField messageInputField;
 
@@ -98,33 +97,12 @@ public class UserTabMessages extends Tab {
         chatArea.setPadding(new Insets(25, 25, 25, 25));
         chatArea.getChildren().add(chatHeader);
 
-        //chat history created with 2 textArea inside of a Hbox, has build in scroll if there is a lot of text.
-        chatHistoryHbox = new HBox();
-
-        //Receiver Section
-        chatHistoryReceiver = new TextArea();
-        chatHistoryReceiver.setEditable(false);
-        chatHistoryReceiver.setWrapText(true);
-        chatHistoryReceiver.setMouseTransparent(true);
-        VBox.setVgrow(chatHistoryReceiver, Priority.ALWAYS);  // Fill where there is space
-        chatHistoryReceiver.setPrefHeight(Region.USE_COMPUTED_SIZE);  //Region.USE_COMPUTED_SIZE = don't use fixed height.
-        chatHistoryReceiver.setStyle("-fx-text-fill: #da291c");
-
-        //Sender Section
-        chatHistorySender = new TextArea();
-        chatHistorySender.setEditable(false);
-        chatHistorySender.setWrapText(true);
-        chatHistorySender.setMouseTransparent(true);
-        VBox.setVgrow(chatHistorySender, Priority.ALWAYS);  // Fill where there is space
-        chatHistorySender.setPrefHeight(Region.USE_COMPUTED_SIZE);  //Region.USE_COMPUTED_SIZE = don't use fixed height.
-        chatHistorySender.setStyle("-fx-text-fill: #1CDA29; -fx-text-alignment: right;");
-
-        //add sender TextArea in a StackPane for right alignment
-        StackPane senderPane = new StackPane(chatHistorySender);
-        senderPane.setAlignment(Pos.CENTER_RIGHT);
-        HBox.setHgrow(senderPane, Priority.ALWAYS);
-
-        chatHistoryHbox.getChildren().addAll(chatHistoryReceiver,senderPane);
+        //chat history created with a textfield, has build in scroll if there is a lot of text.
+        chatHistory = new TextArea();
+        chatHistory.setEditable(false);
+        chatHistory.setWrapText(true);
+        VBox.setVgrow(chatHistory, Priority.ALWAYS);  // Fill where there is space
+        chatHistory.setPrefHeight(Region.USE_COMPUTED_SIZE);  //Region.USE_COMPUTED_SIZE = don't use fixed height.
 
         //setup bottom of chat.
         HBox messageInputBox = new HBox(10);
@@ -138,9 +116,9 @@ public class UserTabMessages extends Tab {
         Button sendButton = new Button("Send");
         sendButton.setOnAction(event -> {sendMessage(MainSceneController.getCurrentProfile(),reseiverProfile);});
 
-        //adds it to chatArea (right side VBox)
+        //adds it to the RightSide VBox.
         messageInputBox.getChildren().addAll(messageInputField, sendButton);
-        chatArea.getChildren().addAll(chatHistoryHbox,messageInputBox);
+        chatArea.getChildren().addAll(chatHistory,messageInputBox);
 
     }
 
@@ -179,18 +157,17 @@ public class UserTabMessages extends Tab {
         ProfileDBInterface profileDB = new ProfileDB();
 
         Message newestMessage = messageDB.newestMessageByLoggedInProfile(loggedInProfile.getProfileID());
-        Profile receiverProfile;
         HBox newestProfileHBox = new HBox();
 
         if (newestMessage != null) {
             if (loggedInProfile.getProfileID() == newestMessage.getSenderID()) {
-                receiverProfile = profileDB.getProfileFromID(newestMessage.getReceiverID());
-            } else {
-                receiverProfile = null;
+                reseiverProfile = profileDB.getProfileFromID(newestMessage.getReceiverID());
             }
-        } else {
-            receiverProfile = loggedInProfile;
+            else {
+                reseiverProfile = loggedInProfile;
+            }
         }
+
 
         GridPane gridPane = new GridPane();
         gridPane.setHgap(150);
@@ -199,12 +176,12 @@ public class UserTabMessages extends Tab {
         gridPane.setStyle("-fx-background-color: #fff; -fx-border-color: #da291c; -fx-border-width: 1.5;");
 
         gridPane.setPadding(new Insets(25, 25, 25, 25));
-        gridPane.add(new Label("Username: " + receiverProfile.getUsername()), 0, 0);
-        gridPane.add(new Label("Department: " + receiverProfile.getDepartment()), 0, 1);
-        gridPane.add(new Label("Job Titel: " + receiverProfile.getJobTitle()), 1, 0);
-        gridPane.add(new Label("Job Description: " + receiverProfile.getJobDescription()), 1, 1);
+        gridPane.add(new Label("Username: " + reseiverProfile.getUsername()), 0, 0);
+        gridPane.add(new Label("Department: " + reseiverProfile.getDepartment()), 0, 1);
+        gridPane.add(new Label("Job Titel: " + reseiverProfile.getJobTitle()), 1, 0);
+        gridPane.add(new Label("Job Description: " + reseiverProfile.getJobDescription()), 1, 1);
         Button openChatButton = new Button("Chat with");
-        openChatButton.setOnAction(event -> {openChat(MainSceneController.getCurrentProfile(), receiverProfile);});
+        openChatButton.setOnAction(event -> {openChat(MainSceneController.getCurrentProfile(), reseiverProfile);});
         gridPane.add(openChatButton, 2, 1);
         gridPane.autosize();
 
@@ -245,39 +222,24 @@ public class UserTabMessages extends Tab {
 
         chatHeader.setText("Chat with "+receiverProfile.getUsername());
         //clear it.
-        chatHistoryReceiver.clear();
-        chatHistorySender.clear();
+        chatHistory.clear();
 
         //array of messages from database between the 2 profiles
-
+        List<Message> AllmessagesBetweenProfiles = new ArrayList<>();
         MessageDBInterface messageDB = new MessageDB();
-        List<Message> allMessagesBetweenProfiles = messageDB.getMessages(loggedInProfile.getProfileID(),receiverProfile.getProfileID());
-        List<String> messagesSender = new ArrayList<>();
-        List<String> messagesReceiver = new ArrayList<>();
+        AllmessagesBetweenProfiles = messageDB.getMessages(loggedInProfile.getProfileID(),receiverProfile.getProfileID());
 
-        //Sort array into sender and receiver arrays.
-        for (Message message : allMessagesBetweenProfiles) {
+        for (Message message : AllmessagesBetweenProfiles) {
+
+
             if (message.getSenderID() == loggedInProfile.getProfileID()) {
-                messagesSender.add(message.getText());
-                messagesReceiver.add(" ");
+                chatHistory.appendText("Me: \n" + message.getText());
             }
             else {
-                messagesReceiver.add(message.getText());
-                messagesSender.add(" ");
+                chatHistory.appendText(receiverProfile.getUsername()+": \n" + message.getText());
             }
+            chatHistory.appendText("\n");
         }
-
-        //add message text to each text area.
-        for (String text : messagesSender) {
-            chatHistorySender.appendText(text + "\n");
-        }
-        for (String text : messagesReceiver) {
-            chatHistoryReceiver.appendText(text + "\n");
-        }
-
-        // Scroll to bottom
-        chatHistoryReceiver.setScrollTop(Double.MAX_VALUE);
-        chatHistorySender.setScrollTop(Double.MAX_VALUE);
     }
 
     private void sendMessage(Profile loggedInProfileID, Profile receiverProfileID)

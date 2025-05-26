@@ -42,6 +42,18 @@ public class Profile {
         this.activelySeeking = activelySeeking;
         this.isLocked = false;
     }
+    public Profile(AccessLevel level, int profileID, String name,String username, String department, String jobTitle, String jobDescription, String jobCategory, boolean activelySeeking, boolean isLocked) {
+        this.level = level;
+        this.profileID = profileID;
+        this.name = name;
+        this.username = username;
+        this.department = department;
+        this.jobTitle = jobTitle;
+        this.jobDescription = jobDescription;
+        this.jobCategory = jobCategory;
+        this.activelySeeking = activelySeeking;
+        this.isLocked = isLocked;
+    }
     public Profile(int profileID, String name,String username, String department, String jobTitle, String jobDescription, String jobCategory, boolean activelySeeking) {
         this.level = AccessLevel.EMPLOYEE;
         this.profileID = profileID;
@@ -81,6 +93,9 @@ public class Profile {
 
     public int getAccessLevel() {
         return level.ordinal();
+    }
+    public AccessLevel getAccessLevelNotOrdnial(){
+        return level;
     }
 
     public String getJobTitle() {

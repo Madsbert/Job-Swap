@@ -8,12 +8,11 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import org.example.jobswap.Model.Profile;
 import org.example.jobswap.Persistence.Interfaces.LoginDBInterface;
+import org.example.jobswap.Persistence.Interfaces.ProfileDBInterface;
 import org.example.jobswap.Persistence.LoginDB;
 import org.example.jobswap.Persistence.ProfileDB;
 import org.example.jobswap.Service.PasswordEncrypter;
 import org.example.jobswap.Service.SceneService;
-
-import java.io.IOException;
 
 
 /**
@@ -30,6 +29,9 @@ public class LoginController {
     @FXML
     private Button loginButton;
 
+    private int wrongIDCounter = 1;
+    private int oldID;
+
 
     @FXML
     public void initialize() {
@@ -41,18 +43,23 @@ public class LoginController {
      * Method that checks if the password and employeeID matches in database
      * @return a {@code boolean} if the credentials match or not
      */
-    private boolean checkCredentials()
-    {
-        int id = Integer.parseInt(employeeIDFields.getText());
-        String pass = PasswordEncrypter.encrypt(passwordField.getText());
+    private boolean checkCredentials() {
         try {
-            LoginDBInterface db = new LoginDB();
-            return db.checkCredentials(id, pass);
-        }catch(NumberFormatException e) {
-            System.out.println("invalid employee ID");
+            if (!employeeIDFields.getText().isBlank() && !passwordField.getText().isBlank()) {
+                int id = Integer.parseInt(employeeIDFields.getText());
+                String pass = PasswordEncrypter.encrypt(passwordField.getText());
+
+                LoginDBInterface db = new LoginDB();
+                if (db.checkIsLocked(id)){
+                    return db.checkCredentials(id, pass);
+                }
+            }
+            return false; // Returns false if a field is blank
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid employee ID (must be a number)");
             return false;
-        }catch (Exception e) {
-            System.out.println("invalid password or employee ID");
+        } catch (Exception e) {
+            System.out.println("Error checking credentials: " + e.getMessage());
             return false;
         }
     }
@@ -63,13 +70,35 @@ public class LoginController {
      */
     public void login(ActionEvent event){
         try {
-
             if (!checkCredentials()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Wrong Credentials");
                 alert.setHeaderText("You have entered a wrong employee ID or password");
                 alert.setContentText("Please enter a valid employee ID or password");
                 alert.showAndWait();//This shows the alert
+                wrongIDCounter++;
+
+                if (oldID != Integer.parseInt(employeeIDFields.getText())) {
+                    oldID = Integer.parseInt(employeeIDFields.getText());
+                    wrongIDCounter = 1;
+                }
+                System.out.println("Wrong ID Counter: " + wrongIDCounter);
+                if (wrongIDCounter ==5 ) {
+                    ProfileDBInterface profileDB = new ProfileDB();
+                    Profile currentIDsProfile = profileDB.getProfileFromID(Integer.parseInt(employeeIDFields.getText()));
+                    profileDB.updateProfile(new Profile(
+                            currentIDsProfile.getAccessLevelNotOrdnial(),
+                            currentIDsProfile.getProfileID(),
+                            currentIDsProfile.getName(),
+                            currentIDsProfile.getUsername(),
+                            currentIDsProfile.getDepartment(),
+                            currentIDsProfile.getJobTitle(),
+                            currentIDsProfile.getJobDescription(),
+                            currentIDsProfile.getJobCategory(),
+                            currentIDsProfile.isActivelySeeking(),
+                            true));
+                }
+
             } else {
 
                 ProfileDB db = new ProfileDB();

@@ -37,6 +37,22 @@ public class LoginDB implements LoginDBInterface {
         return false;
     }
 
+    public boolean checkIsLocked(int ProfileId){
+        String query = "SELECT IsLocked FROM dbo.tbl_Profile WHERE ProfileID = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setInt(1, ProfileId);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            System.out.println("Something went wrong in checkIsLocked");
+        }
+        return false;
+    }
+
     /**
      * Makes a login- record in tbl login.
      * @param profileID

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * class to do CRUD in Matches
+ * Class to handle database querys and stored procedures of {@link Match}
  */
 public class MatchDB implements MatchDBInterface {
     public List<Match> getMatches(int profileID, MatchState state) {
@@ -26,7 +26,7 @@ public class MatchDB implements MatchDBInterface {
     /**
      * Updates the {@link MatchState} in an {@link Match}
      * @param match the {@link Match} which needs to be updated
-     * @return a {@code boolean} if the match is updated or not
+     * @return a {@code boolean} if the {@link Match} is updated or not
      */
     public boolean updateMatch(Match match) {
         String sql = "UPDATE tbl_Match SET MatchStateID=?, TimeOfMatch=? WHERE Profile1ID=? AND Profile2ID=?";
@@ -74,8 +74,8 @@ public class MatchDB implements MatchDBInterface {
 
     /**
      * The Stored procedure makes sure that one {@link Profile} cant push the button twice so its a {@link Match}.
-     * and it makes the {@link MatchState} go from 3- interested to 5 - One Profile is interested and then to 4 - Match
-     * @param match {@link Match} which state needs to be changed
+     * and it makes the {@link MatchState} go from 3- interested to 5 - One {@link Profile} is interested and then to 4 - Match
+     * @param match {@link Match} which {@link MatchState} needs to be changed
      * @param LoggedInProfile the {@link Profile}  for the one who is logged in
      */
     public void updateMatchStateFromBothInterestedToMatch(Match match,Profile LoggedInProfile) {
@@ -101,7 +101,7 @@ public class MatchDB implements MatchDBInterface {
      * the department they wish to work in
      * @param profileID an id for a {@link Profile}
      * @param wantedDepartment the department the {@link Profile} is seeking
-     * @return
+     * @return a list of {@link Profile}s
      */
     public static List<Profile> seekAllPossibleProfileMatches(int profileID, String wantedDepartment){
         String sp = "{call seek_all_possible_profile_matches(?,?) }";
@@ -137,7 +137,7 @@ public class MatchDB implements MatchDBInterface {
     }
 
     /**
-     * Gets all the profiles which the owner {@link Profile} has a {@link Match} with.
+     * Gets all the {@link Profile}s which the owner {@link Profile} has a {@link Match} with.
      * @param profileID an id for a {@link Profile}
      * @return a list of {@link Profile}
      */

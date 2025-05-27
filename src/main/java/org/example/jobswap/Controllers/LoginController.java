@@ -41,6 +41,7 @@ public class LoginController {
 
     /**
      * Method that checks if the password and employeeID matches in database
+     * and checks if the {@link Profile} is Locked
      * @return a {@code boolean} if the credentials match or not
      */
     private boolean checkCredentials() {
@@ -66,9 +67,9 @@ public class LoginController {
     }
 
     /**
-     * {@code Buttonevent} that shiftsscene if credentials are correct else it shows {@code Alert}, and add to a wrongIDcounter
-     * if counter hits 5, update the profile with the tried ID to "isLocked = true"
-     * @param event click on a button
+     * {@code ButtonEvent} that shifts scene if credentials are correct else it shows {@code Alert}, and add to a wrongIDcounter
+     * if counter hits 5, update the {@link Profile} with the tried ID to "isLocked = true"
+     * @param event click on a {@link Button}
      */
     public void login(ActionEvent event){
         try {

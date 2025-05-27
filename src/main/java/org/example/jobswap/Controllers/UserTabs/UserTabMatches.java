@@ -39,7 +39,7 @@ public final class UserTabMatches extends UpdatableTab {
     private int currentProfileID = MainSceneController.getCurrentProfile().getProfileID();
 
     /**
-     *Constructor for UserTabMatches
+     *Constructor for {@link UserTabMatches}
      */
     public UserTabMatches() {
         super("Matches");
@@ -142,7 +142,7 @@ public final class UserTabMatches extends UpdatableTab {
     }
 
     /**
-     * Adds {@link Profile}es to the request{@code Vbox} if exists with the requested {@link Match}es
+     * Adds {@link Profile}es to the request{@link VBox} if exists with the requested {@link Match}es
      */
     private void showRequestedMatches() {
         if (requestProfiles != null) {
@@ -177,7 +177,7 @@ public final class UserTabMatches extends UpdatableTab {
     }
 
     /**
-     * Adds {@link Profile}es to the application{@code Vbox} if exists with the application {@link Match}es
+     * Adds {@link Profile}es to the application{@link VBox} if exists with the application {@link Match}es
      */
     private void showMatchApplications() {
         if (applicationProfiles != null) {
@@ -203,7 +203,7 @@ public final class UserTabMatches extends UpdatableTab {
     }
 
     /**
-     * Adds {@link Profile}es to the both{@code Vbox} if exists with the both interested {@link Match}es
+     * Adds {@link Profile}es to the both{@link  VBox} if exists with the both interested {@link Match}es
      */
     private void showBothInterested() {
         if (bothProfiles != null) {

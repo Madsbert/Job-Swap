@@ -4,7 +4,8 @@ import java.sql.Date;
 import java.time.LocalDateTime;
 
 /**
- * class to define a message
+ * class to define a {@link Message}
+ * it has a senderid, recieverID, time and Text
  */
 public class Message {
     private int senderID;

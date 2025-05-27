@@ -5,7 +5,7 @@ import javafx.scene.control.Label;
 import javafx.stage.Screen;
 
 /**
- * UI Class to add a label with Danfoss/Default Red color as background.
+ * UI Class to add a {@link Label} with Danfoss/Default Red color as background.
  */
 public class Header extends Label {
 

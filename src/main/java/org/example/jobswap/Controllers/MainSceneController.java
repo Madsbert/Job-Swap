@@ -55,12 +55,8 @@ public class MainSceneController {
 
         //logout button setup
         logoutButton.setOnMouseClicked(event -> {
-            try {
-                MainSceneController.setCurrentProfile(null);
-                SceneService.shiftScene(event, "JobSwap", "/org/example/jobswap/Login.fxml");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            MainSceneController.setCurrentProfile(null);
+            SceneService.shiftScene(event, "JobSwap", "/org/example/jobswap/Login.fxml");
         });
 
         //Help button setup

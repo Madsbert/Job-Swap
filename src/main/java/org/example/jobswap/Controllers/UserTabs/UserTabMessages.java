@@ -20,7 +20,6 @@ import org.example.jobswap.Persistence.ProfileDB;
 import org.example.jobswap.Service.BorderedVBox;
 import org.example.jobswap.Service.Header;
 
-import java.awt.event.ActionEvent;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -43,7 +42,7 @@ public class UserTabMessages extends UpdatableTab {
     private static Header chatHeader;
     private static TextField messageInputField;
 
-    private Profile reseiverProfile;
+    private Profile receiverProfile;
 
     /**
      * Constructs a new Messages tab with all UI components and method-usage.
@@ -66,19 +65,17 @@ public class UserTabMessages extends UpdatableTab {
 
         //Sets up the Last Messaged UnderTab
         lastMessageVBox = new BorderedVBox();
-        lastMessageVBox.getChildren().add(new Header("Last Messaged"));
+        lastMessageVBox.getChildren().add(new Header("Received"));
         messageUnderTabs.getChildren().add(lastMessageVBox);
         lastmessageBox = new VBox();
         lastMessageVBox.getChildren().add(lastmessageBox);
-        showLastMessageChats(MainSceneController.getCurrentProfile());
 
         //Sets up the old Message UnderTab
         oldChatVBow = new BorderedVBox();
-        oldChatVBow.getChildren().add(new Header("Old Chats"));
+        oldChatVBow.getChildren().add(new Header("Answered"));
         messageUnderTabs.getChildren().add(oldChatVBow);
         oldChatBox = new VBox();
         oldChatVBow.getChildren().add(oldChatBox);
-        showOldChats(MainSceneController.getCurrentProfile());
 
         //Sets up the new contact Message UnderTab
         newContactVBox = new BorderedVBox();
@@ -88,6 +85,7 @@ public class UserTabMessages extends UpdatableTab {
         showAllAvailableChats(MatchState.BOTH_INTERESTED);
         messageUnderTabs.getChildren().add(newContactVBox);
 
+        sortMessages();
         setupChatUI();
 
         //adds each BorderedVBox to the side of the SplitPane
@@ -124,7 +122,7 @@ public class UserTabMessages extends UpdatableTab {
         messageInputField.setPromptText("Type your message...");
         //setup button
         Button sendButton = new Button("Send");
-        sendButton.setOnAction(event -> {sendMessage(MainSceneController.getCurrentProfile(),reseiverProfile);});
+        sendButton.setOnAction(event -> {sendMessage(MainSceneController.getCurrentProfile(), receiverProfile);});
 
         //adds it to the RightSide VBox.
         messageInputBox.getChildren().addAll(messageInputField, sendButton);
@@ -169,22 +167,15 @@ public class UserTabMessages extends UpdatableTab {
     /**
      * Displays the {@link Profile} Information of the most recent conversation, in the "Last Messaged" section.
      * Adds a "Chat with" {@link Button}.
-     * @param loggedInProfile
+     * @param receivedMessages {@link Message Messages} where the last receiver was the current user
      */
-    public void showLastMessageChats(Profile loggedInProfile){
-        MessageDBInterface messageDB = new MessageDB();
+    public void showReceivedMessageProfiles(List<Message> receivedMessages){
         ProfileDBInterface profileDB = new ProfileDB();
 
-        Message newestMessage = messageDB.newestMessageByLoggedInProfile(loggedInProfile.getProfileID());
         HBox newestProfileHBox = new HBox();
         //does nothing if there is no messages at all.
-        if (newestMessage != null) {
-            if (loggedInProfile.getProfileID() == newestMessage.getSenderID()) {
-                reseiverProfile = profileDB.getProfileFromID(newestMessage.getReceiverID());
-            }
-            if (loggedInProfile.getProfileID() == newestMessage.getReceiverID()) {
-                reseiverProfile = profileDB.getProfileFromID(newestMessage.getSenderID());
-            }
+        for (Message message : receivedMessages) {
+            Profile senderProfile = profileDB.getProfileFromID(message.getSenderID());
 
             GridPane gridPane = new GridPane();
             gridPane.setHgap(150);
@@ -193,34 +184,33 @@ public class UserTabMessages extends UpdatableTab {
             gridPane.setStyle("-fx-background-color: #fff; -fx-border-color: #da291c; -fx-border-width: 1.5;");
 
             gridPane.setPadding(new Insets(25, 25, 25, 25));
-            gridPane.add(new Label("Username: " + reseiverProfile.getUsername()), 0, 0);
-            gridPane.add(new Label("Department: " + reseiverProfile.getDepartment()), 0, 1);
-            gridPane.add(new Label("Job Titel: " + reseiverProfile.getJobTitle()), 1, 0);
-            gridPane.add(new Label("Job Description: " + reseiverProfile.getJobDescription()), 1, 1);
+            gridPane.add(new Label("Username: " + senderProfile.getUsername()), 0, 0);
+            gridPane.add(new Label("Department: " + senderProfile.getDepartment()), 0, 1);
+            gridPane.add(new Label("Job Titel: " + senderProfile.getJobTitle()), 1, 0);
+            gridPane.add(new Label("Job Description: " + senderProfile.getJobDescription()), 1, 1);
             Button openChatButton = new Button("Chat with");
-            openChatButton.setOnAction(event -> {openChat(MainSceneController.getCurrentProfile(), reseiverProfile);});
+            openChatButton.setOnAction(event -> {openChat(MainSceneController.getCurrentProfile(), senderProfile);});
             gridPane.add(openChatButton, 2, 1);
             gridPane.autosize();
 
             newestProfileHBox.getChildren().add(gridPane);
             lastmessageBox.getChildren().addAll(newestProfileHBox);
         }
-        else {
-            System.out.println("No new Message");
-        }
     }
 
     /**
-     * Displays the {@link Profile} Information of all conversations, in the "Old Messages" section.
+     * Displays the {@link Profile} Information of all conversations, in the "Answered chats" section.
      * Adds a "Chat with" {@link Button}.
-     * @param loggedInProfile
+     * @param answeredMessages {@link Message Messages} where the last sender was the current user
      */
-    public void showOldChats(Profile loggedInProfile){
-        List<Profile> profilesWhereLoggedInProfileHasChattedWithBefore = getAllPossibleChats(loggedInProfile.getProfileID());
-
+    public void showAnsweredMessageProfiles(List<Message> answeredMessages){
         List<GridPane> matchingProfilesHBoxes = new ArrayList<>();
 
-        for (Profile matchingProfile : profilesWhereLoggedInProfileHasChattedWithBefore) {
+        ProfileDBInterface profileDB = new ProfileDB();
+        for (Message message : answeredMessages) {
+            Profile receiverProfile = profileDB.getProfileFromID(message.getReceiverID());
+
+
             GridPane gridPane = new GridPane();
             gridPane.setHgap(150);
             gridPane.setVgap(5);
@@ -228,12 +218,12 @@ public class UserTabMessages extends UpdatableTab {
             gridPane.setStyle("-fx-background-color: #fff; -fx-border-color: #da291c; -fx-border-width: 1.5;");
 
             gridPane.setPadding(new Insets(25, 25, 25, 25));
-            gridPane.add(new Label("Username: " + matchingProfile.getUsername()), 0, 0);
-            gridPane.add(new Label("Department: " + matchingProfile.getDepartment()), 0, 1);
-            gridPane.add(new Label("Job Titel: " + matchingProfile.getJobTitle()), 1, 0);
-            gridPane.add(new Label("Job Description: " + matchingProfile.getJobDescription()), 1, 1);
+            gridPane.add(new Label("Username: " + receiverProfile.getUsername()), 0, 0);
+            gridPane.add(new Label("Department: " + receiverProfile.getDepartment()), 0, 1);
+            gridPane.add(new Label("Job Titel: " + receiverProfile.getJobTitle()), 1, 0);
+            gridPane.add(new Label("Job Description: " + receiverProfile.getJobDescription()), 1, 1);
             Button openChatButton = new Button("Chat with");
-            openChatButton.setOnAction(event -> {openChat(MainSceneController.getCurrentProfile(), matchingProfile);});
+            openChatButton.setOnAction(event -> {openChat(MainSceneController.getCurrentProfile(), receiverProfile);});
             gridPane.add(openChatButton, 2, 1);
 
             gridPane.autosize();
@@ -250,7 +240,7 @@ public class UserTabMessages extends UpdatableTab {
      * @param receiverProfile The {@link Profile} of the user being chatted with
      */
     public void openChat(Profile loggedInProfile,Profile receiverProfile){
-        reseiverProfile = receiverProfile;
+        this.receiverProfile = receiverProfile;
 
         chatHeader.setText("Chat with "+receiverProfile.getUsername());
         //clear it.
@@ -332,7 +322,7 @@ public class UserTabMessages extends UpdatableTab {
         return possibleChats;
     }
     /**
-     * Retrieves all {@link Profile} the logged in user has previously chatted with.
+     * Retrieves all {@link Profile}s the logged in user has previously chatted with.
      * A Set Collection is used since it doesn't allow duplicates.
      * @param loggedInProfileID The ID of the logged in user
      * @return List of {@link Profile} objects representing previous chat partners
@@ -378,14 +368,37 @@ public class UserTabMessages extends UpdatableTab {
         newContactBox.getChildren().clear();
 
         // Reload
-        showLastMessageChats(MainSceneController.getCurrentProfile());
-        showOldChats(MainSceneController.getCurrentProfile());
+        sortMessages();
         showAllAvailableChats(MatchState.BOTH_INTERESTED);
 
         //open chat again
-        if (reseiverProfile != null) {
-            openChat(MainSceneController.getCurrentProfile(), reseiverProfile);
+        if (receiverProfile != null) {
+            openChat(MainSceneController.getCurrentProfile(), receiverProfile);
         }
+    }
+
+    public void sortMessages() {
+        Profile loggedInProfile = MainSceneController.getCurrentProfile();
+        List<Profile> profilesWhereLoggedInProfileHasChattedWithBefore = getAllPossibleChats(loggedInProfile.getProfileID());
+        MessageDBInterface messageDB = new MessageDB();
+
+        List<Message> iSentLast = new ArrayList<>();
+        List<Message> iReceivedLast = new ArrayList<>();
+
+        for (Profile matchingProfile : profilesWhereLoggedInProfileHasChattedWithBefore) {
+            List<Message> allMessages = messageDB.getMessages(loggedInProfile.getProfileID(), matchingProfile.getProfileID());
+            Message lastMessage = allMessages.getLast();
+
+            if (lastMessage != null && lastMessage.getSenderID() == loggedInProfile.getProfileID()) {
+                iSentLast.add(lastMessage);
+            }
+            else {
+                iReceivedLast.add(lastMessage);
+            }
+        }
+
+        showAnsweredMessageProfiles(iSentLast);
+        showReceivedMessageProfiles(iReceivedLast);
     }
 
     /**

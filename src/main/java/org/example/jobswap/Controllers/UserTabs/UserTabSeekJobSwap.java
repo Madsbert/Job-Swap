@@ -103,8 +103,10 @@ public class UserTabSeekJobSwap extends UpdatableTab {
 
         swapsBox.getChildren().clear();
 
+        String selectedDepartment = departmentChoiceBox.getSelectionModel().getSelectedItem().substring(0, departmentChoiceBox.getSelectionModel().getSelectedItem().indexOf(","));
+
         List<Profile> matchingProfiles = MatchDB.seekAllPossibleProfileMatches(MainSceneController.getCurrentProfile().getProfileID(),
-                departmentChoiceBox.getSelectionModel().getSelectedItem());
+                selectedDepartment);
 
         List<GridPane> matchingProfilesHBoxes = new ArrayList<>();
 

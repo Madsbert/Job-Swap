@@ -1,10 +1,13 @@
 package org.example.jobswap.Controllers.UserTabs;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Screen;
+import javafx.util.Duration;
 import org.example.jobswap.Controllers.MainSceneController;
 import org.example.jobswap.Controllers.UpdatableTab;
 import org.example.jobswap.Model.Match;
@@ -44,6 +47,8 @@ public class UserTabMessages extends UpdatableTab {
     private static TextField messageInputField;
 
     private Profile reseiverProfile;
+
+    private static Timeline updater;
 
     /**
      * Constructs a new Messages tab with all UI components and method-usage.
@@ -89,6 +94,11 @@ public class UserTabMessages extends UpdatableTab {
         messageUnderTabs.getChildren().add(newContactVBox);
 
         setupChatUI();
+
+        updater = new Timeline();
+        updater.setCycleCount(Timeline.INDEFINITE);
+        updater.getKeyFrames().add(new KeyFrame(Duration.seconds(0.25f), event -> {update();}));
+        updater.play();
 
         //adds each BorderedVBox to the side of the SplitPane
         primarySplitPane.getItems().addAll(messageSectionLeftPane,chatArea);
@@ -179,11 +189,12 @@ public class UserTabMessages extends UpdatableTab {
         HBox newestProfileHBox = new HBox();
         //does nothing if there is no messages at all.
         if (newestMessage != null) {
+            Profile tempReceiver = null;
             if (loggedInProfile.getProfileID() == newestMessage.getSenderID()) {
-                reseiverProfile = profileDB.getProfileFromID(newestMessage.getReceiverID());
+                tempReceiver = profileDB.getProfileFromID(newestMessage.getReceiverID());
             }
             if (loggedInProfile.getProfileID() == newestMessage.getReceiverID()) {
-                reseiverProfile = profileDB.getProfileFromID(newestMessage.getSenderID());
+                tempReceiver = profileDB.getProfileFromID(newestMessage.getSenderID());
             }
 
             GridPane gridPane = new GridPane();
@@ -193,12 +204,16 @@ public class UserTabMessages extends UpdatableTab {
             gridPane.setStyle("-fx-background-color: #fff; -fx-border-color: #da291c; -fx-border-width: 1.5;");
 
             gridPane.setPadding(new Insets(25, 25, 25, 25));
-            gridPane.add(new Label("Username: " + reseiverProfile.getUsername()), 0, 0);
-            gridPane.add(new Label("Department: " + reseiverProfile.getDepartment()), 0, 1);
-            gridPane.add(new Label("Job Titel: " + reseiverProfile.getJobTitle()), 1, 0);
-            gridPane.add(new Label("Job Description: " + reseiverProfile.getJobDescription()), 1, 1);
+            gridPane.add(new Label("Username: " + tempReceiver.getUsername()), 0, 0);
+            gridPane.add(new Label("Department: " + tempReceiver.getDepartment()), 0, 1);
+            gridPane.add(new Label("Job Titel: " + tempReceiver.getJobTitle()), 1, 0);
+            gridPane.add(new Label("Job Description: " + tempReceiver.getJobDescription()), 1, 1);
             Button openChatButton = new Button("Chat with");
-            openChatButton.setOnAction(event -> {openChat(MainSceneController.getCurrentProfile(), reseiverProfile);});
+            Profile finalTempReceiver = tempReceiver;
+            openChatButton.setOnAction(event -> {
+                reseiverProfile = finalTempReceiver;
+                openChat(MainSceneController.getCurrentProfile(), finalTempReceiver);
+            });
             gridPane.add(openChatButton, 2, 1);
             gridPane.autosize();
 
@@ -272,6 +287,8 @@ public class UserTabMessages extends UpdatableTab {
             }
             chatHistory.appendText("\n");
         }
+
+        chatHistory.setScrollTop(Double.MAX_VALUE);
     }
     /**
      * Sends a new message in the current conversation.
@@ -281,6 +298,11 @@ public class UserTabMessages extends UpdatableTab {
      */
     private void sendMessage(Profile loggedInProfileID, Profile receiverProfileID)
     {
+        if (messageInputField.getText().isBlank())
+        {
+            return;
+        }
+
         MessageDBInterface messageDB = new MessageDB();
         Message newMessage = new Message(loggedInProfileID.getProfileID(),receiverProfileID.getProfileID(),messageInputField.getText());
         messageDB.createMessage(newMessage);
@@ -372,6 +394,10 @@ public class UserTabMessages extends UpdatableTab {
      * Reloads contact lists and reopens the current chat if one is active.
      */
     private void refreshMessageTab(){
+        if (MainSceneController.getCurrentProfile() == null) {
+            StopUpdating();
+        }
+
         // Clear existing content
         lastmessageBox.getChildren().clear();
         oldChatBox.getChildren().clear();
@@ -394,5 +420,9 @@ public class UserTabMessages extends UpdatableTab {
     @Override
     public void update() {
         refreshMessageTab();
+    }
+
+    public static void StopUpdating(){
+        updater.stop();
     }
 }

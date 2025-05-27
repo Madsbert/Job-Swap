@@ -56,6 +56,7 @@ public class MainSceneController {
         //logout button setup
         logoutButton.setOnMouseClicked(event -> {
             MainSceneController.setCurrentProfile(null);
+            UserTabMessages.StopUpdating();
             SceneService.shiftScene(event, "JobSwap", "/org/example/jobswap/Login.fxml");
         });
 

@@ -13,11 +13,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Class to handle database querys and stored procedures of {@link Message}
+ */
 public class MessageDB implements MessageDBInterface {
 
     /**
      * Creates a new record in tbl_Message
-     * @param message
+     * @param message a {@link Message}
      */
     public void createMessage(Message message) {
         String ps = "INSERT INTO tbl_Message (ProfileIDOfSender, ProfileIDOfReceiver, TimeOfMessage, MessageText) VALUES (?, ?, ?, ?)";
@@ -38,8 +41,8 @@ public class MessageDB implements MessageDBInterface {
     /**
      * Return a HashMap of ProfileIDs and links them up, sender and receiver. LoggedInProfileID might be sender or receiver.
      * It gets every profileID, LoggedInProfileID has ever messaged.
-     * @param LoggedInProfileID
-     * @return
+     * @param LoggedInProfileID the id of the logged in {@link Profile}
+     * @return a Hashmap of the {@link Profile}IDs
      */
     public HashMap<Integer,Integer> allChatsOfProfile(int LoggedInProfileID) {
         String preparedStatement = "SELECT * FROM tbl_Message WHERE ProfileIDOfSender = ? OR ProfileIDOfReceiver = ?";
@@ -62,9 +65,9 @@ public class MessageDB implements MessageDBInterface {
     }
 
     /**
-     * returns the Message Object that has the newest time of creation.
-     * @param LoggedInProfileID
-     * @return
+     * returns the {@link Message} Object that has the newest time of creation.
+     * @param LoggedInProfileID the id of the logged in {@link Profile}
+     * @return a {@link Message}
      */
     public Message newestMessageByLoggedInProfile(int LoggedInProfileID) {
         String preparedStatement = "SELECT TOP 1 * FROM tbl_Message WHERE ProfileIDOfSender = ? OR ProfileIDOfReceiver = ? ORDER BY TimeOfMessage DESC";
@@ -95,11 +98,11 @@ public class MessageDB implements MessageDBInterface {
     }
 
     /**
-     * Returns a list of Message Obejct for every chat between two profileIDs.
-     * The Stored Procedure gets every record, not matter who is Sender and Receiver of the message.
-     * @param LoggedInProfileID
-     * @param ProfileIDReceiver
-     * @return
+     * Returns a list of {@link Profile} Obejct for every chat between two profileIDs.
+     * The Stored Procedure gets every record, not matter who is Sender and Receiver of the {@link Message}.
+     * @param LoggedInProfileID the ID og the logged in {@link Profile}
+     * @param ProfileIDReceiver the Id of the other {@link Profile}
+     * @return a List of {@link Message}s
      */
     public List<Message> getMessages(int LoggedInProfileID, int ProfileIDReceiver)
     {

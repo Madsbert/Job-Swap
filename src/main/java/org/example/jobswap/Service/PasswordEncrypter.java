@@ -1,11 +1,21 @@
 package org.example.jobswap.Service;
 
+import org.example.jobswap.Model.Profile;
+
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Encryptes passwords
+ */
 public class PasswordEncrypter {
 
+    /**
+     * encypts the Password the user has choosen
+     * @param password a {@link String}
+     * @return an encrypted {@link String}
+     */
     public static String encrypt(String password) {
         try {
 

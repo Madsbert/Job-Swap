@@ -73,10 +73,9 @@ public class NewProfileController {
     /**
      * This method it triggered by the createButton, it checks if everything is valid.
      * If it is valid, return to loginScene, if not, an alert pops up.
-     * @param actionEvent
-     * @throws IOException
+     * @param actionEvent a click of a {@link Button}
      */
-    public void createProfileInDatabase(ActionEvent actionEvent) throws IOException {
+    public void createProfileInDatabase(ActionEvent actionEvent) {
         //set variables
         profileID = Integer.parseInt(profileIdField.getText());
         fullName = nameField.getText();
@@ -97,17 +96,21 @@ public class NewProfileController {
         //create new profile in database, if it was created, create a login with the ID and password
         isProfileCreated = profileDB.createNewProfile(newProfile);
 
-        if (isProfileCreated) {
-            LoginDBInterface loginDB = new LoginDB();
-            loginDB.addLoginToDataBase(profileID,password);
-            SceneService.shiftScene(actionEvent,"Login Screen","/org/example/jobswap/Login.fxml");
-        }
-        else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("ID is already in use");
-            alert.setHeaderText("You have entered a wrong employee ID, this one is already in use");
-            alert.setContentText("Please try again");
-            alert.showAndWait();//This shows the alert
+        try {
+            if (isProfileCreated) {
+                LoginDBInterface loginDB = new LoginDB();
+                loginDB.addLoginToDataBase(profileID, password);
+                SceneService.shiftScene(actionEvent, "Login Screen", "/org/example/jobswap/Login.fxml");
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("ID is already in use");
+                alert.setHeaderText("You have entered a wrong employee ID, this one is already in use");
+                alert.setContentText("Please try again");
+                alert.showAndWait();//This shows the alert
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("something went wrong in CreateProfileInDatabase" + e.getMessage());
         }
 
     }
@@ -136,7 +139,7 @@ public class NewProfileController {
     }
 
     /**
-     * The method that is checked by the listener, and makes the create button not disable if everything is valid.
+     * The method that is checked by the listener, and makes the create-{@link Button} not disable if everything is valid.
      */
     public void checkButtonState(){
             boolean validID = validateIDField();
@@ -153,7 +156,7 @@ public class NewProfileController {
 
     /**
      * Checks if profileIDField is valid. If not, changes the Text Field Border.
-     * @return
+     * @return a boolean
      */
     private boolean validateIDField() {
         if (!profileIdField.getText().isBlank()) {
@@ -171,11 +174,16 @@ public class NewProfileController {
     }
 
     /**
-     * is called from the Cancel button, saves nothing, and returns to the loginScene.
-     * @param actionEvent
-     * @throws IOException
+     * is called from the Cancel {@link Button}, saves nothing, and returns to the loginScene.
+     * @param actionEvent a {@link Button} click
      */
-    public void Cancel(ActionEvent actionEvent) throws IOException {
-        SceneService.shiftScene(actionEvent,"Login Screen","/org/example/jobswap/Login.fxml");
+    public void Cancel(ActionEvent actionEvent){
+        try {
+            SceneService.shiftScene(actionEvent,"Login Screen","/org/example/jobswap/Login.fxml");
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("something went wrong in Cancel" + e.getMessage());
+        }
+
     }
 }

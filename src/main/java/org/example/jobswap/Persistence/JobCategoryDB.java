@@ -11,6 +11,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class to handle database querys and stored procedures of Jobcategory
+ */
 public class JobCategoryDB implements JobCategoryDBInterface {
 
     /**

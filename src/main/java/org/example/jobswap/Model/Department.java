@@ -1,7 +1,8 @@
 package org.example.jobswap.Model;
 
 /**
- * class to define a department
+ * class to define a {@link Department}
+ * it has an ID, Name and city
  */
 public class Department {
     private int departmentID;

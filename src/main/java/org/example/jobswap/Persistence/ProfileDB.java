@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class to do CRUD in Profiles
+ * Class to handle database querys and stored procedures of {@link Profile}
  */
 public class ProfileDB implements ProfileDBInterface {
 
@@ -52,12 +52,17 @@ public class ProfileDB implements ProfileDBInterface {
         }
     }
 
+
     public List<Profile> getAllProfiles()
     {
         //Will not be implemented in this iteration
         return null;
     }
 
+    /**
+     * unlocks a locked Profile
+     * @param profileID the id of a {@link Profile}
+     */
     public void unlockProfile(int profileID)
     {
         String query = "UPDATE tbl_Profile SET isLocked=false WHERE ProfileID = ?";

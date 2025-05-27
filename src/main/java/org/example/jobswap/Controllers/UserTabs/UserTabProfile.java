@@ -37,6 +37,9 @@ public class UserTabProfile extends javafx.scene.control.Tab {
 
     private final Profile changedProfile;
 
+    /**
+     * {@link UserTabProfile} constructor
+     */
     public UserTabProfile() {
         super("Profile");
 
@@ -91,8 +94,8 @@ public class UserTabProfile extends javafx.scene.control.Tab {
     }
 
     /**
-     * Creates an Apply/save changes button.
-     * @return Save Changes button.
+     * Creates an Apply/save changes {@link Button}.
+     * @return Save Changes {@link Button}.
      */
     private Button getApplyButton() {
         Button applyButton = new Button("Save Changes");
@@ -131,7 +134,7 @@ public class UserTabProfile extends javafx.scene.control.Tab {
     }
 
     /**
-     * Sets up name label and the label containing the {@link Profile} name.
+     * Sets up name {@link Label} and the {@link Label} containing the {@link Profile} name.
      */
     private void setupNameBox()
     {
@@ -147,7 +150,7 @@ public class UserTabProfile extends javafx.scene.control.Tab {
     }
 
     /**
-     * Sets up id label and the label containing the profileID.
+     * Sets up id {@link Label} and the {@link Label} containing the profileID.
      */
     private void setupIDBox()
     {
@@ -163,8 +166,8 @@ public class UserTabProfile extends javafx.scene.control.Tab {
     }
 
     /**
-     * Sets up {@link Department} label and a {@link ChoiceBox} containing all the Departments, which it gets from the Database.
-     * It also sets the profiles current {@link Department} to be selected in the {@link ChoiceBox} if it is valid.
+     * Sets up {@link Department} {@link Label} and a {@link ChoiceBox} containing all the Departments, which it gets from the Database.
+     * It also sets the {@Profile}s current {@link Department} to be selected in the {@link ChoiceBox} if it is valid.
      */
     private void setupDepartmentBox()
     {
@@ -195,7 +198,7 @@ public class UserTabProfile extends javafx.scene.control.Tab {
     }
 
     /**
-     * Sets up Job category label and a {@link ChoiceBox} containing all the Job categories, which it gets from the Database.
+     * Sets up Job category {@link Label} and a {@link ChoiceBox} containing all the Job categories, which it gets from the Database.
      * It also sets the {@link Profile}s current Job category to be selected in the {@link ChoiceBox} if it is valid.
      */
     private void setupJobCategoryBox()
@@ -221,7 +224,7 @@ public class UserTabProfile extends javafx.scene.control.Tab {
     }
 
     /**
-     * Sets up JobTitle label and a TextField containing the current {@link Profile} job title.
+     * Sets up JobTitle {@link Label} and a TextField containing the current {@link Profile} job title.
      */
     private void setupJobTitleBox()
     {
@@ -239,7 +242,7 @@ public class UserTabProfile extends javafx.scene.control.Tab {
     }
 
     /**
-     * Sets up JobDescription label and a TextField containing the current {@link Profile} job description.
+     * Sets up JobDescription {@link Label} and a {@link TextField} containing the current {@link Profile} job description.
      */
     private void setupJobDescription()
     {
@@ -255,7 +258,7 @@ public class UserTabProfile extends javafx.scene.control.Tab {
         profileDetailsBox.getChildren().add(JobDescriptionBox);
     }
     /**
-     * Sets up JobTitle label and a TextField containing the current {@link Profile} job title.
+     * Sets up JobTitle {@link Label} and a {@link TextField} containing the current {@link Profile} job title.
      */
     private void setupUsernameBox()
     {

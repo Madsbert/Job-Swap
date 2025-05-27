@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 
 /**
  * class which sets up the tab Messages.
- *
  * The tab is divided into two main sections:
  *  - Left side: Displays contact lists categorized by conversation status
  *  - Right side: Shows the chat history and provides input for new messages
@@ -132,10 +131,9 @@ public class UserTabMessages extends Tab {
     }
 
     /**
-     * Displays all available chat options based on the specified match state.
-     * Only shows profiles that haven't been chatted with before.
-     *
-     * @param state The match state to filter available chats.
+     * Displays all available chat options based on the specified {@link MatchState}.
+     * Only shows {@link Profile}s that haven't been chatted with before.
+     * @param state The {@link MatchState} to filter available chats.
      */
     private void showAllAvailableChats(MatchState state)
     {
@@ -168,8 +166,8 @@ public class UserTabMessages extends Tab {
     }
 
     /**
-     * Displays the Profile Information of the most recent conversation, in the "Last Messaged" section.
-     * Adds a "Chat with" Button.
+     * Displays the {@link Profile} Information of the most recent conversation, in the "Last Messaged" section.
+     * Adds a "Chat with" {@link Button}.
      * @param loggedInProfile
      */
     public void showLastMessageChats(Profile loggedInProfile){
@@ -212,8 +210,8 @@ public class UserTabMessages extends Tab {
     }
 
     /**
-     * Displays the Profile Information of all conversations, in the "Old Messages" section.
-     * Adds a "Chat with" Button.
+     * Displays the {@link Profile} Information of all conversations, in the "Old Messages" section.
+     * Adds a "Chat with" {@link Button}.
      * @param loggedInProfile
      */
     public void showOldChats(Profile loggedInProfile){
@@ -245,11 +243,10 @@ public class UserTabMessages extends Tab {
     }
 
     /**
-     * Opens a chat conversation between two profiles.
+     * Opens a chat conversation between two {@link Profile}s.
      * Displays the chat history and updates the UI to show the active conversation.
-     *
-     * @param loggedInProfile The currently logged in user's profile
-     * @param receiverProfile The profile of the user being chatted with
+     * @param loggedInProfile The currently logged in user's {@link Profile}
+     * @param receiverProfile The {@link Profile} of the user being chatted with
      */
     public void openChat(Profile loggedInProfile,Profile receiverProfile){
         reseiverProfile = receiverProfile;
@@ -278,9 +275,8 @@ public class UserTabMessages extends Tab {
     /**
      * Sends a new message in the current conversation.
      * Updates the database and refreshes the chat display.
-     *
-     * @param loggedInProfileID The profile of the message sender
-     * @param receiverProfileID The profile of the message recipient
+     * @param loggedInProfileID The {@link Profile} of the message sender
+     * @param receiverProfileID The {@link Profile} of the message recipient
      */
     private void sendMessage(Profile loggedInProfileID, Profile receiverProfileID)
     {
@@ -293,13 +289,12 @@ public class UserTabMessages extends Tab {
         refreshMessageTab();
     }
     /**
-     * Retrieves all possible chat partners based on match state.
-     * Filters out profiles that have already been chatted with.
+     * Retrieves all possible chat partners based on {@link MatchState}.
+     * Filters out {@link Profile}s that have already been chatted with.
      * A Set Collection is used since it doesn't allow duplicates.
-     *
      * @param LoggedInProfileID The ID of the logged in user
-     * @param stateOfMatch The match state to filter by
-     * @return List of Profile objects representing potential chat partners
+     * @param stateOfMatch The {@link MatchState} to filter by
+     * @return List of {@link Profile} objects representing potential chat partners
      */
     public List<Profile> getAllPossibleChatsBasedOnState(int LoggedInProfileID, MatchState stateOfMatch) {
         MatchDBInterface matchDB = new MatchDB();
@@ -336,11 +331,10 @@ public class UserTabMessages extends Tab {
         return possibleChats;
     }
     /**
-     * Retrieves all profiles the logged in user has previously chatted with.
+     * Retrieves all {@link Profile} the logged in user has previously chatted with.
      * A Set Collection is used since it doesn't allow duplicates.
-     *
      * @param loggedInProfileID The ID of the logged in user
-     * @return List of Profile objects representing previous chat partners
+     * @return List of {@link Profile} objects representing previous chat partners
      */
     public List<Profile> getAllPossibleChats(int loggedInProfileID) {
         MessageDBInterface messageDB = new MessageDB();

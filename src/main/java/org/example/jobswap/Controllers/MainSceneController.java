@@ -36,6 +36,9 @@ public class MainSceneController {
 
     private static Profile currentProfile;
 
+    /**
+     * sets up Mainescene
+     */
     public void initialize() {
         tabPane.getTabs().add(UserTabMatches.getInstance());
         tabPane.getTabs().add(new UserTabSeekJobSwap());

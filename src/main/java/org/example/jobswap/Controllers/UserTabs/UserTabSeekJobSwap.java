@@ -56,13 +56,14 @@ public class UserTabSeekJobSwap extends javafx.scene.control.Tab {
 
         vbox.getChildren().add(availableSwapsBox);
 
-
-
         this.setContent(scrollPane);
 
         showJobswapOptions();
     }
 
+    /**
+     * Adds the information in th departmentBox so the user can see possible jobswaps
+     */
     private void showJobswapOptions()
     {
         Label label = new Label("Departments:");
@@ -78,7 +79,7 @@ public class UserTabSeekJobSwap extends javafx.scene.control.Tab {
             {
                 continue;
             }
-            departments.add(department.getDepartmentName());
+            departments.add(department.getDepartmentName() + ", " + department.getCity());
         }
 
         departmentChoiceBox = new ChoiceBox<>();
@@ -89,6 +90,9 @@ public class UserTabSeekJobSwap extends javafx.scene.control.Tab {
         updateJobList();
     }
 
+    /**
+     * Gets all {@link Profile}s that matches the criteria {@link Department} and jobcategory
+     */
     private void updateJobList()
     {
         if (departmentChoiceBox.getSelectionModel().isEmpty() && departmentChoiceBox.getSelectionModel().getSelectedItem() == null)
@@ -126,6 +130,10 @@ public class UserTabSeekJobSwap extends javafx.scene.control.Tab {
         swapsBox.getChildren().addAll(matchingProfilesHBoxes);
     }
 
+    /**
+     * apply for the jobswap and refreshes display and database
+     * @param profileToApplyTo the {@link Profile} the user wants to swap with
+     */
     private void applyForJobswap(Profile profileToApplyTo)
     {
         MatchDBInterface db = new MatchDB();

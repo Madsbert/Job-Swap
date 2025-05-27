@@ -15,7 +15,7 @@ public class DBConnection {
 
         /**
          * Establishes connection to the Database.
-         * @return return the connection to the Database.
+         * @return the connection to the Database.
          */
         public static Connection getConnection() {
             if (conn == null) {

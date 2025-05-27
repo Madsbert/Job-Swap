@@ -1,6 +1,7 @@
 package org.example.jobswap.Persistence;
 
 import org.example.jobswap.Foundation.DBConnection;
+import org.example.jobswap.Model.Department;
 import org.example.jobswap.Model.Profile;
 import org.example.jobswap.Persistence.Interfaces.LoginDBInterface;
 
@@ -11,11 +12,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+/**
+ * Class to handle database querys and stored procedures of Login
+ */
 public class LoginDB implements LoginDBInterface {
 
     /**
      * Read in database the password and profileID
-     * @param ProfileId
+     * @param ProfileId the id of a {@link Profile}
      * @param password the password the employee have chosen
      * @return a boolean returns true if password and employeeID matches
      */
@@ -39,8 +43,8 @@ public class LoginDB implements LoginDBInterface {
 
     /**
      * checks if a profile with isLocked or not.
-     * @param ProfileId
-     * @return
+     * @param ProfileId the ID of an {@link Profile}
+     * @return a boolean if the {@link Profile} is locked
      */
     public boolean checkIsLocked(int ProfileId){
         String query = "SELECT IsLocked FROM dbo.tbl_Profile WHERE ProfileID = ?";
@@ -60,8 +64,8 @@ public class LoginDB implements LoginDBInterface {
 
     /**
      * Makes a login- record in tbl login.
-     * @param profileID
-     * @param password
+     * @param profileID an ID of a {@link Profile}
+     * @param password the password the user has choosen
      */
     public void addLoginToDataBase(int profileID, String password){
         String query = "INSERT INTO tbl_Login VALUES (?,?)";

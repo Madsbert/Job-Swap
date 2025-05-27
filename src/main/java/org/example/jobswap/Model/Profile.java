@@ -3,7 +3,11 @@ package org.example.jobswap.Model;
 import java.util.Objects;
 
 /**
- * a class which defines a Profile
+ * a class which defines a {@link Profile}
+ * it has:
+ * AccessLevel level, int profileID, String name,
+ * String username, String department, String jobTitle,
+ * String jobDescription, String jobCategory, boolean activelySeeking
  */
 public class Profile {
     private AccessLevel level;

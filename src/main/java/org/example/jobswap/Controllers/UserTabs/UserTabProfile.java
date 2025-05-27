@@ -6,6 +6,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import org.example.jobswap.Controllers.MainSceneController;
+import org.example.jobswap.Controllers.UpdatableTab;
 import org.example.jobswap.Model.Department;
 import org.example.jobswap.Model.Profile;
 import org.example.jobswap.Persistence.DepartmentDB;
@@ -21,7 +22,7 @@ import java.util.List;
 /**
  * class which sets up the tab Profile
  */
-public class UserTabProfile extends javafx.scene.control.Tab {
+public class UserTabProfile extends UpdatableTab {
 
     private ChoiceBox departmentChoiceBox;
     private ChoiceBox jobCategoryChoiceBox;
@@ -261,7 +262,7 @@ public class UserTabProfile extends javafx.scene.control.Tab {
     {
         HBox usernameBox = new HBox();
 
-        usernameField = new TextField(MainSceneController.getCurrentProfile().getJobTitle());
+        usernameField = new TextField(MainSceneController.getCurrentProfile().getUsername());
 
         Label t7Label = new Label("Username:");
         t7Label.setPrefWidth(140);

@@ -1,6 +1,8 @@
 package org.example.jobswap.Controllers.HRTabs;
 
-public class HRTabReports extends javafx.scene.control.Tab{
+import org.example.jobswap.Controllers.UpdatableTab;
+
+public class HRTabReports extends UpdatableTab {
     private void viewReports()
     {
 

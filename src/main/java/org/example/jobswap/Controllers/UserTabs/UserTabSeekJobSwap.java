@@ -10,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import org.example.jobswap.Controllers.MainSceneController;
+import org.example.jobswap.Controllers.UpdatableTab;
 import org.example.jobswap.Model.*;
 import org.example.jobswap.Persistence.DepartmentDB;
 import org.example.jobswap.Persistence.Interfaces.MatchDBInterface;
@@ -23,7 +24,7 @@ import java.util.List;
 /**
  * class which sets up the tab seek jobswap
  */
-public class UserTabSeekJobSwap extends javafx.scene.control.Tab {
+public class UserTabSeekJobSwap extends UpdatableTab {
 
     private static VBox departmentBox;
     private static ChoiceBox<String> departmentChoiceBox;
@@ -133,6 +134,5 @@ public class UserTabSeekJobSwap extends javafx.scene.control.Tab {
 
         db.createMatch(newMatch);
         updateJobList();
-        UserTabMatches.getInstance().refreshMatchDisplay();
     }
 }

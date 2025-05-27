@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Screen;
 import org.example.jobswap.Controllers.MainSceneController;
+import org.example.jobswap.Controllers.UpdatableTab;
 import org.example.jobswap.Model.Match;
 import org.example.jobswap.Model.MatchState;
 import org.example.jobswap.Model.Message;
@@ -30,7 +31,7 @@ import java.util.stream.Collectors;
  *  - Left side: Displays contact lists categorized by conversation status
  *  - Right side: Shows the chat history and provides input for new messages
  */
-public class UserTabMessages extends Tab {
+public class UserTabMessages extends UpdatableTab {
     private static ScrollPane messageSectionLeftPane;
     private static VBox newContactBox;
     private static VBox oldChatBox;
@@ -391,5 +392,13 @@ public class UserTabMessages extends Tab {
         if (reseiverProfile != null) {
             openChat(MainSceneController.getCurrentProfile(), reseiverProfile);
         }
+    }
+
+    /**
+     * Updates content of tab
+     */
+    @Override
+    public void update() {
+        refreshMessageTab();
     }
 }

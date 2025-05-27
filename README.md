@@ -293,7 +293,7 @@ CREATE TABLE tbl_Match (
 -- Table: Message
 CREATE TABLE tbl_Message (
     MessageID INT IDENTITY(1,1) PRIMARY KEY,
-    MatchID INT NOT NULL,
+    MatchID INT,
     ProfileIDOfSender INT NOT NULL,
     ProfileIDOfReceiver INT NOT NULL,
     MessageText NVARCHAR(300),

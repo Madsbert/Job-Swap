@@ -1,8 +1,9 @@
 package org.example.jobswap.Controllers.SysAdminTabs;
 
+import org.example.jobswap.Controllers.UpdatableTab;
 import org.example.jobswap.Model.Profile;
 
-public class SysAdminTabProfile extends javafx.scene.control.Tab{
+public class SysAdminTabProfile extends UpdatableTab {
     private void unlockProfile(int profileId)
     {
 

@@ -1,10 +1,9 @@
 package org.example.jobswap.Controllers;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
@@ -37,10 +36,17 @@ public class MainSceneController {
     private static Profile currentProfile;
 
     public void initialize() {
-        tabPane.getTabs().add(UserTabMatches.getInstance());
+        tabPane.getTabs().add(new UserTabMatches());
         tabPane.getTabs().add(new UserTabSeekJobSwap());
         tabPane.getTabs().add(new UserTabProfile());
         tabPane.getTabs().add(new UserTabMessages());
+
+        tabPane.setOnMouseClicked(event -> {
+            if (tabPane.getSelectionModel().getSelectedItem() instanceof UpdatableTab updatableTab) {
+                // Updates every tab when t
+                updatableTab.update();
+            }
+        });
 
         usernameLabel.setText("Hello " + currentProfile.getUsername() + "!");
 

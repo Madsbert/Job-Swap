@@ -7,6 +7,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.stage.Screen;
 import org.example.jobswap.Controllers.MainSceneController;
+import org.example.jobswap.Controllers.UpdatableTab;
 import org.example.jobswap.Model.Match;
 import org.example.jobswap.Model.MatchState;
 import org.example.jobswap.Model.Profile;
@@ -21,7 +22,7 @@ import java.util.List;
 /**
  * class which sets up the tab Matches
  */
-public class UserTabMatches extends javafx.scene.control.Tab {
+public final class UserTabMatches extends UpdatableTab {
 
     private static ScrollPane scrollPane;
     private static VBox matchVBox;
@@ -35,20 +36,12 @@ public class UserTabMatches extends javafx.scene.control.Tab {
     private List<Profile> bothProfiles=new ArrayList<>();
     private Profile match=null;
 
-    private int currentProfileID=MainSceneController.getCurrentProfile().getProfileID();
-
-    private static UserTabMatches instance;
-    public static UserTabMatches getInstance() {
-        if (instance == null) {
-            instance = new UserTabMatches();
-        }
-        return instance;
-    }
+    private int currentProfileID = MainSceneController.getCurrentProfile().getProfileID();
 
     /**
      *Constructor for UserTabMatches
      */
-    private UserTabMatches() {
+    public UserTabMatches() {
         super("Matches");
 
         initializeUI();
@@ -308,6 +301,9 @@ public class UserTabMatches extends javafx.scene.control.Tab {
      * Refeshes the display so it matches the database
      */
     public void refreshMatchDisplay() {
+        // Update ID from active Profile
+        currentProfileID = MainSceneController.getCurrentProfile().getProfileID();
+
         // Clear existing data
         applicationProfiles.clear();
         requestProfiles.clear();
@@ -332,5 +328,13 @@ public class UserTabMatches extends javafx.scene.control.Tab {
         showAcceptedMatch();
         showRequestedMatches();
         showBothInterested();
+    }
+
+    /**
+     * Updates contents of tab
+     */
+    @Override
+    public void update() {
+        refreshMatchDisplay();
     }
 }

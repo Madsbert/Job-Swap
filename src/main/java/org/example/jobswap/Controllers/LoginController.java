@@ -106,6 +106,7 @@ public class LoginController {
                 ProfileDB db = new ProfileDB();
                 Profile profile = db.getProfileFromID(Integer.parseInt(employeeIDFields.getText()));
                 MainSceneController.setCurrentProfile(profile);
+
                 SceneService.shiftScene(event, "Jobswap", "/org/example/jobswap/MainScene.fxml");
             }
         }catch(Exception e) {

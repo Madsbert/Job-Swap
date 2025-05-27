@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import org.example.jobswap.Controllers.UserTabs.UserTabMatches;
 import org.example.jobswap.View.JobswapApplication;
 
 import java.io.IOException;

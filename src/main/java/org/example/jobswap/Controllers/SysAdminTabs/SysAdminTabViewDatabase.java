@@ -1,6 +1,8 @@
 package org.example.jobswap.Controllers.SysAdminTabs;
 
-public class SysAdminTabViewDatabase extends javafx.scene.control.Tab{
+import org.example.jobswap.Controllers.UpdatableTab;
+
+public class SysAdminTabViewDatabase extends UpdatableTab {
     private void viewAllStatistics()
     {
 

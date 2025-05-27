@@ -95,7 +95,7 @@ public class UserTabMessages extends UpdatableTab {
 
         updater = new Timeline();
         updater.setCycleCount(Timeline.INDEFINITE);
-        updater.getKeyFrames().add(new KeyFrame(Duration.seconds(0.25f), event -> {update();}));
+        updater.getKeyFrames().add(new KeyFrame(Duration.seconds(1), event -> {update();}));
         updater.play();
 
         //adds each BorderedVBox to the side of the SplitPane
@@ -182,7 +182,7 @@ public class UserTabMessages extends UpdatableTab {
     public void showReceivedMessageProfiles(List<Message> receivedMessages){
         ProfileDBInterface profileDB = new ProfileDB();
 
-        HBox newestProfileHBox = new HBox();
+        VBox newestProfileVBox = new VBox();
         //does nothing if there is no messages at all.
         for (Message message : receivedMessages) {
             Profile senderProfile = profileDB.getProfileFromID(message.getSenderID());
@@ -203,9 +203,9 @@ public class UserTabMessages extends UpdatableTab {
             gridPane.add(openChatButton, 2, 1);
             gridPane.autosize();
 
-            newestProfileHBox.getChildren().add(gridPane);
-            lastmessageBox.getChildren().addAll(newestProfileHBox);
+            newestProfileVBox.getChildren().add(gridPane);
         }
+        lastmessageBox.getChildren().addAll(newestProfileVBox);
     }
 
     /**

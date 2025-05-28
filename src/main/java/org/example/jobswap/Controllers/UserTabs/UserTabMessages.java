@@ -236,6 +236,7 @@ public class UserTabMessages extends UpdatableTab {
         List<GridPane> matchingProfilesHBoxes = new ArrayList<>();
 
         for (Profile matchingProfile : profilesWhereLoggedInProfileHasChattedWithBefore) {
+
             GridPane gridPane = new GridPane();
             gridPane.setHgap(150);
             gridPane.setVgap(5);

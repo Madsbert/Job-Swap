@@ -6,6 +6,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.util.Duration;
 import org.example.jobswap.Controllers.MainSceneController;
@@ -41,9 +42,10 @@ public class UserTabMessages extends UpdatableTab {
     private static VBox oldChatVBow;
     private static VBox newContactVBox;
     private static BorderedVBox chatArea;
-    private static TextArea chatHistory;
+    private static ScrollPane chatHistory;
     private static Header chatHeader;
     private static TextField messageInputField;
+    private static VBox chatAreaVBox;
 
     private Profile receiverProfile;
 
@@ -94,7 +96,7 @@ public class UserTabMessages extends UpdatableTab {
         setupChatUI();
 
         //Game Loop Design Pattern
-        //Proces Input - if there is a new message put in database
+        //Proces Input - Send button
         //Update -get the message from database
         //Render - update the screen
         updater = new Timeline();
@@ -119,12 +121,13 @@ public class UserTabMessages extends UpdatableTab {
         chatArea.setPadding(new Insets(25, 25, 25, 25));
         chatArea.getChildren().add(chatHeader);
 
-        //chat history created with a textfield, has build in scroll if there is a lot of text.
-        chatHistory = new TextArea();
-        chatHistory.setEditable(false);
-        chatHistory.setWrapText(true);
-        VBox.setVgrow(chatHistory, Priority.ALWAYS);  // Fill where there is space
-        chatHistory.setPrefHeight(Region.USE_COMPUTED_SIZE);  //Region.USE_COMPUTED_SIZE = don't use fixed height.
+        //chat history created with a ScrollPane with a Vbox inside
+        chatHistory = new ScrollPane();
+        chatHistory.setFitToWidth(true);  //don't use fixed height.
+
+        chatAreaVBox= new VBox();
+        chatAreaVBox.setFillWidth(true);
+        chatHistory.setContent(chatAreaVBox);
 
         //setup bottom of chat.
         HBox messageInputBox = new HBox(10);
@@ -138,7 +141,7 @@ public class UserTabMessages extends UpdatableTab {
         Button sendButton = new Button("Send");
         sendButton.setOnAction(event -> {sendMessage(MainSceneController.getCurrentProfile(), receiverProfile);});
 
-        //adds it to the RightSide VBox.
+        //adds it to the Chat UI VBox.
         messageInputBox.getChildren().addAll(messageInputField, sendButton);
         chatArea.getChildren().addAll(chatHistory,messageInputBox);
     }
@@ -258,7 +261,10 @@ public class UserTabMessages extends UpdatableTab {
 
         chatHeader.setText("Chat with "+receiverProfile.getUsername());
         //clear it.
-        chatHistory.clear();
+        chatAreaVBox.getChildren().clear();
+
+        chatAreaVBox.setPadding(new Insets(10));
+        chatAreaVBox.setSpacing(10);
 
         //array of messages from database between the 2 profiles
         List<Message> AllmessagesBetweenProfiles = new ArrayList<>();
@@ -266,18 +272,36 @@ public class UserTabMessages extends UpdatableTab {
         AllmessagesBetweenProfiles = messageDB.getMessages(loggedInProfile.getProfileID(),receiverProfile.getProfileID());
 
         for (Message message : AllmessagesBetweenProfiles) {
-
-
             if (message.getSenderID() == loggedInProfile.getProfileID()) {
-                chatHistory.appendText("Me: \n" + message.getText());
+                HBox hbox = new HBox();
+                Label loggedInLabel = new Label();
+
+                loggedInLabel.setText(message.getText());
+                loggedInLabel.setWrapText(true);
+
+                hbox.setAlignment(Pos.CENTER_RIGHT);
+                hbox.setMaxWidth(chatAreaVBox.getWidth());
+
+                hbox.getChildren().add(loggedInLabel);
+                chatAreaVBox.getChildren().add(hbox);
+
             }
             else {
-                chatHistory.appendText(receiverProfile.getUsername()+": \n" + message.getText());
-            }
-            chatHistory.appendText("\n");
-        }
+                HBox hbox = new HBox();
+                Label otherProfileLabel = new Label();
 
-        chatHistory.setScrollTop(Double.MAX_VALUE);
+                otherProfileLabel.setText(message.getText());
+                otherProfileLabel.setWrapText(true);
+
+                hbox.setAlignment(Pos.CENTER_LEFT);
+                hbox.setMaxWidth(chatAreaVBox.getWidth());
+
+                hbox.getChildren().add(otherProfileLabel);
+                chatAreaVBox.getChildren().add(hbox);
+            }
+        }
+        // Scroll to bottom
+        chatHistory.setVvalue(1.0);
     }
     /**
      * Sends a new message in the current conversation.

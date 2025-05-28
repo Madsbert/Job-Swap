@@ -5,9 +5,11 @@ import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.jobswap.Controllers.MainSceneController;
 import org.example.jobswap.Controllers.UpdatableTab;
@@ -18,11 +20,14 @@ import org.example.jobswap.Model.Profile;
 import org.example.jobswap.Persistence.Interfaces.MatchDBInterface;
 import org.example.jobswap.Persistence.Interfaces.MessageDBInterface;
 import org.example.jobswap.Persistence.Interfaces.ProfileDBInterface;
+import org.example.jobswap.Persistence.Interfaces.ReportDBInterface;
 import org.example.jobswap.Persistence.MatchDB;
 import org.example.jobswap.Persistence.MessageDB;
 import org.example.jobswap.Persistence.ProfileDB;
+import org.example.jobswap.Persistence.ReportDB;
 import org.example.jobswap.Service.BorderedVBox;
 import org.example.jobswap.Service.Header;
+
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -56,7 +61,25 @@ public class UserTabMessages extends UpdatableTab {
      */
     public UserTabMessages() {
         super("Messages");
+        initizializeUI();
+        sortMessages();
+        setupChatUI();
 
+        //Game Loop Design Pattern
+        //Proces Input - Send button
+        //Update -get the message from database
+        //Render - update the screen
+        updater = new Timeline();
+        updater.setCycleCount(Timeline.INDEFINITE);
+        updater.getKeyFrames().add(new KeyFrame(Duration.seconds(1), event -> {update();}));
+        updater.play();
+
+    }
+
+    /**
+     * Sets up UI
+     */
+    private void initizializeUI(){
         //setup SplitPane, the same as a HBox but dynamic
         SplitPane primarySplitPane = new SplitPane();
         primarySplitPane.setDividerPositions(0.70); //70% left 30% right
@@ -92,17 +115,7 @@ public class UserTabMessages extends UpdatableTab {
         showAllAvailableChats(MatchState.BOTH_INTERESTED);
         messageUnderTabs.getChildren().add(newContactVBox);
 
-        sortMessages();
-        setupChatUI();
-
-        //Game Loop Design Pattern
-        //Proces Input - Send button
-        //Update -get the message from database
-        //Render - update the screen
-        updater = new Timeline();
-        updater.setCycleCount(Timeline.INDEFINITE);
-        updater.getKeyFrames().add(new KeyFrame(Duration.seconds(1), event -> {update();}));
-        updater.play();
+        chatArea = new BorderedVBox();
 
         //adds each BorderedVBox to the side of the SplitPane
         primarySplitPane.getItems().addAll(messageSectionLeftPane,chatArea);
@@ -116,7 +129,6 @@ public class UserTabMessages extends UpdatableTab {
      */
     private void setupChatUI(){
         //setup RightSide
-        chatArea = new BorderedVBox();
         chatHeader = new Header("Chat");
         chatArea.setPadding(new Insets(25, 25, 25, 25));
         chatArea.getChildren().add(chatHeader);
@@ -161,65 +173,94 @@ public class UserTabMessages extends UpdatableTab {
         List<GridPane> matchingProfilesHBoxes = new ArrayList<>();
 
         for (Profile matchingProfile : matchingProfiles) {
-            GridPane gridPane = new GridPane();
-            gridPane.setHgap(150);
-            gridPane.setVgap(5);
-            gridPane.setPrefSize(Screen.getPrimary().getBounds().getWidth(), 40);
-            gridPane.setStyle("-fx-background-color: #fff; -fx-border-color: #da291c; -fx-border-width: 1.5;");
+                GridPane gridPane = new GridPane();
+                gridPane.setHgap(80);
+                gridPane.setVgap(5);
+                gridPane.setPrefSize(Screen.getPrimary().getBounds().getWidth(), 40);
+                gridPane.setStyle("-fx-background-color: #fff; -fx-border-color: #da291c; -fx-border-width: 1.5;");
 
-            gridPane.setPadding(new Insets(25, 25, 25, 25));
-            gridPane.add(new Label("Username: " + matchingProfile.getUsername()), 0, 0);
-            gridPane.add(new Label("Department: " + matchingProfile.getDepartment()), 0, 1);
-            gridPane.add(new Label("Job Titel: " + matchingProfile.getJobTitle()), 1, 0);
-            gridPane.add(new Label("Job Description: " + matchingProfile.getJobDescription()), 1, 1);
-            Button openChatButton = new Button("Chat with");
-            openChatButton.setOnAction(event -> {openChat(MainSceneController.getCurrentProfile(), matchingProfile);});
-            gridPane.add(openChatButton, 2, 1);
+                gridPane.setPadding(new Insets(25, 25, 25, 25));
+                gridPane.add(new Label("Username: " + matchingProfile.getUsername()), 0, 0);
+                gridPane.add(new Label("Department: " + matchingProfile.getDepartment()), 0, 1);
+                gridPane.add(new Label("Job Titel: " + matchingProfile.getJobTitle()), 1, 0);
+                gridPane.add(new Label("Job Description: " + matchingProfile.getJobDescription()), 1, 1);
 
-            gridPane.autosize();
-            matchingProfilesHBoxes.add(gridPane);
-        }
+                Button openChatButton = new Button("Chat  📝");
+                openChatButton.setOnAction(event -> {
+                    openChat(MainSceneController.getCurrentProfile(), receiverProfile);
+                });
+                gridPane.add(openChatButton, 2, 1);
 
-        newContactBox.getChildren().addAll(matchingProfilesHBoxes);
+
+                Button reportButton = new Button("Report❗");
+                reportButton.setStyle("-fx-text-fill: red;");
+                reportButton.setOnAction(event -> {
+                    reportUser(MainSceneController.getCurrentProfile().getProfileID(), receiverProfile.getProfileID());
+                });
+                gridPane.add(reportButton, 2, 2);
+
+                gridPane.autosize();
+                matchingProfilesHBoxes.add(gridPane);
+            }
+
+            newContactBox.getChildren().addAll(matchingProfilesHBoxes);
+
 
     }
 
     /**
-     * Displays the {@link Profile} Information of the most recent conversation, in the "Last Messaged" section.
+     * Displays the {@link Profile} Information of the most recent conversation, in the "Last Messaged" section
+     * if a Report between the other user hasn't been reported
      * Adds a "Chat with" {@link Button}.
      * @param receivedMessages {@link Message Messages} where the last receiver was the current user
      */
     public void showReceivedMessageProfiles(List<Message> receivedMessages){
         ProfileDBInterface profileDB = new ProfileDB();
+        ReportDBInterface reportDB = new ReportDB();
 
         VBox newestProfileVBox = new VBox();
         //does nothing if there is no messages at all.
         for (Message message : receivedMessages) {
-            Profile senderProfile = profileDB.getProfileFromID(message.getSenderID());
+            if (reportDB.checkIfReportExistsBetweenUsers(message.getSenderID(), message.getReceiverID()) == false) {
+                Profile senderProfile = profileDB.getProfileFromID(message.getSenderID());
 
-            GridPane gridPane = new GridPane();
-            gridPane.setHgap(150);
-            gridPane.setVgap(5);
-            gridPane.setPrefSize(Screen.getPrimary().getBounds().getWidth(), 40);
-            gridPane.setStyle("-fx-background-color: #fff; -fx-border-color: #da291c; -fx-border-width: 1.5;");
+                GridPane gridPane = new GridPane();
+                gridPane.setHgap(80);
+                gridPane.setVgap(5);
+                gridPane.setPrefSize(Screen.getPrimary().getBounds().getWidth(), 40);
+                gridPane.setStyle("-fx-background-color: #fff; -fx-border-color: #da291c; -fx-border-width: 1.5;");
 
-            gridPane.setPadding(new Insets(25, 25, 25, 25));
-            gridPane.add(new Label("Username: " + senderProfile.getUsername()), 0, 0);
-            gridPane.add(new Label("Department: " + senderProfile.getDepartment()), 0, 1);
-            gridPane.add(new Label("Job Titel: " + senderProfile.getJobTitle()), 1, 0);
-            gridPane.add(new Label("Job Description: " + senderProfile.getJobDescription()), 1, 1);
-            Button openChatButton = new Button("Chat with");
-            openChatButton.setOnAction(event -> {openChat(MainSceneController.getCurrentProfile(), senderProfile);});
-            gridPane.add(openChatButton, 2, 1);
-            gridPane.autosize();
+                gridPane.setPadding(new Insets(25, 25, 25, 25));
+                gridPane.add(new Label("Username: " + senderProfile.getUsername()), 0, 0);
+                gridPane.add(new Label("Department: " + senderProfile.getDepartment()), 0, 1);
+                gridPane.add(new Label("Job Titel: " + senderProfile.getJobTitle()), 1, 0);
+                gridPane.add(new Label("Job Description: " + senderProfile.getJobDescription()), 1, 1);
 
-            newestProfileVBox.getChildren().add(gridPane);
+                Button openChatButton = new Button("Chat  📝");
+                openChatButton.setOnAction(event -> {
+                    openChat(MainSceneController.getCurrentProfile(), receiverProfile);
+                });
+                gridPane.add(openChatButton, 2, 1);
+
+
+                Button reportButton = new Button("Report❗");
+                reportButton.setStyle("-fx-text-fill: red;");
+                reportButton.setOnAction(event -> {
+                    reportUser(MainSceneController.getCurrentProfile().getProfileID(), receiverProfile.getProfileID());
+                });
+                gridPane.add(reportButton, 2, 2);
+
+                gridPane.autosize();
+
+                newestProfileVBox.getChildren().add(gridPane);
+            }
+            lastmessageBox.getChildren().addAll(newestProfileVBox);
         }
-        lastmessageBox.getChildren().addAll(newestProfileVBox);
     }
 
     /**
-     * Displays the {@link Profile} Information of all conversations, in the "Answered chats" section.
+     * Displays the {@link Profile} Information of all conversations, in the "Answered chats" section
+     * if a Report between the other user hasn't been reported
      * Adds a "Chat with" {@link Button}.
      * @param answeredMessages {@link Message Messages} where the last sender was the current user
      */
@@ -227,12 +268,13 @@ public class UserTabMessages extends UpdatableTab {
         List<GridPane> matchingProfilesHBoxes = new ArrayList<>();
 
         ProfileDBInterface profileDB = new ProfileDB();
+        ReportDBInterface reportDB = new ReportDB();
         for (Message message : answeredMessages) {
+            if(reportDB.checkIfReportExistsBetweenUsers(message.getSenderID(), message.getReceiverID())==false){
             Profile receiverProfile = profileDB.getProfileFromID(message.getReceiverID());
 
-
             GridPane gridPane = new GridPane();
-            gridPane.setHgap(150);
+            gridPane.setHgap(80);
             gridPane.setVgap(5);
             gridPane.setPrefSize(Screen.getPrimary().getBounds().getWidth(), 40);
             gridPane.setStyle("-fx-background-color: #fff; -fx-border-color: #da291c; -fx-border-width: 1.5;");
@@ -242,14 +284,22 @@ public class UserTabMessages extends UpdatableTab {
             gridPane.add(new Label("Department: " + receiverProfile.getDepartment()), 0, 1);
             gridPane.add(new Label("Job Titel: " + receiverProfile.getJobTitle()), 1, 0);
             gridPane.add(new Label("Job Description: " + receiverProfile.getJobDescription()), 1, 1);
-            Button openChatButton = new Button("Chat with");
+
+            Button openChatButton = new Button("Chat  📝");
             openChatButton.setOnAction(event -> {openChat(MainSceneController.getCurrentProfile(), receiverProfile);});
             gridPane.add(openChatButton, 2, 1);
+
+
+            Button reportButton = new Button("Report❗");
+            reportButton.setStyle("-fx-text-fill: red;");
+            reportButton.setOnAction(event -> {reportUser(MainSceneController.getCurrentProfile().getProfileID(),receiverProfile.getProfileID());});
+            gridPane.add(reportButton, 2, 2);
 
             gridPane.autosize();
             matchingProfilesHBoxes.add(gridPane);
         }
         oldChatBox.getChildren().addAll(matchingProfilesHBoxes);
+        }
 
     }
 
@@ -466,7 +516,36 @@ public class UserTabMessages extends UpdatableTab {
         refreshMessageTab();
     }
 
+    /**
+     * stops the gameloop
+     */
     public static void StopUpdating(){
         updater.stop();
+    }
+
+    /**
+     * User can {@link org.example.jobswap.Model.Report} other users if there has happened something inappropriate
+     * shows an Alert to make sure the user wants to report
+     * and deletes match
+     * @param profileIDOfReporter the {@link Profile}ID of the reporter
+     * @param profileIDOfReported the {@link Profile}ID of the reported
+     */
+    public void reportUser(int profileIDOfReporter, int profileIDOfReported){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        //new stage for the alert, to change the icon.
+        Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+        alertStage.getIcons().add(new Image(getClass().getResource("/org/example/jobswap/JobSwapIcon.png").toExternalForm()));
+        alert.setTitle("Report a user");
+        alert.setHeaderText("You are about to report a user, because a user has done something in appropriate");
+        alert.setContentText("HR will contact you if you proceed" +
+        "\nThe user will also be removed from your matches\n" +
+                "Do you want to proceed? ");
+        alert.showAndWait();//This shows the alert
+
+        ReportDBInterface reportDB = new ReportDB();
+        reportDB.createReport(profileIDOfReporter,profileIDOfReported);
+        MatchDBInterface matchDB = new MatchDB();
+        matchDB.deleteMatch(profileIDOfReporter, profileIDOfReported);
+
     }
 }

@@ -123,11 +123,14 @@ public class UserTabMessages extends UpdatableTab {
 
         //chat history created with a ScrollPane with a Vbox inside
         chatHistory = new ScrollPane();
-        chatHistory.setFitToWidth(true);  //don't use fixed height.
+        chatHistory.setFitToWidth(true);  //don't use width
+        chatHistory.setPrefHeight(600);
+        chatHistory.getStyleClass().add("chat-history");
 
         chatAreaVBox= new VBox();
         chatAreaVBox.setFillWidth(true);
         chatHistory.setContent(chatAreaVBox);
+        chatAreaVBox.getStyleClass().add("chat-history");
 
         //setup bottom of chat.
         HBox messageInputBox = new HBox(10);
@@ -278,6 +281,7 @@ public class UserTabMessages extends UpdatableTab {
 
                 loggedInLabel.setText(message.getText());
                 loggedInLabel.setWrapText(true);
+                loggedInLabel.getStyleClass().add("message-label-my");
 
                 hbox.setAlignment(Pos.CENTER_RIGHT);
                 hbox.setMaxWidth(chatAreaVBox.getWidth());
@@ -292,6 +296,7 @@ public class UserTabMessages extends UpdatableTab {
 
                 otherProfileLabel.setText(message.getText());
                 otherProfileLabel.setWrapText(true);
+                otherProfileLabel.getStyleClass().add("message-label-other");
 
                 hbox.setAlignment(Pos.CENTER_LEFT);
                 hbox.setMaxWidth(chatAreaVBox.getWidth());

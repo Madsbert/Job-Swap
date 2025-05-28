@@ -287,7 +287,7 @@ public class UserTabMessages extends UpdatableTab {
      */
     private void sendMessage(Profile loggedInProfileID, Profile receiverProfileID)
     {
-        if (messageInputField.getText().isBlank())
+    if (messageInputField.getText().isBlank() || receiverProfileID==null)
         {
             return;
         }

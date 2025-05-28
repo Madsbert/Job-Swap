@@ -93,9 +93,13 @@ public class UserTabMessages extends UpdatableTab {
         sortMessages();
         setupChatUI();
 
+        //Game Loop Design Pattern
+        //Proces Input - if there is a new message put in database
+        //Update -get the message from database
+        //Render - update the screen
         updater = new Timeline();
         updater.setCycleCount(Timeline.INDEFINITE);
-        updater.getKeyFrames().add(new KeyFrame(Duration.seconds(0.25f), event -> {update();}));
+        updater.getKeyFrames().add(new KeyFrame(Duration.seconds(1f), event -> {update();}));
         updater.play();
 
         //adds each BorderedVBox to the side of the SplitPane
@@ -375,7 +379,7 @@ public class UserTabMessages extends UpdatableTab {
         return possibleChats;
     }
     /**
-     * Refreshes all message tab components.
+     * Refreshes all {@link Message} tab components.
      * Reloads contact lists and reopens the current chat if one is active.
      */
     private void refreshMessageTab(){
@@ -398,6 +402,9 @@ public class UserTabMessages extends UpdatableTab {
         }
     }
 
+    /**
+     * sorts the {@link Message}s in two arraylist iSentLast and iRecievedLast
+     */
     public void sortMessages() {
         Profile loggedInProfile = MainSceneController.getCurrentProfile();
         List<Profile> profilesWhereLoggedInProfileHasChattedWithBefore = getAllPossibleChats(loggedInProfile.getProfileID());

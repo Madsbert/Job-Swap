@@ -7,7 +7,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -192,7 +191,7 @@ public class UserTabMessages extends UpdatableTab {
                 openChatButton.setOnAction(event -> {
                     openChat(MainSceneController.getCurrentProfile(), receiverProfile);
                 });
-                gridPane.add(openChatButton, 2, 1);
+                gridPane.add(openChatButton, 2, 0);
 
 
                 Button reportButton = new Button("Report❗");
@@ -200,7 +199,7 @@ public class UserTabMessages extends UpdatableTab {
                 reportButton.setOnAction(event -> {
                     reportUser(MainSceneController.getCurrentProfile().getProfileID(), receiverProfile.getProfileID());
                 });
-                gridPane.add(reportButton, 2, 2);
+                gridPane.add(reportButton, 2, 1);
 
                 gridPane.autosize();
                 matchingProfilesHBoxes.add(gridPane);
@@ -243,7 +242,7 @@ public class UserTabMessages extends UpdatableTab {
                 openChatButton.setOnAction(event -> {
                     openChat(MainSceneController.getCurrentProfile(), receiverProfile);
                 });
-                gridPane.add(openChatButton, 2, 1);
+                gridPane.add(openChatButton, 2, 0);
 
 
                 Button reportButton = new Button("Report❗");
@@ -251,7 +250,7 @@ public class UserTabMessages extends UpdatableTab {
                 reportButton.setOnAction(event -> {
                     reportUser(MainSceneController.getCurrentProfile().getProfileID(), receiverProfile.getProfileID());
                 });
-                gridPane.add(reportButton, 2, 2);
+                gridPane.add(reportButton, 2, 1);
 
                 gridPane.autosize();
 
@@ -290,13 +289,13 @@ public class UserTabMessages extends UpdatableTab {
 
             Button openChatButton = new Button("Chat  📝");
             openChatButton.setOnAction(event -> {openChat(MainSceneController.getCurrentProfile(), receiverProfile);});
-            gridPane.add(openChatButton, 2, 1);
+            gridPane.add(openChatButton, 2, 0);
 
 
             Button reportButton = new Button("Report❗");
             reportButton.setStyle("-fx-text-fill: red;");
             reportButton.setOnAction(event -> {reportUser(MainSceneController.getCurrentProfile().getProfileID(),receiverProfile.getProfileID());});
-            gridPane.add(reportButton, 2, 2);
+            gridPane.add(reportButton, 2, 1);
 
             gridPane.autosize();
             matchingProfilesHBoxes.add(gridPane);
@@ -466,7 +465,7 @@ public class UserTabMessages extends UpdatableTab {
      */
     private void refreshMessageTab(){
         if (MainSceneController.getCurrentProfile() == null) {
-            StopUpdating();
+            stopUpdating();
         }
 
         // Clear existing content
@@ -522,7 +521,7 @@ public class UserTabMessages extends UpdatableTab {
     /**
      * stops the gameloop
      */
-    public static void StopUpdating(){
+    public static void stopUpdating(){
         updater.stop();
     }
 
@@ -543,12 +542,25 @@ public class UserTabMessages extends UpdatableTab {
         alert.setContentText("HR will contact you if you proceed" +
         "\nThe user will also be removed from your matches\n" +
                 "Do you want to proceed? ");
-        alert.showAndWait();//This shows the alert
 
-        ReportDBInterface reportDB = new ReportDB();
-        reportDB.createReport(profileIDOfReporter,profileIDOfReported);
-        MatchDBInterface matchDB = new MatchDB();
-        matchDB.deleteMatch(profileIDOfReporter, profileIDOfReported);
+        //Waits for user choice and saves result of choice
+        Optional<ButtonType> result = alert.showAndWait();
+
+        // checks if user choose ok
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            ReportDBInterface reportDB = new ReportDB();
+            reportDB.createReport(profileIDOfReporter, profileIDOfReported);
+
+            MatchDBInterface matchDB = new MatchDB();
+            matchDB.deleteMatch(profileIDOfReporter, profileIDOfReported);
+
+            Alert info = new Alert(Alert.AlertType.INFORMATION);
+            info.setTitle("Report sent");
+            info.setHeaderText(null);
+            info.setContentText("The user has been reported and removed from your matches.");
+            info.showAndWait();
+
+        }
 
     }
 }

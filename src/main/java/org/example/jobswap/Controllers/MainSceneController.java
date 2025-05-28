@@ -5,7 +5,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.example.jobswap.Controllers.UserTabs.UserTabMatches;
 import org.example.jobswap.Controllers.UserTabs.UserTabMessages;
@@ -13,9 +12,6 @@ import org.example.jobswap.Controllers.UserTabs.UserTabProfile;
 import org.example.jobswap.Controllers.UserTabs.UserTabSeekJobSwap;
 import org.example.jobswap.Model.Profile;
 import org.example.jobswap.Service.SceneService;
-
-import java.awt.*;
-import java.io.IOException;
 
 /**
  * Class which sets up the Mainescene.fxml
@@ -56,7 +52,7 @@ public class MainSceneController {
         //logout button setup
         logoutButton.setOnMouseClicked(event -> {
             MainSceneController.setCurrentProfile(null);
-            UserTabMessages.StopUpdating();
+            UserTabMessages.stopUpdating();
             SceneService.shiftScene(event, "JobSwap", "/org/example/jobswap/Login.fxml");
         });
 

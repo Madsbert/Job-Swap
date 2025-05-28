@@ -34,7 +34,6 @@
     -fx-background-radius: 5;
     -fx-padding: 8 16;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.1), 2, 0, 0, 1);
     -fx-border-color: transparent;
 }
 
@@ -102,4 +101,28 @@
 
 .secondary-button:hover {
     -fx-background-color: #7f8c8d;
+}
+
+.chat-history{
+    -fx-background: #FFFFFF;
+    -fx-background-color: #FFFFFF;
+}
+
+.message-label-my{
+    -fx-background-color: #da291c;
+    -fx-background-radius: 18 18 5 18; /* Rounded corners (top-right most rounded) */
+    -fx-padding: 8 12 8 12;
+    -fx-text-fill: white;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 14px;
+    -fx-max-width: 250px;
+}
+.message-label-other{
+    -fx-background-color: #f1f1f1;
+    -fx-background-radius: 18 18 18 5; /* Rounded corners (top-left most rounded) */
+    -fx-padding: 8 12 8 12;
+    -fx-text-fill: black;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 14px;
+    -fx-max-width: 250px;
 }

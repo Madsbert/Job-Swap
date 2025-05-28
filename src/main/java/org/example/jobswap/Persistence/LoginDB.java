@@ -1,16 +1,15 @@
 package org.example.jobswap.Persistence;
 
 import org.example.jobswap.Foundation.DBConnection;
+import org.example.jobswap.Model.AccessLevel;
 import org.example.jobswap.Model.Department;
 import org.example.jobswap.Model.Profile;
 import org.example.jobswap.Persistence.Interfaces.LoginDBInterface;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.sql.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
 /**
  * Class to handle database querys and stored procedures of Login
@@ -80,6 +79,26 @@ public class LoginDB implements LoginDBInterface {
             System.out.println(e.getMessage());
             System.out.println(e.getCause());
             System.out.println(e.getStackTrace());
+        }
+    }
+
+    public static AccessLevel getAccessLevelFromID(int ProfileID) {
+        String sp = "{call get_access_level_from_id(?)}";
+        try {
+            Connection conn = DBConnection.getConnection();
+            CallableStatement cstmt = conn.prepareCall(sp);
+
+            cstmt.setInt(1, ProfileID);
+            ResultSet rs = cstmt.executeQuery();
+            AccessLevel profileAccessLevel = null;
+            if (rs.next()) {
+                profileAccessLevel  = AccessLevel.values()[rs.getInt("AccessLevelID")];
+            }
+            return profileAccessLevel;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("something went wrong in GetProfileFromID");
+            throw new RuntimeException(e);
         }
     }
 }

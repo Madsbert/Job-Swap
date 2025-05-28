@@ -6,6 +6,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import org.example.jobswap.Foundation.DBConnection;
+import org.example.jobswap.Model.AccessLevel;
 import org.example.jobswap.Model.Profile;
 import org.example.jobswap.Persistence.Interfaces.LoginDBInterface;
 import org.example.jobswap.Persistence.Interfaces.ProfileDBInterface;
@@ -73,6 +75,10 @@ public class LoginController {
      */
     public void login(ActionEvent event){
         try {
+
+            //Update Database Username and password based on Accesslevel
+            DBConnection.ChangeAccessLevelOnDatabase(LoginDB.getAccessLevelFromID(Integer.parseInt(employeeIDFields.getText())));
+
             if (!checkCredentials()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Wrong Credentials");

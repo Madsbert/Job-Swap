@@ -122,6 +122,9 @@ public class UserTabMessages extends UpdatableTab {
         VBox.setVgrow(chatHistory, Priority.ALWAYS);  // Fill where there is space
         chatHistory.setPrefHeight(Region.USE_COMPUTED_SIZE);  //Region.USE_COMPUTED_SIZE = don't use fixed height.
 
+
+
+
         //setup bottom of chat.
         HBox messageInputBox = new HBox(10);
         messageInputBox.setAlignment(Pos.CENTER_RIGHT);

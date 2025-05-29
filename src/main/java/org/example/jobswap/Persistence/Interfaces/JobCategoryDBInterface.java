@@ -4,11 +4,7 @@ import java.util.List;
 
 public interface JobCategoryDBInterface {
 
-    static List<String> getCategories() {
-        return null;
-    }
+    List<String> getCategories();
 
-    static void addCategory(String categoryName) {
-
-    }
+    void addCategory(String categoryName);
 }

@@ -10,6 +10,8 @@ import org.example.jobswap.Controllers.UpdatableTab;
 import org.example.jobswap.Model.Department;
 import org.example.jobswap.Model.Profile;
 import org.example.jobswap.Persistence.DepartmentDB;
+import org.example.jobswap.Persistence.Interfaces.DepartmentDBInterface;
+import org.example.jobswap.Persistence.Interfaces.JobCategoryDBInterface;
 import org.example.jobswap.Persistence.Interfaces.ProfileDBInterface;
 import org.example.jobswap.Persistence.JobCategoryDB;
 import org.example.jobswap.Persistence.ProfileDB;
@@ -106,6 +108,7 @@ public class UserTabProfile extends UpdatableTab {
             changedProfile.setJobTitle(jobTitleField.getText());
             changedProfile.setDescription(jobDescriptionField.getText());
             changedProfile.setActivelySeeking(activeCheckBox.isSelected());
+            changedProfile.setUsername(usernameField.getText());
 
             System.out.println("Profile Diff: " + !changedProfile.equals(MainSceneController.getCurrentProfile()));
             if (!changedProfile.equals(MainSceneController.getCurrentProfile())) {
@@ -174,8 +177,9 @@ public class UserTabProfile extends UpdatableTab {
     {
         HBox departmentBox = new HBox();
         ArrayList<String> departments = new ArrayList<>();
+        DepartmentDBInterface departmentDB = new DepartmentDB();
 
-        for (Department department : DepartmentDB.getDepartments())
+        for (Department department : departmentDB.getDepartments())
         {
             departments.add(department.getDepartmentName());
         }
@@ -205,7 +209,9 @@ public class UserTabProfile extends UpdatableTab {
     private void setupJobCategoryBox()
     {
         HBox jobCategoryBox = new HBox();
-        List<String> jobCategories = JobCategoryDB.getCategories();
+        JobCategoryDBInterface jobCategoryDB = new JobCategoryDB();
+
+        List<String> jobCategories = jobCategoryDB.getCategories();
 
         jobCategoryChoiceBox = new ChoiceBox<String>();
         jobCategoryChoiceBox.getItems().addAll(jobCategories);

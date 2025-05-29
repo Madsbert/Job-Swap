@@ -10,9 +10,9 @@ public interface ProfileDBInterface {
     List<Profile> getAllProfiles();
     void unlockProfile(int workerId);
 
-    public boolean createNewProfile(Profile profile);
+    boolean createNewProfile(Profile profile);
 
-    public void deleteProfile(int workerId);
+    void deleteProfile(int workerId);
     void updateProfile(Profile profile);
 
     void grantHRRights(int workerId);

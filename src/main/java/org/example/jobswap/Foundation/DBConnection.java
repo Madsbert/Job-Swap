@@ -40,22 +40,21 @@ public class DBConnection {
                     System.out.println("Failed to connect to database.");
                 }
             }
-            else
-            {
-                try {
-                    if (conn.isClosed())
-                    {
-                        conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-                    }
-                }
-                catch (Exception e)
+
+            try {
+                if (conn.isClosed())
                 {
-                    System.out.println("Failed to connect to database.");
-                    e.printStackTrace();
-                    System.out.println(e.getMessage());
-                    System.exit(0);
+                    conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
                 }
             }
+            catch (Exception e)
+            {
+                System.out.println("Failed to connect to database.");
+                e.printStackTrace();
+                System.out.println(e.getMessage());
+                System.exit(0);
+            }
+
 
             return conn;
         }

@@ -20,7 +20,7 @@ public class JobCategoryDB implements JobCategoryDBInterface {
      * Returns a {@link List} containing {@link String}s of JobCategory names from the database.
      * @return {@link List} of {@link String}s, Job Categories
      */
-    public static List<String> getCategories()
+    public List<String> getCategories()
     {
         String query = "select * from tbl_JobCategory";
 
@@ -44,7 +44,7 @@ public class JobCategoryDB implements JobCategoryDBInterface {
         return jobCategories;
     }
 
-    public static void addCategory(String categoryName)
+    public void addCategory(String categoryName)
     {
         // Not implemented
     }

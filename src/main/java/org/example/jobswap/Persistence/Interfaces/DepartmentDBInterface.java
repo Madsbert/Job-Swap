@@ -5,19 +5,11 @@ import org.example.jobswap.Model.Department;
 import java.util.List;
 
 public interface DepartmentDBInterface {
-    static List<Department> getDepartments() {
-        return null;
-    }
+    List<Department> getDepartments();
 
-    static void createDepartment(Department department) {
+    void createDepartment(Department department);
 
-    }
+    void deleteDepartment(int departmentID);
 
-    static void deleteDepartment(int departmentID) {
-
-    }
-
-    static Department getDepartmentFromUserID(int profileID) {
-        return null;
-    }
+    Department getDepartmentFromUserID(int profileID);
 }

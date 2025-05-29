@@ -103,7 +103,7 @@ public class MatchDB implements MatchDBInterface {
      * @param wantedDepartment the department the {@link Profile} is seeking
      * @return a list of {@link Profile}s
      */
-    public static List<Profile> seekAllPossibleProfileMatches(int profileID, String wantedDepartment){
+    public List<Profile> seekAllPossibleProfileMatches(int profileID, String wantedDepartment){
         String sp = "{call seek_all_possible_profile_matches(?,?) }";
 
         try (Connection conn = DBConnection.getConnection();

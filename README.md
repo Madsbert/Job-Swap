@@ -704,6 +704,7 @@ BEGIN
     INSERT INTO tbl_Login(ProfileID,LoginPassword) VALUES (@profileID,@password)
 
 END;
+    GO
 -- Create Login and passwords
                 CREATE LOGIN LoginProfile WITH PASSWORD = 'Login123456!';
                 CREATE LOGIN UserProfile WITH PASSWORD = 'User123456!';

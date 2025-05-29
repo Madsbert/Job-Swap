@@ -358,423 +358,209 @@ VALUES
 
 
 
-CREATE OR ALTER PROCEDURE seek_all_possible_profile_matches(@ProfileID int, @WantedDepartment NVARCHAR(100))
+GO
+CREATE OR ALTER PROCEDURE create_match
+    @Profile1ID int,
+    @Profile2ID int,
+    @MatchStateID int,
+    @TimeOfMatch DATETIME2(7)
 
 AS
 
 BEGIN
 
-    DECLARE
-        @JobCategory NVARCHAR(100),
-        @JobCategoryID int,
-        @WantedDepartmentID int;
+    DECLARE @ExistingMatchID int
 
-    --Converts the wanted departmentname to depID
-    SELECT @WantedDepartmentID = DepartmentID
-    FROM tbl_Department
-    WHERE DepartmentName = @WantedDepartment
-
-    -- converts jobcategory to jobcategoryID
-    SELECT @JobCategoryID = JobCategoryID
-    FROM tbl_JobCategory
-    WHERE JobCategory = @JobCategory
-
-    -- gets jobcategory from profileID
-    SELECT @JobCategoryID = JobCategoryID
-    FROM tbl_Profile
-    WHERE ProfileID = @ProfileID
-
-    -- Selects all profiles where the wantedjobdepartment and the currently working
-    -- Jobcategory and actively seeking mathces the criteria
-    SELECT * FROM tbl_Profile where DepartmentID=@WantedDepartmentID
-                                AND JobCategoryID=@JobCategoryID
-                                AND ActivelySeeking= 1;
-
-
-END;
-
-
-
-    CREATE OR ALTER PROCEDURE seek_all_possible_profile_matches(@ProfileID int, @WantedDepartment NVARCHAR(100))
-
-    AS
-
-    BEGIN
-
-        DECLARE
-            @JobCategory NVARCHAR(100),
-            @JobCategoryID int,
-            @WantedDepartmentID int;
-
-        --Converts the wanted departmentname to depID
-        SELECT @WantedDepartmentID = DepartmentID
-        FROM tbl_Department
-        WHERE DepartmentName = @WantedDepartment
-
-        -- converts jobcategory to jobcategoryID
-        SELECT @JobCategoryID = JobCategoryID
-        FROM tbl_JobCategory
-        WHERE JobCategory = @JobCategory
-
-        -- gets jobcategory from profileID
-        SELECT @JobCategoryID = JobCategoryID
-        FROM tbl_Profile
-        WHERE ProfileID = @ProfileID
-
-        -- Selects all profiles where the wantedjobdepartment and the currently working
-        -- Jobcategory and actively seeking mathces the criteria.
-        --Returns the profile with departmentname and jobcategory instead of IDs
-        SELECT
-            p.ProfileID,
-            d.DepartmentName,
-            j.JobCategory,
-            p.AccesslevelID,
-            p.FullName,
-            p.Username,
-            p.JobTitle,
-            p.ActivelySeeking,
-            p.JobDescription,
-            p.IsLocked
-        FROM tbl_Profile p
-                 INNER JOIN
-             tbl_Department d ON p.DepartmentID = d.DepartmentID
-                 INNER JOIN
-             tbl_JobCategory j ON p.JobCategoryID = j.JobCategoryID
-
-        where p.DepartmentID=@WantedDepartmentID
-          AND p.JobCategoryID=@JobCategoryID
-          AND ActivelySeeking= 1;
-
-    END;
-
-
-
-        CREATE OR ALTER PROCEDURE create_match
-            @Profile1ID int,
-            @Profile2ID int,
-            @MatchStateID int,
-            @TimeOfMatch DATETIME2(7)
-
-        AS
-
-        BEGIN
-
-            DECLARE @ExistingMatchID int
-
-            -- Checks if match exists with profile 1 and 2 ID in case that one profile spams the other profile
+    -- Checks if match exists with profile 1 and 2 ID in case that one profile spams the other profile
 -- with request
-            IF EXISTS (
-                SELECT 1 FROM tbl_Match
-                WHERE (Profile1ID = @Profile1ID AND Profile2ID = @Profile2ID)
-            )
-                BEGIN
-                    -- Return a message if match exists
-                    SELECT 'Match already exists between these profiles' AS Result;
-                    RETURN;
-                END;
+    IF EXISTS (
+        SELECT 1 FROM tbl_Match
+        WHERE (Profile1ID = @Profile1ID AND Profile2ID = @Profile2ID)
+    )
+        BEGIN
+            -- Return a message if match exists
+            SELECT 'Match already exists between these profiles' AS Result;
+            RETURN;
+        END;
 
-            -- if profile one has an application from profile 2 but havent seen it
+    -- if profile one has an application from profile 2 but havent seen it
 --and sends application the application the state of the match will be interested
-            SELECT @ExistingMatchID = MatchID
-            FROM tbl_Match
-            WHERE Profile1ID = @Profile2ID AND Profile2ID = @Profile1ID;
+    SELECT @ExistingMatchID = MatchID
+    FROM tbl_Match
+    WHERE Profile1ID = @Profile2ID AND Profile2ID = @Profile1ID;
 
-            IF @ExistingMatchID > 0
-                BEGIN
-                    UPDATE dbo.tbl_Match SET MatchStateID=3 WHERE MatchID = @ExistingMatchID
-                    RETURN;
-                END;
-
-
-
-            INSERT INTO tbl_Match (Profile1ID,Profile2ID,MatchStateID
-                                  ,TimeOfMatch)
-            VALUES
-                (@Profile1ID, @Profile2ID, @MatchStateID,@TimeOfMatch)
-
-
+    IF @ExistingMatchID > 0
+        BEGIN
+            UPDATE dbo.tbl_Match SET MatchStateID=3 WHERE MatchID = @ExistingMatchID
+            RETURN;
         END;
 
 
 
-            CREATE OR ALTER PROCEDURE update_matchstate_of_both_interested_to_complete_match
-                @Profile1ID int,
-                @Profile2ID int,
-                @loggedInProfileID int
-
-            AS
-            BEGIN
-
-                --DECLARES
-                DECLARE
-                    @MatchID int,
-                    @CurrentMatchStateID Int,
-                    @OtherProfileID int,
-                    @FirstToAcceptProfileID int
-
-                --get matchID based on both profiles, the state of the match, and FirstToAcceptProfileID.
-                SELECT @MatchID = MatchID, @CurrentMatchStateID = MatchStateID ,@FirstToAcceptProfileID = FirstToAcceptProfileID
-                FROM tbl_Match
-                WHERE (Profile1ID = @Profile2ID AND Profile2ID = @Profile1ID)
-                   or (Profile1ID = @Profile1ID AND Profile2ID = @Profile2ID)
-
-                --set matchstate to 4 and record who did it.
-                IF @CurrentMatchStateID = 3 --both are interested
-                    BEGIN
-                        UPDATE dbo.tbl_Match SET MatchStateID=4, FirstToAcceptProfileID = @loggedInProfileID WHERE MatchID = @MatchID
-                    END
-                ELSE IF (@CurrentMatchStateID = 4 AND @FirstToAcceptProfileID <> @loggedInProfileID)
-                    BEGIN
-                        UPDATE dbo.tbl_Match
-                        SET MatchStateID = 5
-                        WHERE MatchID = @MatchID
-                    END
-
-            END;
+    INSERT INTO tbl_Match (Profile1ID,Profile2ID,MatchStateID
+                          ,TimeOfMatch)
+    VALUES
+        (@Profile1ID, @Profile2ID, @MatchStateID,@TimeOfMatch)
 
 
+END;
 
-                CREATE PROCEDURE create_new_profile
-                    @DepartmentName NVARCHAR(100),
-                    @JobCategory NVARCHAR(100),
-                    @AccessLevelID int,
-                    @FullName Nvarchar (100),
-                    @Username Nvarchar (100),
-                    @JobTitle Nvarchar (100),
-                    @ActivelySeeking Bit,
-                    @JobDescription Nvarchar (300),
-                    @IsLocked Bit
-
-                AS
-                BEGIN
-
-                    DECLARE @DepartmentID INT
-                    DECLARE @JobCategoryID INT
-
-                    SELECT @DepartmentID = DepartmentID
-                    FROM tbl_Department
-                    WHERE DepartmentName = @DepartmentName
-
-                    SELECT @JobCategoryID = JobCategoryID
-                    FROM tbl_JobCategory
-                    WHERE JobCategory = @JobCategory
-
-                    INSERT INTO tbl_Profile (DepartmentID,JobCategoryID,AccessLevelID,
-                                             FullName, Username, JobTitle, ActivelySeeking, JobDescription, IsLocked)
-
-                    VALUES
-
-                        (@DepartmentID, @JobCategoryID, @AccessLevelID, @FullName, @Username,
-                         @JobTitle,@ActivelySeeking,@JobDescription,@IsLocked)
-
-                END;
-
-
-
-                    CREATE OR ALTER PROCEDURE getProfileFromID
-                        @ProfileID INT
-                    AS
-                    BEGIN
-                        -- Check if profile exists
-                        IF NOT EXISTS (SELECT 1 FROM tbl_Profile WHERE ProfileID = @ProfileID)
-                            BEGIN
-                                -- Return a message that the profile doesn't exist
-                                SELECT 'Profile with ID ' + CAST(@ProfileID AS VARCHAR(10)) + ' does not exist' AS Message;
-                                RETURN;
-                            END
-
-                        -- Profile exists, return the data
-                        SELECT
-                            p.ProfileID,
-                            d.DepartmentName,
-                            j.JobCategory,
-                            p.AccesslevelID,
-                            p.FullName,
-                            p.Username,
-                            p.JobTitle,
-                            p.ActivelySeeking,
-                            p.JobDescription,
-                            p.IsLocked
-                        FROM tbl_Profile p
-                                 INNER JOIN tbl_Department d ON p.DepartmentID = d.DepartmentID
-                                 INNER JOIN tbl_JobCategory j ON p.JobCategoryID = j.JobCategoryID
-                        WHERE p.ProfileID = @ProfileID;
-                    END;
-
-
-                        CREATE OR ALTER PROCEDURE [dbo].[create_new_profile]
-                            @ProfileID int,
-                            @DepartmentName NVARCHAR(100),
-                            @JobCategory NVARCHAR(100),
-                            @AccessLevelID int,
-                            @FullName Nvarchar (100),
-                            @Username Nvarchar (100),
-                            @JobTitle Nvarchar (100),
-                            @ActivelySeeking Bit,
-                            @JobDescription Nvarchar (300),
-                            @IsLocked Bit
-                        AS
-                        BEGIN
-
-                            DECLARE @DepartmentID INT
-                            DECLARE @JobCategoryID INT
-                            --Converts Text to ID (could have used join)
-                            SELECT @DepartmentID = DepartmentID
-                            FROM tbl_Department
-                            WHERE DepartmentName = @DepartmentName
-                            --Converts Text to ID (could have used join)
-                            SELECT @JobCategoryID = JobCategoryID
-                            FROM tbl_JobCategory
-                            WHERE JobCategory = @JobCategory
-
-                            -- Check if profile exists
-                            IF EXISTS (SELECT 1 FROM tbl_Profile WHERE ProfileID = @ProfileID)
-                                BEGIN
-                                    -- Return a message that the profile does exist
-                                    SELECT 'Profile with ID ' + CAST(@ProfileID AS VARCHAR(10)) + ' does exist' AS Message;
-                                    RETURN;
-                                END
-
-                            --Creation of new profil
-                            INSERT INTO tbl_Profile (ProfileID,DepartmentID,JobCategoryID,AccessLevelID,
-                                                     FullName, Username, JobTitle, ActivelySeeking, JobDescription, IsLocked)
-                            VALUES
-                                (@ProfileID,@DepartmentID, @JobCategoryID, @AccessLevelID, @FullName, @Username,
-                                 @JobTitle,@ActivelySeeking,@JobDescription,@IsLocked)
-                        END;
-
-
-
-                            ALTER PROCEDURE [dbo].[seek_all_possible_profile_matches](@ProfileID int, @WantedDepartment NVARCHAR(100))
-
-                            AS
-
-                            BEGIN
-
-                                DECLARE
-                                    @JobCategoryID int,
-                                    @WantedDepartmentID int;
-
-
--- First get the JobCategoryID from the source profile
-                                SELECT @JobCategoryID = JobCategoryID
-                                FROM tbl_Profile
-                                WHERE ProfileID = @ProfileID;
-
-                                --Converts the wanted departmentname to depID
-                                SELECT @WantedDepartmentID = DepartmentID
-                                FROM tbl_Department
-                                WHERE DepartmentName = @WantedDepartment
-
-                                -- Selects all profiles where the wantedjobdepartment and the currently working
-                                -- Jobcategory and actively seeking mathces the criteria.
-                                --Returns the profile with departmentname and jobcategory instead of IDs
-                                SELECT
-                                    p.ProfileID,
-                                    d.DepartmentName,
-                                    j.JobCategory,
-                                    p.AccesslevelID,
-                                    p.FullName,
-                                    p.Username,
-                                    p.JobTitle,
-                                    p.ActivelySeeking,
-                                    p.JobDescription,
-                                    p.IsLocked
-                                FROM tbl_Profile p
-                                         INNER JOIN
-                                     tbl_Department d ON p.DepartmentID = d.DepartmentID
-                                         INNER JOIN
-                                     tbl_JobCategory j ON p.JobCategoryID = j.JobCategoryID
-
-                                where p.DepartmentID=@WantedDepartmentID
-                                  AND p.JobCategoryID=@JobCategoryID
-                                  AND ActivelySeeking= 1;
-
-                            END;
-
-
-
-                                CREATE OR ALTER PROCEDURE [dbo].[update_profile]
-                                    @ProfileID int,
-                                    @DepartmentName NVARCHAR(100),
-                                    @JobCategory NVARCHAR(100),
-                                    @AccessLevelID int,
-                                    @FullName Nvarchar (100),
-                                    @Username Nvarchar (100),
-                                    @JobTitle Nvarchar (100),
-                                    @ActivelySeeking Bit,
-                                    @JobDescription Nvarchar (300),
-                                    @IsLocked Bit
-                                AS
-                                BEGIN
-
-                                    DECLARE @DepartmentID INT
-                                    DECLARE @JobCategoryID INT
-                                    --Converts Text to ID (could have used join)
-                                    SELECT @DepartmentID = DepartmentID
-                                    FROM tbl_Department
-                                    WHERE DepartmentName = @DepartmentName
-                                    --Converts Text to ID (could have used join)
-                                    SELECT @JobCategoryID = JobCategoryID
-                                    FROM tbl_JobCategory
-                                    WHERE JobCategory = @JobCategory
-
-                                    --Update of profil
-                                    UPDATE tbl_Profile
-                                    SET
-                                        DepartmentID = @DepartmentID,
-                                        JobCategoryID = @JobCategoryID,
-                                        AccessLevelID = @AccessLevelID,
-                                        FullName = @FullName,
-                                        Username = @Username,
-                                        JobTitle = @JobTitle,
-                                        ActivelySeeking = @ActivelySeeking,
-                                        JobDescription = @JobDescription,
-                                        IsLocked = @IsLocked
-                                    WHERE
-                                        ProfileID = @ProfileID
-                                END;
-
-
-
-                                    CREATE OR ALTER PROCEDURE [dbo].[getProfileFromID]
-                                        @ProfileID INT
-                                    AS
-                                    BEGIN
-                                        -- Check if profile exists
-                                        IF NOT EXISTS (SELECT 1 FROM tbl_Profile WHERE ProfileID = @ProfileID)
-                                            BEGIN
-                                                -- Return a message that the profile doesn't exist
-                                                SELECT 'Profile with ID ' + CAST(@ProfileID AS VARCHAR(10)) + ' does not exist' AS Message;
-                                                RETURN;
-                                            END
-
-                                        -- Profile exists, return the data
-                                        SELECT
-                                            p.ProfileID,
-                                            d.DepartmentName,
-                                            j.JobCategory,
-                                            p.AccesslevelID,
-                                            p.FullName,
-                                            p.Username,
-                                            p.JobTitle,
-                                            p.ActivelySeeking,
-                                            p.JobDescription,
-                                            p.IsLocked
-                                        FROM tbl_Profile p
-                                                 INNER JOIN tbl_Department d ON p.DepartmentID = d.DepartmentID
-                                                 INNER JOIN tbl_JobCategory j ON p.JobCategoryID = j.JobCategoryID
-                                        WHERE p.ProfileID = @ProfileID;
-                                    END;
-
-
-
-                                        SET ANSI_NULLS ON
 GO
-SET QUOTED_IDENTIFIER ON
-GO
+CREATE OR ALTER PROCEDURE update_matchstate_of_both_interested_to_complete_match
+    @Profile1ID int,
+    @Profile2ID int,
+    @loggedInProfileID int
 
-ALTER PROCEDURE [dbo].[update_matchstate_of_both_interested_to_complete_match]
+AS
+BEGIN
+
+    --DECLARES
+    DECLARE
+        @MatchID int,
+        @CurrentMatchStateID Int,
+        @OtherProfileID int,
+        @FirstToAcceptProfileID int
+
+    --get matchID based on both profiles, the state of the match, and FirstToAcceptProfileID.
+    SELECT @MatchID = MatchID, @CurrentMatchStateID = MatchStateID ,@FirstToAcceptProfileID = FirstToAcceptProfileID
+    FROM tbl_Match
+    WHERE (Profile1ID = @Profile2ID AND Profile2ID = @Profile1ID)
+       or (Profile1ID = @Profile1ID AND Profile2ID = @Profile2ID)
+
+    --set matchstate to 4 and record who did it.
+    IF @CurrentMatchStateID = 3 --both are interested
+        BEGIN
+            UPDATE dbo.tbl_Match SET MatchStateID=4, FirstToAcceptProfileID = @loggedInProfileID WHERE MatchID = @MatchID
+        END
+    ELSE IF (@CurrentMatchStateID = 4 AND @FirstToAcceptProfileID <> @loggedInProfileID)
+        BEGIN
+            UPDATE dbo.tbl_Match
+            SET MatchStateID = 5
+            WHERE MatchID = @MatchID
+        END
+
+END;
+GO
+CREATE OR ALTER PROCEDURE [dbo].[create_new_profile]
+    @ProfileID int,
+    @DepartmentName NVARCHAR(100),
+    @JobCategory NVARCHAR(100),
+    @AccessLevelID int,
+    @FullName Nvarchar (100),
+    @Username Nvarchar (100),
+    @JobTitle Nvarchar (100),
+    @ActivelySeeking Bit,
+    @JobDescription Nvarchar (300),
+    @IsLocked Bit
+AS
+BEGIN
+
+    DECLARE @DepartmentID INT
+    DECLARE @JobCategoryID INT
+    --Converts Text to ID (could have used join)
+    SELECT @DepartmentID = DepartmentID
+    FROM tbl_Department
+    WHERE DepartmentName = @DepartmentName
+    --Converts Text to ID (could have used join)
+    SELECT @JobCategoryID = JobCategoryID
+    FROM tbl_JobCategory
+    WHERE JobCategory = @JobCategory
+
+    -- Check if profile exists
+    IF EXISTS (SELECT 1 FROM tbl_Profile WHERE ProfileID = @ProfileID)
+        BEGIN
+            -- Return a message that the profile does exist
+            SELECT 'Profile with ID ' + CAST(@ProfileID AS VARCHAR(10)) + ' does exist' AS Message;
+            RETURN;
+        END
+
+    --Creation of new profil
+    INSERT INTO tbl_Profile (ProfileID,DepartmentID,JobCategoryID,AccessLevelID,
+                             FullName, Username, JobTitle, ActivelySeeking, JobDescription, IsLocked)
+    VALUES
+        (@ProfileID,@DepartmentID, @JobCategoryID, @AccessLevelID, @FullName, @Username,
+         @JobTitle,@ActivelySeeking,@JobDescription,@IsLocked)
+END;
+
+
+
+GO
+CREATE OR ALTER PROCEDURE [dbo].[update_profile]
+    @ProfileID int,
+    @DepartmentName NVARCHAR(100),
+    @JobCategory NVARCHAR(100),
+    @AccessLevelID int,
+    @FullName Nvarchar (100),
+    @Username Nvarchar (100),
+    @JobTitle Nvarchar (100),
+    @ActivelySeeking Bit,
+    @JobDescription Nvarchar (300),
+    @IsLocked Bit
+AS
+BEGIN
+
+    DECLARE @DepartmentID INT
+    DECLARE @JobCategoryID INT
+    --Converts Text to ID (could have used join)
+    SELECT @DepartmentID = DepartmentID
+    FROM tbl_Department
+    WHERE DepartmentName = @DepartmentName
+    --Converts Text to ID (could have used join)
+    SELECT @JobCategoryID = JobCategoryID
+    FROM tbl_JobCategory
+    WHERE JobCategory = @JobCategory
+
+    --Update of profil
+    UPDATE tbl_Profile
+    SET
+        DepartmentID = @DepartmentID,
+        JobCategoryID = @JobCategoryID,
+        AccessLevelID = @AccessLevelID,
+        FullName = @FullName,
+        Username = @Username,
+        JobTitle = @JobTitle,
+        ActivelySeeking = @ActivelySeeking,
+        JobDescription = @JobDescription,
+        IsLocked = @IsLocked
+    WHERE
+        ProfileID = @ProfileID
+END;
+
+
+GO
+CREATE OR ALTER PROCEDURE [dbo].[getProfileFromID]
+    @ProfileID INT
+AS
+BEGIN
+    -- Check if profile exists
+    IF NOT EXISTS (SELECT 1 FROM tbl_Profile WHERE ProfileID = @ProfileID)
+        BEGIN
+            -- Return a message that the profile doesn't exist
+            SELECT 'Profile with ID ' + CAST(@ProfileID AS VARCHAR(10)) + ' does not exist' AS Message;
+            RETURN;
+        END
+
+    -- Profile exists, return the data
+    SELECT
+        p.ProfileID,
+        d.DepartmentName,
+        j.JobCategory,
+        p.AccesslevelID,
+        p.FullName,
+        p.Username,
+        p.JobTitle,
+        p.ActivelySeeking,
+        p.JobDescription,
+        p.IsLocked
+    FROM tbl_Profile p
+             INNER JOIN tbl_Department d ON p.DepartmentID = d.DepartmentID
+             INNER JOIN tbl_JobCategory j ON p.JobCategoryID = j.JobCategoryID
+    WHERE p.ProfileID = @ProfileID;
+END;
+
+
+GO
+CREATE OR ALTER PROCEDURE [dbo].[update_matchstate_of_both_interested_to_complete_match]
     @Profile1ID int,
     @Profile2ID int,
     @loggedInProfileID int
@@ -809,114 +595,115 @@ BEGIN
 
 END;
 
+GO
+CREATE OR ALTER PROCEDURE [dbo].[seek_all_possible_profile_matches](@ProfileID int, @WantedDepartment NVARCHAR(100))
 
-    ALTER PROCEDURE [dbo].[seek_all_possible_profile_matches](@ProfileID int, @WantedDepartment NVARCHAR(100))
+AS
 
-    AS
+BEGIN
 
-    BEGIN
-
-        DECLARE
-            @JobCategoryID int,
-            @WantedDepartmentID int;
+    DECLARE
+        @JobCategoryID int,
+        @WantedDepartmentID int;
 
 
 -- First get the JobCategoryID from the source profile
-        SELECT @JobCategoryID = JobCategoryID
-        FROM tbl_Profile
-        WHERE ProfileID = @ProfileID;
+    SELECT @JobCategoryID = JobCategoryID
+    FROM tbl_Profile
+    WHERE ProfileID = @ProfileID;
 
-        --Converts the wanted departmentname to depID
-        SELECT @WantedDepartmentID = DepartmentID
-        FROM tbl_Department
-        WHERE DepartmentName = @WantedDepartment
+    --Converts the wanted departmentname to depID
+    SELECT @WantedDepartmentID = DepartmentID
+    FROM tbl_Department
+    WHERE DepartmentName = @WantedDepartment
 
-        -- Selects all profiles where the wantedjobdepartment and the currently working
-        -- Jobcategory and actively seeking mathces the criteria.
-        --Returns the profile with departmentname and jobcategory instead of IDs
-        -- Only returns if the profiles does not have a match already
-        SELECT
-            p.ProfileID,
-            d.DepartmentName,
-            j.JobCategory,
-            p.AccesslevelID,
-            p.FullName,
-            p.Username,
-            p.JobTitle,
-            p.ActivelySeeking,
-            p.JobDescription,
-            p.IsLocked
-        FROM tbl_Profile p
-                 INNER JOIN
-             tbl_Department d ON p.DepartmentID = d.DepartmentID
-                 INNER JOIN
-             tbl_JobCategory j ON p.JobCategoryID = j.JobCategoryID
-        WHERE
-            p.DepartmentID = @WantedDepartmentID
-          AND p.JobCategoryID = @JobCategoryID
-          AND p.ActivelySeeking = 1
-          AND NOT EXISTS (
-            SELECT 1
-            FROM tbl_Match
-            WHERE Profile1ID = p.ProfileID OR Profile2ID = p.ProfileID
-        );
+    -- Selects all profiles where the wantedjobdepartment and the currently working
+    -- Jobcategory and actively seeking mathces the criteria.
+    --Returns the profile with departmentname and jobcategory instead of IDs
+    -- Only returns if the profiles does not have a match already
+    SELECT
+        p.ProfileID,
+        d.DepartmentName,
+        j.JobCategory,
+        p.AccesslevelID,
+        p.FullName,
+        p.Username,
+        p.JobTitle,
+        p.ActivelySeeking,
+        p.JobDescription,
+        p.IsLocked
+    FROM tbl_Profile p
+             INNER JOIN
+         tbl_Department d ON p.DepartmentID = d.DepartmentID
+             INNER JOIN
+         tbl_JobCategory j ON p.JobCategoryID = j.JobCategoryID
+    WHERE
+        p.DepartmentID = @WantedDepartmentID
+      AND p.JobCategoryID = @JobCategoryID
+      AND p.ActivelySeeking = 1
+      AND NOT EXISTS (
+        SELECT 1
+        FROM tbl_Match
+        WHERE Profile1ID = p.ProfileID OR Profile2ID = p.ProfileID
+    );
 
-    END;
+END;
+GO
+CREATE OR ALTER PROCEDURE get_all_messages_between_2_profiles_sort_by_time
+    @LoggedInProfileID int,
+    @ProfileIDReceiver int
 
-        CREATE OR ALTER PROCEDURE get_all_messages_between_2_profiles_sort_by_time
-            @LoggedInProfileID int,
-            @ProfileIDReceiver int
+AS
+BEGIN
 
-        AS
+
+    SELECT
+        ProfileIDOfSender,
+        ProfileIDOfReceiver,
+        MessageText,
+        TimeOfMessage
+    FROM
+        tbl_Message
+    WHERE
+        (ProfileIDOfSender = @LoggedInProfileID AND ProfileIDOfReceiver = @ProfileIDReceiver)
+       OR
+        (ProfileIDOfSender = @ProfileIDReceiver AND ProfileIDOfReceiver = @LoggedInProfileID)
+    ORDER BY
+        TimeOfMessage ASC; -- ASC = Ascending Order
+
+END;
+
+
+GO
+CREATE OR ALTER PROCEDURE get_access_level_from_id
+    @ProfileID INT
+
+AS
+BEGIN
+
+    -- Check if profile exists
+    IF NOT EXISTS (SELECT 1 FROM tbl_Profile WHERE ProfileID = @ProfileID)
         BEGIN
+            -- Return a message that the profile doesn't exist
+            SELECT 'Profile with ID ' + CAST(@ProfileID AS NVARCHAR(100));
+            RETURN;
+        END
 
+    SELECT AccessLevelID FROM tbl_Profile WHERE @ProfileID = ProfileID
 
-            SELECT
-                ProfileIDOfSender,
-                ProfileIDOfReceiver,
-                MessageText,
-                TimeOfMessage
-            FROM
-                tbl_Message
-            WHERE
-                (ProfileIDOfSender = @LoggedInProfileID AND ProfileIDOfReceiver = @ProfileIDReceiver)
-               OR
-                (ProfileIDOfSender = @ProfileIDReceiver AND ProfileIDOfReceiver = @LoggedInProfileID)
-            ORDER BY
-                TimeOfMessage ASC; -- ASC = Ascending Order
+END;
+GO
+CREATE OR ALTER PROCEDURE create_login
+    @profileID int,
+    @password NVARCHAR(100)
 
-        END;
+AS
 
-            CREATE OR ALTER PROCEDURE get_access_level_from_id
-                @ProfileID INT
+BEGIN
 
-            AS
-            BEGIN
+    INSERT INTO tbl_Login(ProfileID,LoginPassword) VALUES (@profileID,@password)
 
-                -- Check if profile exists
-                IF NOT EXISTS (SELECT 1 FROM tbl_Profile WHERE ProfileID = @ProfileID)
-                    BEGIN
-                        -- Return a message that the profile doesn't exist
-                        SELECT 'Profile with ID ' + CAST(@ProfileID AS NVARCHAR(100));
-                        RETURN;
-                    END
-
-                SELECT AccessLevelID FROM tbl_Profile WHERE @ProfileID = ProfileID
-
-            END;
-
-        CREATE OR ALTER PROCEDURE create_login
-                @profileID int,
-                @password NVARCHAR(100)
-
-            AS
-
-            BEGIN
-
-                INSERT INTO tbl_Login(ProfileID,LoginPassword) VALUES (@profileID,@password)
-
-            END;
-
+END;
 -- Create Login and passwords
                 CREATE LOGIN LoginProfile WITH PASSWORD = 'Login123456!';
                 CREATE LOGIN UserProfile WITH PASSWORD = 'User123456!';
@@ -944,9 +731,10 @@ END;
 --Add Privileges to different Database-logins.
                 GRANT EXECUTE ON dbo.get_access_level_from_id TO loginscreen; --this is the right example.
                 GRANT EXECUTE ON dbo.create_new_profile TO loginscreen; --this is the right example.
-                GRANT SELECT TO loginscreen;
+                GRANT EXECUTE ON dbo.create_login TO loginscreen;
+                GRANT SELECT ON SCHEMA::dbo TO loginscreen;
 
-                GRANT ALL TO ApplicationUser; --this should not have "ALL" privileges, every create/delete and update should be in a stored procedure.
+                GRANT SELECT,UPDATE,INSERT,DELETE,EXECUTE ON SCHEMA::dbo TO ApplicationUser; --this should not have "ALL" privileges, every create/delete and update should be in a stored procedure.
                 GRANT ALL TO HumanResource; --to be determined later
                 GRANT ALL TO SystemAdmin; --to be determined later
 

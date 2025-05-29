@@ -52,7 +52,8 @@ public class ReportDB implements ReportDBInterface {
             ps.setInt(1, profileIDOfReporter);
             ps.setInt(2, profileIDOfReported);
             try (ResultSet rs = ps.executeQuery()) {
-                return rs.next();
+                boolean exists = rs.next();
+                return exists;
             }
         }catch (Exception e){
             e.printStackTrace();

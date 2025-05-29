@@ -189,7 +189,7 @@ public class UserTabMessages extends UpdatableTab {
 
                 Button openChatButton = new Button("Chat  📝");
                 openChatButton.setOnAction(event -> {
-                    openChat(MainSceneController.getCurrentProfile(), receiverProfile);
+                    openChat(MainSceneController.getCurrentProfile(), matchingProfile);
                 });
                 gridPane.add(openChatButton, 2, 0);
 
@@ -197,17 +197,14 @@ public class UserTabMessages extends UpdatableTab {
                 Button reportButton = new Button("Report❗");
                 reportButton.setStyle("-fx-text-fill: red;");
                 reportButton.setOnAction(event -> {
-                    reportUser(MainSceneController.getCurrentProfile().getProfileID(), receiverProfile.getProfileID());
+                    reportUser(MainSceneController.getCurrentProfile().getProfileID(), matchingProfile.getProfileID());
                 });
                 gridPane.add(reportButton, 2, 1);
 
                 gridPane.autosize();
                 matchingProfilesHBoxes.add(gridPane);
             }
-
             newContactBox.getChildren().addAll(matchingProfilesHBoxes);
-
-
     }
 
     /**
@@ -223,7 +220,7 @@ public class UserTabMessages extends UpdatableTab {
         VBox newestProfileVBox = new VBox();
         //does nothing if there is no messages at all.
         for (Message message : receivedMessages) {
-            if (reportDB.checkIfReportExistsBetweenUsers(message.getSenderID(), message.getReceiverID()) == false) {
+            if (!reportDB.checkIfReportExistsBetweenUsers(message.getReceiverID(), message.getSenderID())) {
                 Profile senderProfile = profileDB.getProfileFromID(message.getSenderID());
 
                 GridPane gridPane = new GridPane();
@@ -240,7 +237,7 @@ public class UserTabMessages extends UpdatableTab {
 
                 Button openChatButton = new Button("Chat  📝");
                 openChatButton.setOnAction(event -> {
-                    openChat(MainSceneController.getCurrentProfile(), receiverProfile);
+                    openChat(MainSceneController.getCurrentProfile(), senderProfile);
                 });
                 gridPane.add(openChatButton, 2, 0);
 
@@ -248,7 +245,7 @@ public class UserTabMessages extends UpdatableTab {
                 Button reportButton = new Button("Report❗");
                 reportButton.setStyle("-fx-text-fill: red;");
                 reportButton.setOnAction(event -> {
-                    reportUser(MainSceneController.getCurrentProfile().getProfileID(), receiverProfile.getProfileID());
+                    reportUser(MainSceneController.getCurrentProfile().getProfileID(), senderProfile.getProfileID());
                 });
                 gridPane.add(reportButton, 2, 1);
 
@@ -256,8 +253,8 @@ public class UserTabMessages extends UpdatableTab {
 
                 newestProfileVBox.getChildren().add(gridPane);
             }
-            lastmessageBox.getChildren().addAll(newestProfileVBox);
         }
+        lastmessageBox.getChildren().addAll(newestProfileVBox);
     }
 
     /**
@@ -272,7 +269,7 @@ public class UserTabMessages extends UpdatableTab {
         ProfileDBInterface profileDB = new ProfileDB();
         ReportDBInterface reportDB = new ReportDB();
         for (Message message : answeredMessages) {
-            if(reportDB.checkIfReportExistsBetweenUsers(message.getSenderID(), message.getReceiverID())==false){
+            if(!reportDB.checkIfReportExistsBetweenUsers(message.getSenderID(), message.getReceiverID())){
             Profile receiverProfile = profileDB.getProfileFromID(message.getReceiverID());
 
             GridPane gridPane = new GridPane();
@@ -299,10 +296,9 @@ public class UserTabMessages extends UpdatableTab {
 
             gridPane.autosize();
             matchingProfilesHBoxes.add(gridPane);
+            }
         }
         oldChatBox.getChildren().addAll(matchingProfilesHBoxes);
-        }
-
     }
 
     /**

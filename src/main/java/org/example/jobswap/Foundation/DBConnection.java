@@ -63,11 +63,11 @@ public class DBConnection {
         public static void ChangeAccessLevelOnDatabase(AccessLevel accessLevel) {
 
             switch (accessLevel) {
-                case EMPLOYEE: USERNAME = "UserProfile"; PASSWORD = "user1234";
+                case EMPLOYEE: USERNAME = "UserProfile"; PASSWORD = "user123456!";
                     System.out.println("LOGIN EMPLOYEE DATABASE!" + accessLevel + USERNAME + PASSWORD);
                 break;
-                case HR: USERNAME = "HRProfile"; PASSWORD = "hr1234"; break;
-                case SYSADMIN: USERNAME = "SAProfile"; PASSWORD = "sa1234"; break;
+                case HR: USERNAME = "HRProfile"; PASSWORD = "hr123456!"; break;
+                case SYSADMIN: USERNAME = "SAProfile"; PASSWORD = "sa123456!"; break;
                 default: break;
             }
             if (conn != null){

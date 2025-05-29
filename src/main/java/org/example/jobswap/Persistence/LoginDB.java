@@ -67,7 +67,7 @@ public class LoginDB implements LoginDBInterface {
      * @param password the password the user has choosen
      */
     public void addLoginToDataBase(int profileID, String password){
-        String query = "INSERT INTO tbl_Login VALUES (?,?)";
+        String query = "{call create_login(?,?)}";
         try(Connection connection = DBConnection.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query);) {
             preparedStatement.setInt(1, profileID);

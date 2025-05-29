@@ -905,6 +905,18 @@ END;
 
             END;
 
+        CREATE OR ALTER PROCEDURE create_login
+                @profileID int,
+                @password NVARCHAR(100)
+
+            AS
+
+            BEGIN
+
+                INSERT INTO tbl_Login(ProfileID,LoginPassword) VALUES (@profileID,@password)
+
+            END;
+
 -- Create Login and passwords
                 CREATE LOGIN LoginProfile WITH PASSWORD = 'Login123456!';
                 CREATE LOGIN UserProfile WITH PASSWORD = 'User123456!';

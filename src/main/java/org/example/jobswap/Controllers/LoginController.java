@@ -70,7 +70,8 @@ public class LoginController {
 
     /**
      * {@code ButtonEvent} that shifts scene if credentials are correct else it shows {@code Alert}, and add to a wrongIDcounter
-     * if counter hits 5, update the {@link Profile} with the tried ID to "isLocked = true"
+     * if counter hits 5, update the {@link Profile} with the tried ID to "isLocked = true".
+     * Before logging in, update the Username and Password of the Database login, based on the AccesLevel of the profile.
      * @param event click on a {@link Button}
      */
     public void login(ActionEvent event){

@@ -38,8 +38,14 @@ public class JobswapApplication extends Application {
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Login");
         //adds icon
-        Image icon = new Image(getClass().getResource("/org/example/jobswap/JobSwapIcon.png").toExternalForm());
-        stage.getIcons().add(icon);
+        try {
+            Image icon = new Image(getClass().getResource("/org/example/jobswap/JobSwapIcon.png").toExternalForm());
+            stage.getIcons().add(icon);
+        }
+        catch (NullPointerException e) {
+            System.out.println("Image not found");
+        }
+
         stage.setScene(scene);
         stage.show();
     }

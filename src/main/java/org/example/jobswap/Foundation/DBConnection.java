@@ -12,7 +12,7 @@ public class DBConnection {
 
         private static final String URL = "jdbc:sqlserver://localhost;databaseName=Danfoss Jobswap DB";
         private static  String USERNAME = "LoginProfile";
-        private static  String PASSWORD = "login1234";
+        private static  String PASSWORD = "Login123456!";
         private static Connection conn;
 
         /**
@@ -40,18 +40,21 @@ public class DBConnection {
                     System.out.println("Failed to connect to database.");
                 }
             }
-
-            try {
-                if (conn.isClosed())
-                {
-                    conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-                }
-            }
-            catch (Exception e)
+            else
             {
-                System.out.println("Failed to connect to database.");
-                e.printStackTrace();
-                System.out.println(e.getMessage());
+                try {
+                    if (conn.isClosed())
+                    {
+                        conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+                    }
+                }
+                catch (Exception e)
+                {
+                    System.out.println("Failed to connect to database.");
+                    e.printStackTrace();
+                    System.out.println(e.getMessage());
+                    System.exit(0);
+                }
             }
 
             return conn;
@@ -63,11 +66,11 @@ public class DBConnection {
         public static void ChangeAccessLevelOnDatabase(AccessLevel accessLevel) {
 
             switch (accessLevel) {
-                case EMPLOYEE: USERNAME = "UserProfile"; PASSWORD = "user123456!";
+                case EMPLOYEE: USERNAME = "UserProfile"; PASSWORD = "User123456!";
                     System.out.println("LOGIN EMPLOYEE DATABASE!" + accessLevel + USERNAME + PASSWORD);
                 break;
-                case HR: USERNAME = "HRProfile"; PASSWORD = "hr123456!"; break;
-                case SYSADMIN: USERNAME = "SAProfile"; PASSWORD = "sa123456!"; break;
+                case HR: USERNAME = "HRProfile"; PASSWORD = "Hr123456!"; break;
+                case SYSADMIN: USERNAME = "SAProfile"; PASSWORD = "Sa123456!"; break;
                 default: break;
             }
             if (conn != null){

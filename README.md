@@ -906,10 +906,10 @@ END;
             END;
 
 -- Create Login and passwords
-                CREATE LOGIN LoginProfile WITH PASSWORD = 'login1234';
-                CREATE LOGIN UserProfile WITH PASSWORD = 'user1234';
-                CREATE LOGIN HRProfile WITH PASSWORD = 'hr1234';
-                CREATE LOGIN SAProfile WITH PASSWORD = 'sa1234';
+                CREATE LOGIN LoginProfile WITH PASSWORD = 'Login123456!';
+                CREATE LOGIN UserProfile WITH PASSWORD = 'User123456!';
+                CREATE LOGIN HRProfile WITH PASSWORD = 'Hr123456!';
+                CREATE LOGIN SAProfile WITH PASSWORD = 'Sa123456!';
 
 --add logins to a Danfoss Database
                 CREATE USER LoginProfile FOR LOGIN LoginProfile;
@@ -931,12 +931,10 @@ END;
 
 --Add Privileges to different Database-logins.
                 GRANT EXECUTE ON dbo.get_access_level_from_id TO loginscreen; --this is the right example.
-                GRANT EXCUTE ON dbo.create_new_profile TO loginscreen; --this is the right example.
+                GRANT EXECUTE ON dbo.create_new_profile TO loginscreen; --this is the right example.
 
                 GRANT ALL TO ApplicationUser; --this should not have "ALL" privileges, every create/delete and update should be in a stored procedure.
                 GRANT ALL TO HumanResource; --to be determined later
                 GRANT ALL TO SystemAdmin; --to be determined later
-
-    
 
 ```

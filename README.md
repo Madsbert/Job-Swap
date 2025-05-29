@@ -932,6 +932,7 @@ END;
 --Add Privileges to different Database-logins.
                 GRANT EXECUTE ON dbo.get_access_level_from_id TO loginscreen; --this is the right example.
                 GRANT EXECUTE ON dbo.create_new_profile TO loginscreen; --this is the right example.
+                GRANT SELECT TO loginscreen;
 
                 GRANT ALL TO ApplicationUser; --this should not have "ALL" privileges, every create/delete and update should be in a stored procedure.
                 GRANT ALL TO HumanResource; --to be determined later

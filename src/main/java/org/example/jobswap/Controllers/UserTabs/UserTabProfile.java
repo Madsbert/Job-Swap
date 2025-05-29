@@ -108,6 +108,7 @@ public class UserTabProfile extends UpdatableTab {
             changedProfile.setJobTitle(jobTitleField.getText());
             changedProfile.setDescription(jobDescriptionField.getText());
             changedProfile.setActivelySeeking(activeCheckBox.isSelected());
+            changedProfile.setUsername(usernameField.getText());
 
             System.out.println("Profile Diff: " + !changedProfile.equals(MainSceneController.getCurrentProfile()));
             if (!changedProfile.equals(MainSceneController.getCurrentProfile())) {

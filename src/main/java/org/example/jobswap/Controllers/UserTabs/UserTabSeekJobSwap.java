@@ -115,6 +115,11 @@ public class UserTabSeekJobSwap extends UpdatableTab {
         List<GridPane> matchingProfilesHBoxes = new ArrayList<>();
 
         for (Profile profile : matchingProfiles) {
+            if (profile.getProfileID() == MainSceneController.getCurrentProfile().getProfileID())
+            {
+                continue;
+            }
+
             GridPane gridPane = new GridPane();
             gridPane.setHgap(150);
             gridPane.setVgap(5);

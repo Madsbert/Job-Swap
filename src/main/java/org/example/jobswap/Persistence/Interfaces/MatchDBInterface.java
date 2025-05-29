@@ -19,10 +19,7 @@ public interface MatchDBInterface {
     void confirmJobswap(int matchID);
 
     Match getMatchFromProfileIDs(int ownerProfileID, int otherProfile);
-
-    public boolean updateMatch(Match match);
-
-    public boolean deleteMatch(int ownerProfileID, int otherProfile);
-
+    boolean updateMatch(Match match);
+    boolean deleteMatch(int ownerProfileID, int otherProfile);
     List<Profile> seekAllPossibleProfileMatches(int profileID, String wantedDepartment);
 }

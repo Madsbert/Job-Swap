@@ -5,6 +5,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.example.jobswap.Model.Profile;
 import org.example.jobswap.Persistence.DepartmentDB;
+import org.example.jobswap.Persistence.Interfaces.DepartmentDBInterface;
+import org.example.jobswap.Persistence.Interfaces.JobCategoryDBInterface;
 import org.example.jobswap.Persistence.Interfaces.LoginDBInterface;
 import org.example.jobswap.Persistence.Interfaces.ProfileDBInterface;
 import org.example.jobswap.Persistence.JobCategoryDB;
@@ -120,8 +122,9 @@ public class NewProfileController {
      */
     public void setupDepartmentChoiceBox(){
         ArrayList<String> departments = new ArrayList<>();
+        DepartmentDBInterface departmentDB= new DepartmentDB();
 
-        for (org.example.jobswap.Model.Department department : DepartmentDB.getDepartments())
+        for (org.example.jobswap.Model.Department department : departmentDB.getDepartments())
         {
             departments.add(department.getDepartmentName());
         }
@@ -133,7 +136,9 @@ public class NewProfileController {
      * Setups the JobCategory ChoiceBox, and auto selects the first option.
      */
     public void setupJobCategoryChoiceBox(){
-        List<String> jobCategories = JobCategoryDB.getCategories();
+        JobCategoryDBInterface jobCategoryDB= new JobCategoryDB();
+
+        List<String> jobCategories = jobCategoryDB.getCategories();
         jobCategoryChoiceBox.getItems().addAll(jobCategories);
         jobCategoryChoiceBox.getSelectionModel().selectFirst();
     }

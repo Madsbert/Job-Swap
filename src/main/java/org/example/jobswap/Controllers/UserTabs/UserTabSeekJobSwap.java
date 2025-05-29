@@ -13,6 +13,7 @@ import org.example.jobswap.Controllers.MainSceneController;
 import org.example.jobswap.Controllers.UpdatableTab;
 import org.example.jobswap.Model.*;
 import org.example.jobswap.Persistence.DepartmentDB;
+import org.example.jobswap.Persistence.Interfaces.DepartmentDBInterface;
 import org.example.jobswap.Persistence.Interfaces.MatchDBInterface;
 import org.example.jobswap.Persistence.MatchDB;
 import org.example.jobswap.Service.BorderedVBox;
@@ -72,9 +73,10 @@ public class UserTabSeekJobSwap extends UpdatableTab {
         label.setStyle("-fx-padding: 0 0 0 10;");
         departmentBox.getChildren().add(label);
 
-
         ArrayList<String> departments = new ArrayList<>();
-        for (Department department : DepartmentDB.getDepartments())
+        DepartmentDBInterface departmentDB = new DepartmentDB();
+
+        for (Department department : departmentDB.getDepartments())
         {
             if (MainSceneController.getCurrentProfile().getDepartment().equals(department.getDepartmentName()))
             {
@@ -105,7 +107,9 @@ public class UserTabSeekJobSwap extends UpdatableTab {
 
         String selectedDepartment = departmentChoiceBox.getSelectionModel().getSelectedItem().substring(0, departmentChoiceBox.getSelectionModel().getSelectedItem().indexOf(","));
 
-        List<Profile> matchingProfiles = MatchDB.seekAllPossibleProfileMatches(MainSceneController.getCurrentProfile().getProfileID(),
+        MatchDBInterface matchDB = new MatchDB();
+
+        List<Profile> matchingProfiles = matchDB.seekAllPossibleProfileMatches(MainSceneController.getCurrentProfile().getProfileID(),
                 selectedDepartment);
 
         List<GridPane> matchingProfilesHBoxes = new ArrayList<>();

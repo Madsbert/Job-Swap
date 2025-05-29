@@ -19,7 +19,7 @@ public class DepartmentDB implements DepartmentDBInterface {
      * Returns a {@link List} containing all {@link Department} in the Database.
      * @return {@link List} of {@link Department} Objects.
      */
-    public static List<Department> getDepartments()
+    public List<Department> getDepartments()
     {
         String query = "select * from tbl_department";
 
@@ -49,17 +49,17 @@ public class DepartmentDB implements DepartmentDBInterface {
         return departments;
     }
 
-    public static void createDepartment(Department department)
+    public void createDepartment(Department department)
     {
         // Not implemented
     }
 
-    public static void deleteDepartment(int departmentID)
+    public void deleteDepartment(int departmentID)
     {
         // Not implemented
     }
 
-    public static Department getDepartmentFromUserID(int profileID)
+    public Department getDepartmentFromUserID(int profileID)
     {
         return null;
     }

@@ -94,23 +94,24 @@ public final class UserTabMatches extends UpdatableTab {
         allMatches=matchDB.getProfileMatches(currentProfileID);
 
         for (Match match : allMatches) {
+
+            Profile ownerProfile = match.getOwnerProfile();
+            Profile otherProfile = match.getOtherProfile();
+
             if (match.getMatchState()== MatchState.BOTH_INTERESTED){
-                if(match.getOwnerProfile().getProfileID()==currentProfileID) {
-                    this.bothProfiles.add(match.getOtherProfile());
-                }else{
-                    this.bothProfiles.add(match.getOwnerProfile());
-                }
+                this.bothProfiles.add(ownerProfile.getProfileID() == currentProfileID ? otherProfile : ownerProfile);
+
             }else if(match.getMatchState()==MatchState.MATCH) {
-                if (match.getOtherProfile().getProfileID() == currentProfileID) {
-                    this.match = match.getOwnerProfile();
-                } else {
-                    this.match = match.getOtherProfile();
-                }
+                this.match = (otherProfile.getProfileID() == currentProfileID ? otherProfile : ownerProfile);
+                
             }else if(match.getOwnerProfile().getProfileID()==currentProfileID
                     && (match.getMatchState()==MatchState.APPLICATION||match.getMatchState()==MatchState.REQUESTED)){
+
                 this.applicationProfiles.add(match.getOtherProfile());
+
             }else if (match.getOtherProfile().getProfileID()==currentProfileID
                     && (match.getMatchState()==MatchState.APPLICATION||match.getMatchState()==MatchState.REQUESTED)){
+
                 this.requestProfiles.add(match.getOwnerProfile());
             }
         }

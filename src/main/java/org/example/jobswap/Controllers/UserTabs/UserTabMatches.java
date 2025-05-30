@@ -15,6 +15,7 @@ import org.example.jobswap.Persistence.Interfaces.MatchDBInterface;
 import org.example.jobswap.Persistence.MatchDB;
 import org.example.jobswap.Service.BorderedVBox;
 import org.example.jobswap.Service.Header;
+import org.example.jobswap.Service.WrapTextLabel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -150,16 +151,25 @@ public final class UserTabMatches extends UpdatableTab {
             List<GridPane> matchingProfilesHBoxes = new ArrayList<>();
             for (Profile profile : this.requestProfiles) {
                 GridPane gridPane = new GridPane();
-                gridPane.setHgap(150);
+
+                ColumnConstraints col1 = new ColumnConstraints();
+                col1.setPercentWidth(25);
+                ColumnConstraints col2 = new ColumnConstraints();
+                col2.setPercentWidth(50);
+                ColumnConstraints col3 = new ColumnConstraints();
+                col3.setPercentWidth(25);
+                gridPane.getColumnConstraints().addAll(col1, col2, col3);
+
+                gridPane.setHgap(100);
                 gridPane.setVgap(5);
                 gridPane.setPrefSize(Screen.getPrimary().getBounds().getWidth(), 40);
                 gridPane.setStyle("-fx-background-color: #fff; -fx-border-color: #da291c; -fx-border-width: 1.5;");
 
-                gridPane.setPadding(new Insets(25, 25, 25, 25));
-                gridPane.add(new Label("Username: " + profile.getUsername()), 0, 0);
-                gridPane.add(new Label("Department: " + profile.getDepartment()), 0, 1);
-                gridPane.add(new Label("Job Titel: " + profile.getJobTitle()), 1, 0);
-                gridPane.add(new Label("Job Description: " + profile.getJobDescription()), 1, 1);
+                gridPane.setPadding(new Insets(20, 20, 20, 20));
+                gridPane.add(new WrapTextLabel("Username: " + profile.getUsername()), 0, 0);
+                gridPane.add(new WrapTextLabel("Department: " + profile.getDepartment()), 0, 1);
+                gridPane.add(new WrapTextLabel("Job Titel: " + profile.getJobTitle()), 1, 0);
+                gridPane.add(new WrapTextLabel("Job Description: " + profile.getJobDescription()), 1, 1);
                 Button iAmInterestedTooButton = new Button("I'm interested too");
                 iAmInterestedTooButton.setOnAction(event -> {iAmInterestedToo(currentProfileID,profile.getProfileID());});
                 gridPane.add(iAmInterestedTooButton, 2, 0);
@@ -185,16 +195,22 @@ public final class UserTabMatches extends UpdatableTab {
             List<GridPane> matchingProfilesHBoxes = new ArrayList<>();
             for (Profile profile : this.applicationProfiles) {
                 GridPane gridPane = new GridPane();
+                ColumnConstraints col1 = new ColumnConstraints();
+                col1.setPercentWidth(25);
+                ColumnConstraints col2 = new ColumnConstraints();
+                col2.setPercentWidth(75);
+                gridPane.getColumnConstraints().addAll(col1, col2);
+
                 gridPane.setHgap(150);
                 gridPane.setVgap(5);
                 gridPane.setPrefSize(Screen.getPrimary().getBounds().getWidth(), 40);
                 gridPane.setStyle("-fx-background-color: #fff; -fx-border-color: #da291c; -fx-border-width: 1.5;");
 
                 gridPane.setPadding(new Insets(25, 25, 25, 25));
-                gridPane.add(new Label("Username: " + profile.getUsername()), 0, 0);
-                gridPane.add(new Label("Department: " + profile.getDepartment()), 0, 1);
-                gridPane.add(new Label("Job Titel: " + profile.getJobTitle()), 1, 0);
-                gridPane.add(new Label("Job Description: " + profile.getJobDescription()), 1, 1);
+                gridPane.add(new WrapTextLabel("Username: " + profile.getUsername()), 0, 0);
+                gridPane.add(new WrapTextLabel("Department: " + profile.getDepartment()), 0, 1);
+                gridPane.add(new WrapTextLabel("Job Titel: " + profile.getJobTitle()), 1, 0);
+                gridPane.add(new WrapTextLabel("Job Description: " + profile.getJobDescription()), 1, 1);
 
                 gridPane.autosize();
                 matchingProfilesHBoxes.add(gridPane);
@@ -212,16 +228,24 @@ public final class UserTabMatches extends UpdatableTab {
 
             for (Profile profile : this.bothProfiles) {
                 GridPane gridPane = new GridPane();
-                gridPane.setHgap(150);
+                ColumnConstraints col1 = new ColumnConstraints();
+                col1.setPercentWidth(25);
+                ColumnConstraints col2 = new ColumnConstraints();
+                col2.setPercentWidth(50);
+                ColumnConstraints col3 = new ColumnConstraints();
+                col3.setPercentWidth(15);
+                gridPane.getColumnConstraints().addAll(col1, col2, col3);
+
+                gridPane.setHgap(100);
                 gridPane.setVgap(5);
                 gridPane.setPrefSize(Screen.getPrimary().getBounds().getWidth(), 40);
                 gridPane.setStyle("-fx-background-color: #fff; -fx-border-color: #da291c; -fx-border-width: 1.5;");
 
-                gridPane.setPadding(new Insets(25, 25, 25, 25));
-                gridPane.add(new Label("Username: " + profile.getUsername()), 0, 0);
-                gridPane.add(new Label("Department: " + profile.getDepartment()), 0, 1);
-                gridPane.add(new Label("Job Titel: " + profile.getJobTitle()), 1, 0);
-                gridPane.add(new Label("Job Description: " + profile.getJobDescription()), 1, 1);
+                gridPane.setPadding(new Insets(20, 20, 20, 20));
+                gridPane.add(new WrapTextLabel("Username: " + profile.getUsername()), 0, 0);
+                gridPane.add(new WrapTextLabel("Department: " + profile.getDepartment()), 0, 1);
+                gridPane.add(new WrapTextLabel("Job Titel: " + profile.getJobTitle()), 1, 0);
+                gridPane.add(new WrapTextLabel("Job Description: " + profile.getJobDescription()), 1, 1);
 
                 Button acceptMatchButton = new Button("Accept Match");
                 acceptMatchButton.setOnAction(event -> {

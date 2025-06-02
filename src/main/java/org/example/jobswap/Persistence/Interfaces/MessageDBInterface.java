@@ -6,10 +6,11 @@ import org.example.jobswap.Model.Profile;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface MessageDBInterface {
     void createMessage(Message message);
     List<Message> getMessages(int userId, int otherId);
-    HashMap<Integer,Integer> allChatsOfProfile(int LoggedInProfileID);
+    Map<Integer,Integer> allChatsOfProfile(int LoggedInProfileID);
     Message newestMessageByLoggedInProfile(int LoggedInProfileID);
 }

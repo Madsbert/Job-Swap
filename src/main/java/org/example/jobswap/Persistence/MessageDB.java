@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class to handle database querys and stored procedures of {@link Message}
@@ -44,14 +45,14 @@ public class MessageDB implements MessageDBInterface {
      * @param LoggedInProfileID the id of the logged in {@link Profile}
      * @return a Hashmap of the {@link Profile}IDs
      */
-    public HashMap<Integer,Integer> allChatsOfProfile(int LoggedInProfileID) {
+    public Map<Integer,Integer> allChatsOfProfile(int LoggedInProfileID) {
         String preparedStatement = "SELECT * FROM tbl_Message WHERE ProfileIDOfSender = ? OR ProfileIDOfReceiver = ?";
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(preparedStatement);) {
             ps.setInt(1, LoggedInProfileID);
             ps.setInt(2, LoggedInProfileID);
             ResultSet rs = ps.executeQuery();
-            HashMap<Integer,Integer> profileIDs = new HashMap();
+            Map<Integer,Integer> profileIDs = new HashMap();
             while (rs.next()) {
                 profileIDs.put(rs.getInt("ProfileIDOfSender"),
                        rs.getInt("ProfileIDOfReceiver"));

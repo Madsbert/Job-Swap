@@ -1,7 +1,6 @@
 package org.example.jobswap.Foundation;
 
 import org.example.jobswap.Model.AccessLevel;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 
@@ -11,8 +10,8 @@ import java.sql.DriverManager;
 public class DBConnection {
 
         private static final String URL = "jdbc:sqlserver://localhost;databaseName=Danfoss Jobswap DB";
-        private static  String USERNAME = "LoginProfile";
-        private static  String PASSWORD = "Login123456!";
+        private static String USERNAME = "LoginProfile";
+        private static String PASSWORD = "Login123456!";
         private static Connection conn;
 
         /**
@@ -65,9 +64,7 @@ public class DBConnection {
         public static void ChangeAccessLevelOnDatabase(AccessLevel accessLevel) {
 
             switch (accessLevel) {
-                case EMPLOYEE: USERNAME = "UserProfile"; PASSWORD = "User123456!";
-                    System.out.println("LOGIN EMPLOYEE DATABASE!" + accessLevel + USERNAME + PASSWORD);
-                break;
+                case EMPLOYEE: USERNAME = "UserProfile"; PASSWORD = "User123456!";break;
                 case HR: USERNAME = "HRProfile"; PASSWORD = "Hr123456!"; break;
                 case SYSADMIN: USERNAME = "SAProfile"; PASSWORD = "Sa123456!"; break;
                 default: break;

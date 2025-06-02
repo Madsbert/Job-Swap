@@ -26,6 +26,7 @@ import org.example.jobswap.Persistence.ProfileDB;
 import org.example.jobswap.Persistence.ReportDB;
 import org.example.jobswap.Service.BorderedVBox;
 import org.example.jobswap.Service.Header;
+import org.example.jobswap.Service.WrapTextLabel;
 
 
 import java.util.*;
@@ -177,16 +178,25 @@ public class UserTabMessages extends UpdatableTab {
 
         for (Profile matchingProfile : matchingProfiles) {
                 GridPane gridPane = new GridPane();
+
+                ColumnConstraints col1 = new ColumnConstraints();
+                col1.setPercentWidth(25);
+                ColumnConstraints col2 = new ColumnConstraints();
+                col2.setPercentWidth(60);
+                ColumnConstraints col3 = new ColumnConstraints();
+                col3.setPercentWidth(15);
+                gridPane.getColumnConstraints().addAll(col1, col2, col3);
+
                 gridPane.setHgap(80);
                 gridPane.setVgap(5);
                 gridPane.setPrefSize(Screen.getPrimary().getBounds().getWidth(), 40);
                 gridPane.setStyle("-fx-background-color: #fff; -fx-border-color: #da291c; -fx-border-width: 1.5;");
 
-                gridPane.setPadding(new Insets(25, 25, 25, 25));
-                gridPane.add(new Label("Username: " + matchingProfile.getUsername()), 0, 0);
-                gridPane.add(new Label("Department: " + matchingProfile.getDepartment()), 0, 1);
-                gridPane.add(new Label("Job Titel: " + matchingProfile.getJobTitle()), 1, 0);
-                gridPane.add(new Label("Job Description: " + matchingProfile.getJobDescription()), 1, 1);
+                gridPane.setPadding(new Insets(20, 20, 20, 20));
+                gridPane.add(new WrapTextLabel("Username: " + matchingProfile.getUsername()), 0, 0);
+                gridPane.add(new WrapTextLabel("Department: " + matchingProfile.getDepartment()), 0, 1);
+                gridPane.add(new WrapTextLabel("Job Titel: " + matchingProfile.getJobTitle()), 1, 0);
+                gridPane.add(new WrapTextLabel("Job Description: " + matchingProfile.getJobDescription()), 1, 1);
 
                 Button openChatButton = new Button("Chat  📝");
                 openChatButton.setOnAction(event -> {
@@ -225,16 +235,25 @@ public class UserTabMessages extends UpdatableTab {
                 Profile senderProfile = profileDB.getProfileFromID(message.getSenderID());
 
                 GridPane gridPane = new GridPane();
+
+                ColumnConstraints col1 = new ColumnConstraints();
+                col1.setPercentWidth(25);
+                ColumnConstraints col2 = new ColumnConstraints();
+                col2.setPercentWidth(60);
+                ColumnConstraints col3 = new ColumnConstraints();
+                col3.setPercentWidth(15);
+                gridPane.getColumnConstraints().addAll(col1, col2, col3);
+
                 gridPane.setHgap(80);
                 gridPane.setVgap(5);
                 gridPane.setPrefSize(Screen.getPrimary().getBounds().getWidth(), 40);
                 gridPane.setStyle("-fx-background-color: #fff; -fx-border-color: #da291c; -fx-border-width: 1.5;");
 
-                gridPane.setPadding(new Insets(25, 25, 25, 25));
-                gridPane.add(new Label("Username: " + senderProfile.getUsername()), 0, 0);
-                gridPane.add(new Label("Department: " + senderProfile.getDepartment()), 0, 1);
-                gridPane.add(new Label("Job Titel: " + senderProfile.getJobTitle()), 1, 0);
-                gridPane.add(new Label("Job Description: " + senderProfile.getJobDescription()), 1, 1);
+                gridPane.setPadding(new Insets(20, 20, 20, 20));
+                gridPane.add(new WrapTextLabel("Username: " + senderProfile.getUsername()), 0, 0);
+                gridPane.add(new WrapTextLabel("Department: " + senderProfile.getDepartment()), 0, 1);
+                gridPane.add(new WrapTextLabel("Job Titel: " + senderProfile.getJobTitle()), 1, 0);
+                gridPane.add(new WrapTextLabel("Job Description: " + senderProfile.getJobDescription()), 1, 1);
 
                 Button openChatButton = new Button("Chat  📝");
                 openChatButton.setOnAction(event -> {
@@ -272,18 +291,27 @@ public class UserTabMessages extends UpdatableTab {
         for (Message message : answeredMessages) {
             if(!reportDB.checkIfReportExistsBetweenUsers(message.getSenderID(), message.getReceiverID())){
             Profile receiverProfile = profileDB.getProfileFromID(message.getReceiverID());
-
             GridPane gridPane = new GridPane();
+
+            ColumnConstraints col1 = new ColumnConstraints();
+            col1.setPercentWidth(25);
+            ColumnConstraints col2 = new ColumnConstraints();
+            col2.setPercentWidth(60);
+            ColumnConstraints col3 = new ColumnConstraints();
+            col3.setPercentWidth(15);
+            gridPane.getColumnConstraints().addAll(col1, col2, col3);
+
+
             gridPane.setHgap(80);
             gridPane.setVgap(5);
             gridPane.setPrefSize(Screen.getPrimary().getBounds().getWidth(), 40);
             gridPane.setStyle("-fx-background-color: #fff; -fx-border-color: #da291c; -fx-border-width: 1.5;");
 
-            gridPane.setPadding(new Insets(25, 25, 25, 25));
-            gridPane.add(new Label("Username: " + receiverProfile.getUsername()), 0, 0);
-            gridPane.add(new Label("Department: " + receiverProfile.getDepartment()), 0, 1);
-            gridPane.add(new Label("Job Titel: " + receiverProfile.getJobTitle()), 1, 0);
-            gridPane.add(new Label("Job Description: " + receiverProfile.getJobDescription()), 1, 1);
+            gridPane.setPadding(new Insets(20, 20, 20, 20));
+            gridPane.add(new WrapTextLabel("Username: " + receiverProfile.getUsername()), 0, 0);
+            gridPane.add(new WrapTextLabel("Department: " + receiverProfile.getDepartment()), 0, 1);
+            gridPane.add(new WrapTextLabel("Job Titel: " + receiverProfile.getJobTitle()), 1, 0);
+            gridPane.add(new WrapTextLabel("Job Description: " + receiverProfile.getJobDescription()), 1, 1);
 
             Button openChatButton = new Button("Chat  📝");
             openChatButton.setOnAction(event -> {openChat(MainSceneController.getCurrentProfile(), receiverProfile);});

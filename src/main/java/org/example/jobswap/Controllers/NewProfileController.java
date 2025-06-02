@@ -15,7 +15,6 @@ import org.example.jobswap.Persistence.ProfileDB;
 import org.example.jobswap.Service.PasswordEncrypter;
 import org.example.jobswap.Service.SceneService;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -182,7 +181,7 @@ public class NewProfileController {
      * is called from the Cancel {@link Button}, saves nothing, and returns to the loginScene.
      * @param actionEvent a {@link Button} click
      */
-    public void Cancel(ActionEvent actionEvent){
+    public void cancel(ActionEvent actionEvent){
         try {
             SceneService.shiftScene(actionEvent,"Login Screen","/org/example/jobswap/Login.fxml");
         }catch (Exception e){

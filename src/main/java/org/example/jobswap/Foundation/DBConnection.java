@@ -61,7 +61,11 @@ public class DBConnection {
         private DBConnection() {
         }
 
-        public static void ChangeAccessLevelOnDatabase(AccessLevel accessLevel) {
+    /**
+     * gives the user their acces based on their {@link AccessLevel}
+     * @param accessLevel the level the employee has
+     */
+        public static void changeAccessLevelOnDatabase(AccessLevel accessLevel) {
 
             switch (accessLevel) {
                 case EMPLOYEE: USERNAME = "UserProfile"; PASSWORD = "User123456!";break;

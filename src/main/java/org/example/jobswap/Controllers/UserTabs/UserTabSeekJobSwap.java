@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -18,6 +19,7 @@ import org.example.jobswap.Persistence.Interfaces.MatchDBInterface;
 import org.example.jobswap.Persistence.MatchDB;
 import org.example.jobswap.Service.BorderedVBox;
 import org.example.jobswap.Service.Header;
+import org.example.jobswap.Service.WrapTextLabel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,16 +123,24 @@ public class UserTabSeekJobSwap extends UpdatableTab {
             }
 
             GridPane gridPane = new GridPane();
-            gridPane.setHgap(150);
+            gridPane.setHgap(100);
             gridPane.setVgap(5);
             gridPane.setPrefSize(Screen.getPrimary().getBounds().getWidth(), 40);
             gridPane.setStyle("-fx-background-color: #fff; -fx-border-color: #da291c; -fx-border-width: 1.5;");
 
-            gridPane.setPadding(new Insets(25, 25, 25, 25));
-            gridPane.add(new Label("Username: " + profile.getUsername()), 0, 0);
-            gridPane.add(new Label("Department: " + profile.getDepartment()), 0, 1);
-            gridPane.add(new Label("Job Titel: " + profile.getJobTitle()), 1, 0);
-            gridPane.add(new Label("Job Description: " + profile.getJobDescription()), 1, 1);
+            ColumnConstraints col1 = new ColumnConstraints();
+            col1.setPercentWidth(25);
+            ColumnConstraints col2 = new ColumnConstraints();
+            col2.setPercentWidth(50);
+            ColumnConstraints col3 = new ColumnConstraints();
+            col3.setPercentWidth(15);
+            gridPane.getColumnConstraints().addAll(col1, col2, col3);
+
+            gridPane.setPadding(new Insets(20, 20, 20, 20));
+            gridPane.add(new WrapTextLabel("Username: " + profile.getUsername()), 0, 0);
+            gridPane.add(new WrapTextLabel("Department: " + profile.getDepartment()), 0, 1);
+            gridPane.add(new WrapTextLabel("Job Title: " + profile.getJobTitle()), 1, 0);
+            gridPane.add(new WrapTextLabel("Job Description: " + profile.getJobDescription()), 1, 1);
             Button applyButton = new Button("Apply for Swap");
             applyButton.setOnAction(event -> {applyForJobswap(profile);});
             gridPane.add(applyButton, 2, 1);
@@ -141,6 +151,7 @@ public class UserTabSeekJobSwap extends UpdatableTab {
 
         swapsBox.getChildren().addAll(matchingProfilesHBoxes);
     }
+
 
     /**
      * apply for the jobswap and refreshes display and database

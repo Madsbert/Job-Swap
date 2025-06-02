@@ -28,7 +28,7 @@
             <TextField fx:id="employeeIDFields" maxWidth="300.0" promptText="Enter your Employee ID" />
             <PasswordField fx:id="passwordField" maxWidth="300.0" promptText="Enter your Password" />
             <Button fx:id="loginButton" minWidth="150.0" onAction="#login" text="Log In" />
-            <Button minWidth="150.0" onAction="#SceneShiftToCreateAccount" text="Create a New Account" />
+            <Button minWidth="150.0" onAction="#sceneShiftToCreateAccount" text="Create a New Account" />
          </children>
       </VBox>
    </center>

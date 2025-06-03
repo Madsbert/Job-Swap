@@ -6,6 +6,7 @@ import org.example.jobswap.Model.Department;
 import org.example.jobswap.Model.Profile;
 import org.example.jobswap.Persistence.Interfaces.LoginDBInterface;
 
+import javax.swing.*;
 import java.sql.*;
 
 import java.sql.Connection;
@@ -51,7 +52,9 @@ public class LoginDB implements LoginDBInterface {
              PreparedStatement ps = conn.prepareStatement(query)){
             ps.setInt(1, ProfileId);
             try (ResultSet rs = ps.executeQuery()) {
-                return rs.next();
+                    boolean locked = rs.next();
+                    System.out.println("is it Locked: " + locked  );
+                    return locked;
             }
         }catch (Exception e){
             e.printStackTrace();

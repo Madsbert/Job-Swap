@@ -55,8 +55,26 @@ public class LoginController {
                 String pass = PasswordEncrypter.encrypt(passwordField.getText());
 
                 LoginDBInterface db = new LoginDB();
-                if (db.checkIsLocked(id)){
+                ProfileDBInterface profileDB = new ProfileDB();
+
+                if (profileDB.getProfileFromID(id).isLocked()) {
+                    System.out.println("The account is locked");
+                    //Error Message Popup
+                    Alert lockedAlert = new Alert(Alert.AlertType.INFORMATION);
+                    //new stage for the alert, to change the icon.
+                    Stage alertStage = (Stage) lockedAlert.getDialogPane().getScene().getWindow();
+                    alertStage.getIcons().add(new Image(getClass().getResource("/org/example/jobswap/JobSwapIcon.png").toExternalForm()));
+                    //information
+                    lockedAlert.setTitle("Locked");
+                    lockedAlert.setHeaderText("The Profile, with the ID: "+ id + ", has been locked");
+                    lockedAlert.setContentText("Please contact your local System Administrator. 📞 +45 12 34 56 67 ");
+                    lockedAlert.showAndWait();//This shows the alert
+                    return false;
+                }
+                else{
+                    System.out.println("The account is NOT locked");
                     return db.checkCredentials(id, pass);
+
                 }
             }
             return false; // Returns false if a field is blank
@@ -80,6 +98,9 @@ public class LoginController {
 
             //Update Database Username and password based on Accesslevel
             DBConnection.changeAccessLevelOnDatabase(LoginDB.getAccessLevelFromID(Integer.parseInt(employeeIDFields.getText())));
+
+
+
 
             if (!checkCredentials()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);

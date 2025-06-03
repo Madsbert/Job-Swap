@@ -40,8 +40,9 @@ public class ProfileDB implements ProfileDBInterface {
                 String jobDescription = rs.getString("JobDescription");
                 String jobCategory = rs.getString("JobCategory");
                 boolean activelySeeking = rs.getBoolean("ActivelySeeking");
+                boolean isLocked = rs.getBoolean("IsLocked");
                 profile = new Profile(accessLevel,matchProfileId, name, username, department,
-                        jobTitle, jobDescription, jobCategory, activelySeeking);
+                        jobTitle, jobDescription, jobCategory, activelySeeking, isLocked);
             }
             return profile;
         } catch (Exception e) {

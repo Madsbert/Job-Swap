@@ -300,11 +300,6 @@ public final class UserTabMatches extends UpdatableTab {
     }
 
 
-    private void sendMessage(String matchId)
-    {
-
-    }
-
     /**
      * Accepts an Interested too so the {@link Match} now have the {@link MatchState} Match
      * Or OneProfileIsReadyToMatch depending on whether the other {@link Profile} has pushed the Interested too {@code Button}

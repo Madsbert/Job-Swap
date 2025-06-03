@@ -64,7 +64,7 @@ public class ProfileDB implements ProfileDBInterface {
      */
     public void unlockProfile(int profileID)
     {
-        String query = "UPDATE tbl_Profile SET isLocked=false WHERE ProfileID = ?";
+        String query = "UPDATE tbl_Profile SET IsLocked=0 WHERE ProfileID = ?";
         Connection conn = DBConnection.getConnection();
 
         try {

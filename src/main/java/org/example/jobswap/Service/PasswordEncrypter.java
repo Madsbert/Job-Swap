@@ -18,7 +18,6 @@ public class PasswordEncrypter {
      */
     public static String encrypt(String password) {
         try {
-
             // Static getInstance method is called with hashing MD5
             MessageDigest md = MessageDigest.getInstance("MD5");
 

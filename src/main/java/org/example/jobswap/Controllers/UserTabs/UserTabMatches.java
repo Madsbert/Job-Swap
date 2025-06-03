@@ -233,7 +233,7 @@ public final class UserTabMatches extends UpdatableTab {
                 ColumnConstraints col2 = new ColumnConstraints();
                 col2.setPercentWidth(50);
                 ColumnConstraints col3 = new ColumnConstraints();
-                col3.setPercentWidth(15);
+                col3.setPercentWidth(25);
                 gridPane.getColumnConstraints().addAll(col1, col2, col3);
 
                 gridPane.setHgap(100);

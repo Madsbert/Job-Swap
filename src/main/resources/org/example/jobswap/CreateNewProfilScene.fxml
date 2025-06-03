@@ -107,7 +107,7 @@
             <!-- Buttons at the bottom -->
             <HBox alignment="CENTER" prefHeight="36.0" prefWidth="875.0" spacing="20.0" styleClass="button-bar">
                 <Button fx:id="createButton" onAction="#createProfileInDatabase" styleClass="primary-button" text="Create Profile" />
-                <Button onAction="#Cancel" styleClass="secondary-button" text="Cancel" />
+                <Button onAction="#cancel" styleClass="secondary-button" text="Cancel" />
             <rotationAxis>
                <Point3D />
             </rotationAxis>

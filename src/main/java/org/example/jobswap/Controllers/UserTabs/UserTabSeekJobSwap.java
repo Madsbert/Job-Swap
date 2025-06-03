@@ -107,7 +107,8 @@ public class UserTabSeekJobSwap extends UpdatableTab {
 
         swapsBox.getChildren().clear();
 
-        String selectedDepartment = departmentChoiceBox.getSelectionModel().getSelectedItem().substring(0, departmentChoiceBox.getSelectionModel().getSelectedItem().indexOf(","));
+        String selectedDepartment = departmentChoiceBox.getSelectionModel()
+                .getSelectedItem().substring(0, departmentChoiceBox.getSelectionModel().getSelectedItem().indexOf(","));
 
         MatchDBInterface matchDB = new MatchDB();
 
@@ -133,7 +134,7 @@ public class UserTabSeekJobSwap extends UpdatableTab {
             ColumnConstraints col2 = new ColumnConstraints();
             col2.setPercentWidth(50);
             ColumnConstraints col3 = new ColumnConstraints();
-            col3.setPercentWidth(15);
+            col3.setPercentWidth(25);
             gridPane.getColumnConstraints().addAll(col1, col2, col3);
 
             gridPane.setPadding(new Insets(20, 20, 20, 20));

@@ -30,6 +30,7 @@ import org.example.jobswap.Service.WrapTextLabel;
 
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -346,9 +347,8 @@ public class UserTabMessages extends UpdatableTab {
         chatAreaVBox.setSpacing(10);
 
         //array of messages from database between the 2 profiles
-        List<Message> AllmessagesBetweenProfiles = new ArrayList<>();
         MessageDBInterface messageDB = new MessageDB();
-        AllmessagesBetweenProfiles = messageDB.getMessages(loggedInProfile.getProfileID(),receiverProfile.getProfileID());
+        List<Message> AllmessagesBetweenProfiles = messageDB.getMessages(loggedInProfile.getProfileID(),receiverProfile.getProfileID());
 
         for (Message message : AllmessagesBetweenProfiles) {
             if (message.getSenderID() == loggedInProfile.getProfileID()) {
@@ -415,17 +415,21 @@ public class UserTabMessages extends UpdatableTab {
      */
     public List<Profile> getAllPossibleChatsBasedOnState(int LoggedInProfileID, MatchState stateOfMatch) {
         MatchDBInterface matchDB = new MatchDB();
-
         // Gets all matches
         List<Match> matches = matchDB.getProfileMatches(LoggedInProfileID);
         // Gets the profileID of profiles LoggedInProfile has chatted with before.
         Set<Integer> alreadyChattedProfiles = getAllPossibleChats(LoggedInProfileID)
-                .stream()
-                .map(Profile::getProfileID)
-                .collect(Collectors.toSet());
-        // Return List
-        List<Profile> possibleChats = new ArrayList<>();
-
+                .stream()    // Convert to stream
+                .map(new Function<Profile, Integer>() {
+                    @Override
+                    public Integer apply(Profile profile) {
+                        return profile.getProfileID();
+                    }
+                }) //Transform each Profile to its ID, could also be written as .map(profile -> profile.getProfileID()),
+                  // or .map(Profile::getProfileID)
+                .collect(Collectors.toSet()); //"saves" it to a Set-collection
+        // Return-List
+        List<Profile> possibleNewChats = new ArrayList<>();
         for (Match match : matches) {
             if (match.getMatchState() == stateOfMatch) {
                 Profile owner = match.getOwnerProfile();
@@ -438,14 +442,13 @@ public class UserTabMessages extends UpdatableTab {
                 } else {
                     potentialChat = owner;
                 }
-
                 // Only add if not already chatted with
                 if (!alreadyChattedProfiles.contains(potentialChat.getProfileID())) {
-                    possibleChats.add(potentialChat);
+                    possibleNewChats.add(potentialChat);
                 }
             }
         }
-        return possibleChats;
+        return possibleNewChats;
     }
     /**
      * Retrieves all {@link Profile}s the logged in user has previously chatted with.
@@ -459,8 +462,8 @@ public class UserTabMessages extends UpdatableTab {
         //Get stored in a Set since it handles Dups.
         Set<Integer> uniqueProfileIDs = new HashSet<>();
 
-        HashMap<Integer, Integer> allChats = messageDB.allChatsOfProfile(loggedInProfileID);
-
+        Map<Integer, Integer> allChats = messageDB.allChatsOfProfile(loggedInProfileID);
+        //Enhanced for loop Map
         for (Map.Entry<Integer, Integer> entry : allChats.entrySet()) {
             int senderID = entry.getKey();
             int receiverID = entry.getValue();
@@ -471,7 +474,6 @@ public class UserTabMessages extends UpdatableTab {
                 uniqueProfileIDs.add(senderID);
             }
         }
-
         // Convert the unique IDs to Profile objects.
         // This could be done before adding it to the Set, but it doublechecks for dups.
         List<Profile> possibleChats = new ArrayList<>();
@@ -480,7 +482,6 @@ public class UserTabMessages extends UpdatableTab {
                 possibleChats.add(profileDB.getProfileFromID(profileID));
             }
         }
-
         return possibleChats;
     }
     /**

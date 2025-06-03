@@ -6,8 +6,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import org.example.jobswap.Foundation.DBConnection;
-import org.example.jobswap.Model.AccessLevel;
 import org.example.jobswap.Model.Profile;
 import org.example.jobswap.Persistence.Interfaces.LoginDBInterface;
 import org.example.jobswap.Persistence.Interfaces.ProfileDBInterface;
@@ -78,7 +79,7 @@ public class LoginController {
         try {
 
             //Update Database Username and password based on Accesslevel
-            DBConnection.ChangeAccessLevelOnDatabase(LoginDB.getAccessLevelFromID(Integer.parseInt(employeeIDFields.getText())));
+            DBConnection.changeAccessLevelOnDatabase(LoginDB.getAccessLevelFromID(Integer.parseInt(employeeIDFields.getText())));
 
             if (!checkCredentials()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -107,6 +108,16 @@ public class LoginController {
                             currentIDsProfile.getJobCategory(),
                             currentIDsProfile.isActivelySeeking(),
                             true));
+                     //Error Message Popup
+                    Alert lockedAlert = new Alert(Alert.AlertType.INFORMATION);
+                    //new stage for the alert, to change the icon.
+                    Stage alertStage = (Stage) lockedAlert.getDialogPane().getScene().getWindow();
+                    alertStage.getIcons().add(new Image(getClass().getResource("/org/example/jobswap/JobSwapIcon.png").toExternalForm()));
+                    //information
+                    lockedAlert.setTitle("Locked");
+                    lockedAlert.setHeaderText("The Profile, with the ID: "+ currentIDsProfile.getProfileID() + ", has been locked");
+                    lockedAlert.setContentText("Please contact your local System Administrator. 📞 +45 12 34 56 67 ");
+                    lockedAlert.showAndWait();//This shows the alert
                 }
 
             } else {
@@ -129,7 +140,7 @@ public class LoginController {
      * Scene shift to create new account
      * @param actionEvent click on the button
      */
-    public void SceneShiftToCreateAccount(ActionEvent actionEvent) {
+    public void sceneShiftToCreateAccount(ActionEvent actionEvent) {
         try {
             SceneService.shiftScene(actionEvent, "Create New Profile", "/org/example/jobswap/CreateNewProfilScene.fxml");
         }catch(Exception e) {
